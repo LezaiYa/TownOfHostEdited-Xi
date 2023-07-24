@@ -214,9 +214,6 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Concealer:
                 Concealer.ApplyGameOptions();
                 break;
-            case CustomRoles.Assassin:
-                Assassin.ApplyGameOptions();
-                break;
             case CustomRoles.Hacker:
                 Hacker.ApplyGameOptions();
                 break;
@@ -275,6 +272,10 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 break;
             case CustomRoles.Anglers:
                 AURoleOptions.ShapeshifterCooldown = Options.AnglersShapeshifterCooldown.GetFloat();
+                AURoleOptions.ShapeshifterDuration = 0.3f;
+                break;
+            case CustomRoles.Assassin:
+                AURoleOptions.ShapeshifterCooldown = Options.AssassinateCooldown.GetFloat();
                 AURoleOptions.ShapeshifterDuration = 0.3f;
                 break;
         }

@@ -33,7 +33,7 @@ public class Main : BasePlugin
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = "<color=#fffcbe>喜！</color><color=#FF0066>瓜！</color><color=#FFFF00>叨！</color>";
     public const string PluginGuid = "com.xi.tohex";
-    public const string PluginVersion = "1.4.2";
+    public const string PluginVersion = "1.5.0";
     public const string CanaryPluginVersion = "裤";
     public const int PluginCreate = 7;
 
@@ -59,6 +59,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> EnableCustomButton { get; private set; }
     public static ConfigEntry<bool> EnableCustomSoundEffect { get; private set; }
     public static ConfigEntry<bool> SwitchVanilla { get; private set; }
+    public static ConfigEntry<bool> QSM { get; private set; }
     //public static ConfigEntry<bool> Devtx { get; private set; }
     //public static ConfigEntry<bool> FastBoot { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
@@ -95,8 +96,12 @@ public class Main : BasePlugin
     public static List<(string, byte, string)> MessagesToSend = new();
     public static bool isChatCommand = false;
     public static List<PlayerControl> LoversPlayers = new();
+    public static List<PlayerControl> CrushLoversPlayers = new();
+    public static List<PlayerControl> CupidLoversPlayers = new();
     public static List<PlayerControl> seniormanagementPlayers = new();
     public static bool isLoversDead = true;
+    public static bool isCrushLoversDead = true;
+    public static bool isCupidLoversDead = true;
     public static bool isjackalDead = true;
     public static bool isSheriffDead = true; 
     public static bool isseniormanagementDead = true;
@@ -125,6 +130,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, bool> isCurseAndKill = new();
     public static Dictionary<byte, int> MafiaRevenged = new();
     public static Dictionary<byte, int> GuesserGuessed = new();
+    public static Dictionary<byte, int> GuesserAllGuessed = new();
     public static Dictionary<byte, int> CapitalismAddTask = new();
     public static Dictionary<byte, int> CapitalismAssignTask = new();
     public static Dictionary<(byte, byte), bool> isDoused = new();
@@ -201,6 +207,9 @@ public class Main : BasePlugin
     public static Dictionary<byte, float> AllPlayerLocation = new();
     public static List<byte> DemolitionManiacKill = new();
     public static Dictionary<byte, int> CrushMax = new();
+    public static Dictionary<byte, int> CupidMax = new();
+    public static Dictionary<byte, int> PGuesserMax = new();
+    public static List<PlayerControl> CupidLoveList = new();
     public static Dictionary<byte, int> SlaveownerMax = new();
     public static List<byte> ForSlaveowner = new();
     public static List<byte> ForSpellmaster = new();
@@ -242,6 +251,12 @@ public class Main : BasePlugin
     public static Dictionary<byte, long> ForNnurse = new();
     public static List<byte> NnurseHelep = new();
     public static Dictionary<byte, int> NnurseHelepMax = new(); 
+    public static List<byte> ForSqueezers = new();
+    public static List<byte> TasksSqueezers = new();
+    public static List<byte> KillForCorpse = new();
+    public static List<byte> KillImpostor = new();
+    public static Dictionary<byte, long> NiceMiniTime = new(); 
+          public static Dictionary<byte, long> GetUp = new();
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();
@@ -277,6 +292,7 @@ public class Main : BasePlugin
         EnableCustomButton = Config.Bind("Client Options", "EnableCustomButton", true);
         EnableCustomSoundEffect = Config.Bind("Client Options", "EnableCustomSoundEffect", true);
         SwitchVanilla = Config.Bind("Client Options", "SwitchVanilla", false);
+        QSM =  Config.Bind("Client Options", "QSM", false);
         //Devtx = Config.Bind("Client Options", "Devtx", false);
         //FastBoot = Config.Bind("Client Options", "FastBoot", false);
         VersionCheat = Config.Bind("Client Options", "VersionCheat", false);
@@ -292,7 +308,7 @@ public class Main : BasePlugin
         if (!DebugModeManager.AmDebugger)
         {
             TOHE.Logger.Disable("2018k");
-            TOHE.Logger.Disable("Github");
+            //TOHE.Logger.Disable("Github");
             TOHE.Logger.Disable("CustomRpcSender");
             //TOHE.Logger.Disable("ReceiveRPC");
             TOHE.Logger.Disable("SendRPC");
@@ -374,6 +390,7 @@ public class Main : BasePlugin
                 {CustomRoles.Mediumshiper, "#7a8c92"},
                 {CustomRoles.Observer, "#a8e0fa"},
                 {CustomRoles.DovesOfNeace, "#FFFFFF" },
+                {CustomRoles.NiceMini, "#FFFFFF" },
                 {CustomRoles.LostCrew, "#666666"},
                 {CustomRoles.Rudepeople, "#66CC00"},
                 {CustomRoles.HatarakiMan,"#6A5ACD" },
@@ -455,7 +472,7 @@ public class Main : BasePlugin
                 {CustomRoles.YLSchrodingerCat,"#6A5ACD" },
                 {CustomRoles.PGSchrodingerCat, "#101010"},
                 {CustomRoles.DHSchrodingerCat, "#483d8b"},
-                {CustomRoles.Crush,"#ff9ace" },
+                {CustomRoles.Crush,"#ff79ce" },
                 {CustomRoles.Slaveowner,"#996600" },
                 {CustomRoles.Jealousy, "#996666"},
                 {CustomRoles.OKSchrodingerCat, "#CC6600"},
@@ -463,12 +480,15 @@ public class Main : BasePlugin
                   {CustomRoles.PlaguesGod, "#101010"},
                 {CustomRoles.King,"#FFCC00" },
                 {CustomRoles.Exorcist,"#336666" },
+                {CustomRoles.Cupid, "#ff80c0" },
                 //管理员
                 {CustomRoles.GM, "#ff5b70"},
                 //附加职业颜色设置
                 {CustomRoles.NotAssigned, "#ffffff"},
                 {CustomRoles.LastImpostor, "#ff1919"},
+                {CustomRoles.CrushLovers, "#ff79ce"},
                 {CustomRoles.Lovers, "#ff9ace"},
+                {CustomRoles.CupidLovers, "#ff80c0" },
                 {CustomRoles.Ntr, "#00a4ff"},
                 {CustomRoles.Madmate, "#ff1919"},
                 {CustomRoles.Watcher, "#800080"},
@@ -508,6 +528,7 @@ public class Main : BasePlugin
                 {CustomRoles.Energizer,"#9900FF" },
                 {CustomRoles.Originator,"#CC9999" },
                 {CustomRoles.QL,"#66ff5c" },
+                {CustomRoles.ProfessionGuesser, "#561800"},
                 //SoloKombat
                 {CustomRoles.KB_Normal, "#f55252"},
                 //烫手的山芋
@@ -634,6 +655,11 @@ public enum CustomRoles
     Hemophobia,
     Guide,
     Anglers,
+    QXZ,
+    Squeezers,
+    Corpse,
+    Defector,
+    EvilMini,
     //船员（原版）
     Engineer,
     GuardianAngel,
@@ -705,6 +731,7 @@ public enum CustomRoles
     Spiritualizer,
     Knight,
     Nurse,
+    NiceMini,
     //中立
     Arsonist,
     Jester,
@@ -758,6 +785,7 @@ public enum CustomRoles
     King,
     Amnesiac,
     Exorcist,
+    Cupid,
 
     //SoloKombat
     KB_Normal,
@@ -777,6 +805,8 @@ public enum CustomRoles
     NotAssigned = 500,
     LastImpostor,
     Lovers,
+    CrushLovers,
+    CupidLovers,
     Ntr,
     Madmate,
     Watcher,
@@ -818,6 +848,7 @@ public enum CustomRoles
     Energizer,
     Originator,
     QL,
+    ProfessionGuesser,
 }
 //胜利设置
 public enum CustomWinner
@@ -832,6 +863,8 @@ public enum CustomWinner
     Jester = CustomRoles.Jester,
     Terrorist = CustomRoles.Terrorist,
     Lovers = CustomRoles.Lovers,
+    CrushLovers = CustomRoles.CrushLovers,
+    CupidLovers = CustomRoles.CupidLovers,
     Executioner = CustomRoles.Executioner,
     Arsonist = CustomRoles.Arsonist,
     Revolutionist = CustomRoles.Revolutionist,
@@ -861,13 +894,16 @@ public enum CustomWinner
     CP = CustomRoles.Coldpotato,
     captor = CustomRoles.captor,
     runagat = CustomRoles.runagat,
-        Exorcist = CustomRoles.Exorcist
+        Exorcist = CustomRoles.Exorcist,
+        NiceMini = CustomRoles.NiceMini,
 }
 public enum AdditionalWinners
 {
     //跟随胜利
     None = -1,
     Lovers = CustomRoles.Lovers,
+    CrushLovers = CustomRoles.CrushLovers,
+    CupidLovers = CustomRoles.CupidLovers,
     Opportunist = CustomRoles.Opportunist,
     Executioner = CustomRoles.Executioner,
     FFF = CustomRoles.FFF,

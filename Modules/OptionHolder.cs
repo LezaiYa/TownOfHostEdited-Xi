@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MS.Internal.Xml.XPath;
 using TOHE.Roles.AddOns.Crewmate;
 using TOHE.Roles.AddOns.Impostor;
 using TOHE.Roles.Crewmate;
@@ -19,6 +20,7 @@ public enum CustomGameMode
     SoloKombat = 0x02,
     HotPotato = 0x03,
     ModeArrest = 0x04,
+    TOEX = 0x05,
     All = int.MaxValue
 }
 
@@ -58,12 +60,13 @@ public static class Options
             1 => CustomGameMode.SoloKombat,
             2 => CustomGameMode.HotPotato,
             3 => CustomGameMode.ModeArrest,
+            4 => CustomGameMode.TOEX,
             _ => CustomGameMode.Standard
         };
 
     public static readonly string[] gameModes =
     {
-        "Standard", "SoloKombat","HotPotato","ModeArrest"
+        "Standard", "SoloKombat","HotPotato","ModeArrest","TOEX"
     };
 
     // MapActive
@@ -143,6 +146,7 @@ public static class Options
     public static OptionItem MadmateKnowWhosMadmate;
     public static OptionItem ImpCanKillMadmate;
     public static OptionItem MadmateCanKillImp;
+    public static OptionItem CanDefector;
 
     public static OptionItem ShapeMasterShapeshiftDuration;
     public static OptionItem EGCanGuessImp;
@@ -150,6 +154,8 @@ public static class Options
     public static OptionItem EGCanGuessVanilla;
     public static OptionItem EGCanGuessTaskDoneSnitch;
     public static OptionItem EGCanGuessTime;
+    public static OptionItem SetEGCanGuessAllTime;
+    public static OptionItem EGCanGuessAllTime;
     public static OptionItem EGTryHideMsg;
     public static OptionItem WarlockCanKillAllies;
     public static OptionItem WarlockCanKillSelf;
@@ -161,6 +167,8 @@ public static class Options
     public static OptionItem GGCanGuessAdt;
     public static OptionItem GGCanGuessVanilla;
     public static OptionItem GGCanGuessTime;
+    public static OptionItem SetGGCanGuessAllTime;
+    public static OptionItem GGCanGuessAllTime;
     public static OptionItem GGTryHideMsg;
     public static OptionItem LuckeyProbability;
     public static OptionItem LuckeyCanSeeKillility;
@@ -267,6 +275,7 @@ public static class Options
     public static OptionItem CultivatorFourCanFlash;
     public static OptionItem CultivatorSpeed;
     public static OptionItem CultivatorFiveCanNotKill;
+    public static OptionItem QXZShields;
     public static readonly string[] MengJiangGirlWinnerPlayer =
     {
         "MengJiangGirlWinnerPlayer.Crew",
@@ -337,6 +346,11 @@ public static class Options
     public static OptionItem AnglersShapeshifterCooldown;
     public static OptionItem NurseSkillDuration;
     public static OptionItem NurseMax;
+    public static OptionItem AssassinateCooldown;
+    public static OptionItem AssassinateCanKill;
+    public static OptionItem SqueezersMaxSecond;
+    public static OptionItem SqueezersKillColldown;
+    public static OptionItem CanKnowKiller;
 
     // タスク無効化
     public static OptionItem DisableTasks;
@@ -422,6 +436,7 @@ public static class Options
     public static OptionItem SyncButtonMode;
     public static OptionItem SyncedButtonCount;
     public static int UsedButtonCount = 0;
+    public static OptionItem AllModMode;
 
     // 全員生存時の会議時間
     public static OptionItem AllAliveMeeting;
@@ -521,6 +536,13 @@ public static class Options
     public static OptionItem LoverSpawnChances;
     public static OptionItem LoverKnowRoles;
     public static OptionItem LoverSuicide;
+    public static OptionItem CrushLoverSpawnChances;
+    public static OptionItem CrushLoverKnowRoles;
+    public static OptionItem CrushLoverSuicide;
+    public static OptionItem CupidLoverKnowRoles;
+    public static OptionItem CupidLoverSuicide;
+    public static OptionItem CupidSkillCooldown;
+    public static OptionItem CanKnowCupid;
     public static OptionItem LoverThree;
     public static OptionItem ImpCanBeEgoist;
     public static OptionItem ImpEgoistVisibalToAllies;
@@ -539,7 +561,8 @@ public static class Options
         "SuffixMode.RoomHost",
         "SuffixMode.OriginalName",
         "SuffixMode.DoNotKillMe",
-        "SuffixMode.NoAndroidPlz"
+        "SuffixMode.NoAndroidPlz",
+        "SuffixMode.Test"
     };
     public static readonly string[] roleAssigningAlgorithms =
     {
@@ -649,6 +672,8 @@ public static class Options
             .SetGameMode(CustomGameMode.Standard);
         MadmateCanKillImp = BooleanOptionItem.Create(900050, "MadmateCanKillImp", true, TabGroup.ImpostorRoles, false)
             .SetGameMode(CustomGameMode.Standard);
+        CanDefector = BooleanOptionItem.Create(950850, "CanDefector", true, TabGroup.ImpostorRoles, false)
+            .SetGameMode(CustomGameMode.Standard);
 
         DefaultShapeshiftCooldown = FloatOptionItem.Create(5011, "DefaultShapeshiftCooldown", new(5f, 999f, 5f), 15f, TabGroup.ImpostorRoles, false)
             .SetGameMode(CustomGameMode.Standard)
@@ -726,6 +751,9 @@ public static class Options
         CultivatorSpeed = FloatOptionItem.Create(12364417, "CultivatorSpeed", new(1.5f, 5f, 0.25f), 2.5f, TabGroup.ImpostorRoles, false).SetParent(CultivatorOneCanKillCooldown)
             .SetValueFormat(OptionFormat.Multiplier);
         CultivatorFiveCanNotKill = BooleanOptionItem.Create(12364418, "CultivatorFiveCanNotKill", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Cultivator]);
+        Options.SetupRoleOptions(345679, TabGroup.ImpostorRoles, CustomRoles.QXZ);
+        QXZShields = IntegerOptionItem.Create(345689, "QXZShields", new(1, 3, 1), 1, TabGroup.ImpostorRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.QXZ]);
+        Corpse.SetupCustomOption();
 
         TextOptionItem.Create(909090, "ImpFK", TabGroup.ImpostorRoles)//远程击杀型
             .SetGameMode(CustomGameMode.Standard)
@@ -743,6 +771,15 @@ public static class Options
         Sniper.SetupCustomOption();
         Vampire.SetupCustomOption();
         SetupRoleOptions(2000, TabGroup.ImpostorRoles, CustomRoles.Puppeteer);
+        SetupRoleOptions(124654, TabGroup.ImpostorRoles, CustomRoles.Assassin);
+        AssassinateCooldown = FloatOptionItem.Create(156457, "AssassinAssassinateCooldown", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Assassin])
+            .SetValueFormat(OptionFormat.Seconds);
+        AssassinateCanKill = BooleanOptionItem.Create(1567467, "AssassinCanKillAfterAssassinate", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Assassin]);
+        SetupRoleOptions(1165987, TabGroup.ImpostorRoles, CustomRoles.Squeezers);
+        SqueezersKillColldown = FloatOptionItem.Create(15649679, "SqueezersKillColldown", new(0f, 180f, 2.5f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Squeezers])
+            .SetValueFormat(OptionFormat.Seconds);
+        SqueezersMaxSecond = FloatOptionItem.Create(198779889, "SqueezersMaxSecond", new(1f, 114514f, 0.25f), 5f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Squeezers])
+          .SetValueFormat(OptionFormat.Seconds);
 
         TextOptionItem.Create(909090, "ImpQK", TabGroup.ImpostorRoles)//快速击杀型
            .SetGameMode(CustomGameMode.Standard)
@@ -785,6 +822,9 @@ public static class Options
         SetupRoleOptions(901065, TabGroup.ImpostorRoles, CustomRoles.EvilGuesser);
         EGCanGuessTime = IntegerOptionItem.Create(901067, "GuesserCanGuessTimes", new(1, 15, 1), 15, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.EvilGuesser])
             .SetValueFormat(OptionFormat.Times);
+        SetEGCanGuessAllTime = BooleanOptionItem.Create(901077, "SetGuesserCanGuessAllTimes", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.EvilGuesser]);
+        EGCanGuessAllTime = IntegerOptionItem.Create(901076, "GuesserCanGuessAllTimes", new(1, 20, 1), 15, TabGroup.ImpostorRoles, false).SetParent(Options.SetEGCanGuessAllTime)
+            .SetValueFormat(OptionFormat.Times);
         EGCanGuessImp = BooleanOptionItem.Create(901069, "EGCanGuessImp", true, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.EvilGuesser]);
         EGCanGuessAdt = BooleanOptionItem.Create(901073, "EGCanGuessAdt", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.EvilGuesser]);
         EGCanGuessVanilla = BooleanOptionItem.Create(901074, "EGCanGuessVanilla", true, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.EvilGuesser]);
@@ -798,7 +838,6 @@ public static class Options
         TextOptionItem.Create(909090, "ImpTr", TabGroup.ImpostorRoles)//传送技能型
            .SetGameMode(CustomGameMode.Standard)
            .SetColor(new Color32(247, 70, 49, byte.MaxValue));
-        Assassin.SetupCustomOption();
         SetupRoleOptions(901590, TabGroup.ImpostorRoles, CustomRoles.Miner);
         SetupRoleOptions(901595, TabGroup.ImpostorRoles, CustomRoles.Escapee);
         SetupRoleOptions(902422, TabGroup.ImpostorRoles, CustomRoles.ImperiusCurse);
@@ -891,6 +930,9 @@ public static class Options
         SetupRoleOptions(102255, TabGroup.CrewmateRoles, CustomRoles.NiceGuesser);
         GGCanGuessTime = IntegerOptionItem.Create(102257, "GuesserCanGuessTimes", new(1, 15, 1), 15, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser])
             .SetValueFormat(OptionFormat.Times);
+        SetGGCanGuessAllTime = BooleanOptionItem.Create(102259, "SetGuesserCanGuessAllTimes", false, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
+        GGCanGuessAllTime = IntegerOptionItem.Create(102266, "GuesserCanGuessAllTimes", new(1, 20, 1), 15, TabGroup.CrewmateRoles, false).SetParent(Options.SetGGCanGuessAllTime)
+            .SetValueFormat(OptionFormat.Times);
         GGCanGuessCrew = BooleanOptionItem.Create(102259, "GGCanGuessCrew", true, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
         GGCanGuessAdt = BooleanOptionItem.Create(102263, "GGCanGuessAdt", false, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
         GGCanGuessVanilla = BooleanOptionItem.Create(102262, "GGCanGuessVanilla", true, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
@@ -977,6 +1019,7 @@ public static class Options
         TextOptionItem.Create(909090, "CF", TabGroup.CrewmateRoles)//辅助型
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(247, 70, 49, byte.MaxValue));
+        NiceMini.SetupCustomOption();
         SetupRoleOptions(1020195, TabGroup.CrewmateRoles, CustomRoles.Luckey);
         LuckeyProbability = IntegerOptionItem.Create(1020197, "LuckeyProbability", new(0, 100, 5), 50, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Luckey])
             .SetValueFormat(OptionFormat.Percent);
@@ -1069,16 +1112,24 @@ public static class Options
         WorkaholicTasks = OverrideTasksData.Create(60115, TabGroup.NeutralRoles, CustomRoles.Workaholic);
         Executioner.SetupCustomOption();
         Lawyer.SetupCustomOption();
+        
         SetupRoleOptions(213212354, TabGroup.NeutralRoles, CustomRoles.Crush);
+        CrushLoverKnowRoles = BooleanOptionItem.Create(213212358, "LoverKnowRoles", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Crush]);
+        CrushLoverSuicide = BooleanOptionItem.Create(213212360, "LoverSuicide", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Crush]);
+        SetupRoleOptions(7565235, TabGroup.NeutralRoles, CustomRoles.Cupid);
+        CupidLoverKnowRoles = BooleanOptionItem.Create(7565237, "LoverKnowRoles", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Cupid]);
+        CupidLoverSuicide = BooleanOptionItem.Create(7565239, "LoverSuicide", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Cupid]);
+        CanKnowCupid = BooleanOptionItem.Create(7565241, "CanKnowCupid", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Cupid]);
+        CupidSkillCooldown = FloatOptionItem.Create(12345665, "CupidSkillCooldown", new(10f, 990f, 2.5f), 10f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Cupid])
+             .SetValueFormat(OptionFormat.Seconds);
         SetupRoleOptions(211345244, TabGroup.NeutralRoles, CustomRoles.Slaveowner);
         ForSlaveownerSlav = IntegerOptionItem.Create(113241247, "ForSlaveownerSlav", new(1, 999, 1), 3, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Slaveowner])
             .SetValueFormat(OptionFormat.Poeple);
         SlaveownerKillCooldown = FloatOptionItem.Create(12345665, "SlaveownerKillCooldown", new(10f, 990f, 2.5f), 10f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Slaveowner])
             .SetValueFormat(OptionFormat.Seconds);
         TargetcanSeeSlaveowner = BooleanOptionItem.Create(12324047, "TargetcanSeeSlaveowner", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Slaveowner]);
-        /*SetupRoleOptions(50300, TabGroup.NeutralRoles, CustomRoles.BWZ);
-        BWZTurns = IntegerOptionItem.Create(50310, "BWZTurns", new(2, 10, 1), 3, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.BWZ]);*/
         SetupRoleOptions(5051500, TabGroup.NeutralRoles, CustomRoles.SchrodingerCat);
+        CanKnowKiller = BooleanOptionItem.Create(5051505, "SchrodingerCatCanKnowKiller", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SchrodingerCat]);
         SetupRoleOptions(51357757, TabGroup.NeutralRoles, CustomRoles.Exorcist);
         ExorcistKillCooldown = FloatOptionItem.Create(1123744, "ExorcistKillCooldown", new(1f, 180f, 1f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Exorcist])
          .SetValueFormat(OptionFormat.Seconds);
@@ -1180,7 +1231,7 @@ public static class Options
         SetupAdtRoleOptions(141355, CustomRoles.Fategiver, canSetNum: true);
         SetupAdtRoleOptions(1413512345, CustomRoles.Wanderers, canSetNum: true);
         SetupAdtRoleOptions(1412355, CustomRoles.LostSouls, canSetNum: true);
-        
+        SetupAdtRoleOptions(7565193, CustomRoles.ProfessionGuesser, canSetNum: true);
         SetupAdtRoleOptions(41534214, CustomRoles.Executor, canSetNum: true);
         SetupAdtRoleOptions(123413242, CustomRoles.OldThousand, canSetNum: true);
         
@@ -1327,8 +1378,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Times);
         AutoKickStopWordsAsBan = BooleanOptionItem.Create(1_000_028, "AutoKickStopWordsAsBan", false, TabGroup.SystemSettings, false).SetParent(AutoKickStopWords);
         AutoWarnStopWords = BooleanOptionItem.Create(1_000_012, "AutoWarnStopWords", false, TabGroup.SystemSettings, false);
-        EACPLUS = BooleanOptionItem.Create(1_000_013, "EACPLUS", false, TabGroup.SystemSettings, false);
-
+        
         ShareLobby = BooleanOptionItem.Create(6090065, "ShareLobby", true, TabGroup.SystemSettings, false)
             .SetHeader(true)
             .SetColor(Color.cyan);
@@ -1345,6 +1395,7 @@ public static class Options
 
         CheatResponses = StringOptionItem.Create(6090121, "CheatResponses", CheatResponsesName, 0, TabGroup.SystemSettings, false)
             .SetHeader(true);
+        EACPLUS = BooleanOptionItem.Create(1_000_013, "EACPLUS", false, TabGroup.SystemSettings, false);
 
         //HighLevelAntiCheat = StringOptionItem.Create(6090123, "HighLevelAntiCheat", CheatResponsesName, 0, TabGroup.SystemSettings, false)
         //.SetHeader(true);
@@ -1388,19 +1439,22 @@ public static class Options
         Logger.Msg("开始加载游戏设置", "Load Options");
 
         #region 游戏设置
-
+        
         //SoloKombat
         SoloKombatManager.SetupCustomOption();
         //热土豆
         HotPotatoManager.SetupCustomOption();
         //抓捕
         //ModeArrestManager.SetupCustomOption();
+        AllModMode = BooleanOptionItem.Create(6090117, "AllModMode", false, TabGroup.GameSettings, false)
+            .SetGameMode(CustomGameMode.Standard)
+            .SetColor(new Color32(255, 153, 153, byte.MaxValue));
 
         //驱逐相关设定
         TextOptionItem.Create(66_123_126, "MenuTitle.Ejections", TabGroup.GameSettings)
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 238, 232, byte.MaxValue));
-
+        
         CEMode = StringOptionItem.Create(6091223, "ConfirmEjectionsMode", ConfirmEjectionsMode, 2, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)
             .SetHeader(true)

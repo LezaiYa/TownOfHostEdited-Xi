@@ -1,7 +1,9 @@
 ﻿using Hazel;
 using System.Collections.Generic;
+using TOHE.Roles.Crewmate;
 using UnityEngine;
 using static TOHE.Translator;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TOHE.Roles.Impostor;
 
@@ -115,7 +117,8 @@ public static class Gangster
             pc.Is(CustomRoles.Captain) ||
             pc.Is(CustomRoles.Solicited) ||
             pc.Is(CustomRoles.seniormanagement) || 
-            pc.Is(CustomRoles.Believer)
+            pc.Is(CustomRoles.Believer) || 
+            pc.Is(CustomRoles.NiceMini) && NiceMini.Age != 18 
             );
     }
 }

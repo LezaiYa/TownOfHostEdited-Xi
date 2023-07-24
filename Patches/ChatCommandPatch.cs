@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using static TOHE.Translator;
 using System.IO;
-
+using TOHE.Roles.Impostor;
 
 namespace TOHE;
 
@@ -23,7 +23,7 @@ internal class ChatCommands
     // Function to check if a player is a moderator
     private static bool IsPlayerModerator(string friendCode)
     {
-        var friendCodesFilePath = @"./TOHE_DATA/Moderators.txt";
+        var friendCodesFilePath = @"./TOHEX_Data/Moderators.txt";
         var friendCodes = File.ReadAllLines(friendCodesFilePath);
         return friendCodes.Contains(friendCode);
     }
@@ -50,6 +50,7 @@ internal class ChatCommands
         if (Judge.TrialMsg(PlayerControl.LocalPlayer, text)) goto Canceled;
         if (Mediumshiper.MsMsg(PlayerControl.LocalPlayer, text)) goto Canceled;
         if (MafiaRevengeManager.MafiaMsgCheck(PlayerControl.LocalPlayer, text)) goto Canceled;
+       // if (QXZ.QXMsg(PlayerControl.LocalPlayer, text)) goto Canceled;
         switch (args[0])
         {
             case "/dump":
@@ -469,6 +470,8 @@ internal class ChatCommands
             "愚者" or "愚" => GetString("Psychic"),
             "修理大师" or "修理" or "维修" => GetString("SabotageMaster"),
             "警長" => GetString("Sheriff"),
+            "好迷你船员" => GetString("NiceMini"),
+            "坏迷你船员" => GetString("EvilMini"),
             "告密者" or "告密" => GetString("Snitch"),
             "增速者" or "增速" => GetString("SpeedBooster"),
             "時間操控者" or "时间操控人" or "时间操控" => GetString("TimeManager"),
@@ -487,7 +490,8 @@ internal class ChatCommands
             "閃電俠" or "闪电" => GetString("Flashman"),
             "靈媒" => GetString("Seer"),
             "破平者" or "破平" => GetString("Brakar"),
-            "執燈人" or "执灯" or "灯人" => GetString("Lighter"),
+            "執燈人" or "执灯" or "灯人" => GetString("ProfessionGuesser"),
+            "专业赌怪" or "专业刺客" or "专业" => GetString("P"),
             "膽小" or "胆小" => GetString("Oblivious"),
             "迷惑者" or "迷幻" => GetString("Bewilder"),
             "蠢蛋" or "笨蛋" or "蠢狗" or "傻逼" => GetString("Fool"),
@@ -581,6 +585,7 @@ internal class ChatCommands
             "扰乱者" => GetString("sabcat"),
             "奴隶主" or "万恶的资本家" or "奴隶" => GetString("Slaveowner"),
             "暗恋者" or "暗恋" or "纯爱者" => GetString("Crush"),
+            "丘比特" or "射箭的" or "爱心觉罗" => GetString("Cupid"),
             "嗜血骑士的猫" or "嗜血猫" => GetString("BloodSchrodingerCat"),
             "玩家的猫" or "宠物" or "玩家猫" => GetString("GamerSchrodingerCat"),
             "船员的猫" or "船员猫" => GetString("CrewSchrodingerCat"),
@@ -603,6 +608,7 @@ internal class ChatCommands
             "牛仔" => GetString("Cowboy"),
             "信徒" =>GetString("Believer"),
             "清廉之官" or "清廉" or "QL" => GetString("QL"),
+            "qx" or "强袭者" => GetString("QXZ"),
             _ => text,
         };
     }
@@ -699,6 +705,7 @@ internal class ChatCommands
         if (text.Length >= 3) if (text[..2] == "/r" && text[..3] != "/rn") args[0] = "/r";
         if (GuessManager.GuesserMsg(player, text)) { canceled = true; return; }
         if (Judge.TrialMsg(player, text)) { canceled = true; return; }
+     //   if (QXZ .QXMsg(player, text)) { canceled = true; return; }
         if (Mediumshiper.MsMsg(player, text)) return;
         if (MafiaRevengeManager.MafiaMsgCheck(player, text)) return;
         switch (args[0])

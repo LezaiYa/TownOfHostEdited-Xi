@@ -1,12 +1,14 @@
 ﻿using HarmonyLib;
 using Hazel;
 using Innersloth.Assets;
+using MS.Internal.Xml.XPath;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using TOHE.Modules;
+using TOHE.Roles.Crewmate;
 using UnityEngine;
 using static TOHE.ChatCommands;
 using static TOHE.Translator;
@@ -128,16 +130,29 @@ public static class GuessManager
             {
                 bool guesserSuicide = false;
                 if (!Main.GuesserGuessed.ContainsKey(pc.PlayerId)) Main.GuesserGuessed.Add(pc.PlayerId, 0);
+                if (!Main.GuesserAllGuessed.ContainsKey(pc.PlayerId)) Main.GuesserAllGuessed.Add(pc.PlayerId, 0);
                 if (pc.Is(CustomRoles.NiceGuesser) && Main.GuesserGuessed[pc.PlayerId] >= Options.GGCanGuessTime.GetInt())
                 {
                     if (!isUI) Utils.SendMessage(GetString("GGGuessMax"), pc.PlayerId);
                     else pc.ShowPopUp(GetString("GGGuessMax"));
                     return true;
                 }
+                if (pc.Is(CustomRoles.NiceGuesser) && Options.SetGGCanGuessAllTime.GetBool() && Main.GuesserAllGuessed[pc.PlayerId] >= Options.GGCanGuessAllTime.GetInt())
+                {
+                    if (!isUI) Utils.SendMessage(GetString("GGGuessATMax"), pc.PlayerId);
+                    else pc.ShowPopUp(GetString("GGGuessATMax"));
+                    return true;
+                }
                 if (pc.Is(CustomRoles.EvilGuesser) && Main.GuesserGuessed[pc.PlayerId] >= Options.EGCanGuessTime.GetInt())
                 {
                     if (!isUI) Utils.SendMessage(GetString("EGGuessMax"), pc.PlayerId);
                     else pc.ShowPopUp(GetString("EGGuessMax"));
+                    return true;
+                }
+                if (pc.Is(CustomRoles.EvilGuesser) && Options.SetEGCanGuessAllTime.GetBool() && Main.GuesserAllGuessed[pc.PlayerId] >= Options.EGCanGuessAllTime.GetInt())
+                {
+                    if (!isUI) Utils.SendMessage(GetString("EGGuessATMax"), pc.PlayerId);
+                    else pc.ShowPopUp(GetString("EGGuessATMax"));
                     return true;
                 }
                 if (pc.Is(CustomRoles.NiceGuesser) && pc.Is(CustomRoles.QL))
@@ -161,6 +176,13 @@ public static class GuessManager
                 {
                     Utils.SendMessage(GetString("GuessSuperStar"), pc.PlayerId);
                     return true;
+
+                }
+                if (role == CustomRoles.NiceMini && NiceMini.Age != 18 || target.Is(CustomRoles.NiceMini) && NiceMini.Age != 18 || target.Is(CustomRoles.EvilMini) && NiceMini.Age != 18)
+                {
+                    Utils.SendMessage(GetString("GuessMini"), pc.PlayerId);
+                    return true;
+
                 }
                 if (role == CustomRoles.Captain || target.Is(CustomRoles.Captain))
                 {
@@ -218,9 +240,17 @@ public static class GuessManager
                     else pc.ShowPopUp(Utils.ColorString(Color.cyan, GetString("MessageFromKPD")) + "\n" + GetString("LaughToWhoGuessSelf"));
                     guesserSuicide = true;
                 }
+                if (pc.Is(CustomRoles.ProfessionGuesser) && Main.PGuesserMax[pc.PlayerId] >= 1) 
+                {
+                    
+                    Utils.SendMessage(GetString("GuessWrong"), target.PlayerId);
+                    Main.PGuesserMax[pc.PlayerId]--;   
+                    return true;
+                }
                 else if (pc.Is(CustomRoles.NiceGuesser) && role.IsCrewmate() && !Options.GGCanGuessCrew.GetBool() && !pc.Is(CustomRoles.Madmate)) guesserSuicide = true;
                 else if (pc.Is(CustomRoles.EvilGuesser) && role.IsImpostor() && !Options.EGCanGuessImp.GetBool()) guesserSuicide = true;
-                else if (!target.Is(role)) guesserSuicide = true;
+                
+                else if (Main.PGuesserMax[pc.PlayerId] < 1 && !target.Is(role) ) guesserSuicide = true;
 
                 Logger.Info($"{pc.GetNameWithRole()} 猜测了 {target.GetNameWithRole()}", "Guesser");
 
@@ -232,6 +262,7 @@ public static class GuessManager
                 string Name = dp.GetRealName();
 
                 Main.GuesserGuessed[pc.PlayerId]++;
+                Main.GuesserAllGuessed[pc.PlayerId]++;
 
                 CustomSoundsManager.RPCPlayCustomSoundAll("Gunfire");
 

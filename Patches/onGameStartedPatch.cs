@@ -131,7 +131,10 @@ internal class ChangeRoleSettings
             Main.TimeStopsstop = new();
             Main.ForGrenadiers = new();
             Main.isjackalDead = false;
+            
             Main.isSheriffDead = false;
+            Main.isCrushLoversDead = false;
+            Main.isCupidLoversDead = false;
             Main.isseniormanagementDead = false;
             ReportDeadBodyPatch.CanReport = new();
             Main.KilledDiseased = new();
@@ -142,6 +145,10 @@ internal class ChangeRoleSettings
             Main.KingCanKill = new();
             Main.ForKnight = new();
             Main.NnurseHelepMax = new();
+            Main.ForSqueezers = new();
+            Main.TasksSqueezers = new();
+            Main.KillForCorpse = new();
+            Main.PGuesserMax = new();
 
             Options.UsedButtonCount = 0;
 
@@ -230,6 +237,7 @@ internal class ChangeRoleSettings
             TimeManager.Init();
             LastImpostor.Init();
             TargetArrow.Init();
+            NiceMini.Init();
             LocateArrow.Init();
             DoubleTrigger.Init();
             Workhorse.Init();
@@ -246,7 +254,6 @@ internal class ChangeRoleSettings
             Concealer.Init();
             Divinator.Init();
             Eraser.Init();
-            Assassin.Init();
             Sans.Init();
             Hacker.Init();
             Psychic.Init();
@@ -271,6 +278,7 @@ internal class ChangeRoleSettings
             ElectOfficials.Init();
             ChiefOfPolice.Init();
             Knight.Init();
+            Corpse.Init();
 
             SoloKombatManager.Init();
             HotPotatoManager.Init();
@@ -452,14 +460,7 @@ internal class SelectRolesPatch
                     if (role.IsEnable()) AssignSubRoles(role);
             }
 
-            //RPCによる同期
-            foreach (var pair in Main.PlayerStates)
-            {
-                ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
 
-                foreach (var subRole in pair.Value.SubRoles)
-                    ExtendedPlayerControl.RpcSetCustomRole(pair.Key, subRole);
-            }
 
             foreach (var pc in Main.AllPlayerControls)
             {
@@ -583,9 +584,6 @@ internal class SelectRolesPatch
                     case CustomRoles.Eraser:
                         Eraser.Add(pc.PlayerId);
                         break;
-                    case CustomRoles.Assassin:
-                        Assassin.Add(pc.PlayerId);
-                        break;
                     case CustomRoles.Sans:
                         Sans.Add(pc.PlayerId);
                         break;
@@ -680,6 +678,9 @@ internal class SelectRolesPatch
                     case CustomRoles.Crush:
                         Main.CrushMax[pc.PlayerId] = 0;
                         break;
+                    case CustomRoles.Cupid:
+                        Main.CupidMax[pc.PlayerId] = 0;
+                        break;
                     case CustomRoles.Slaveowner:
                         Main.SlaveownerMax[pc.PlayerId] = 0;
                         break;
@@ -729,6 +730,15 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Nurse:
                         Main.NnurseHelepMax[pc.PlayerId] = 0;
+                        break;
+                    case CustomRoles.Corpse:
+                        Corpse.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.NiceGuesser:
+                        Main.PGuesserMax[pc.PlayerId] = 1;
+                        break;
+                    case CustomRoles.EvilGuesser:
+                        Main.PGuesserMax[pc.PlayerId] = 1;
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())
@@ -853,16 +863,29 @@ internal class SelectRolesPatch
             //Loversを初期化
             Main.LoversPlayers.Clear();
             Main.isLoversDead = false;
+            
+            
             //ランダムに2人選出
             AssignLoversRoles(2);
         }
+        if (CustomRoles.Crush.IsEnable())
+        {
+            Main.CrushLoversPlayers.Clear();
+            Main.isCrushLoversDead = false;
+        }
+        if (CustomRoles.Cupid.IsEnable())
+        {
+            Main.CupidLoversPlayers.Clear();
+            Main.isCupidLoversDead = false;
+        }
     }
+
     private static void AssignLoversRoles(int RawCount = -1)
     {
         var allPlayers = new List<PlayerControl>();
         foreach (var pc in Main.AllPlayerControls)
         {
-            if (pc.Is(CustomRoles.GM) || (pc.HasSubRole() && Options.LimitAddonsNum.GetBool()) && pc.GetCustomSubRoles().Count >= Options.AddonsNumMax.GetInt() || pc.Is(CustomRoles.Needy) || pc.Is(CustomRoles.Ntr) || pc.Is(CustomRoles.God) || pc.Is(CustomRoles.FFF) || pc.Is(CustomRoles.Captain) || pc.Is(CustomRoles.Believer)) continue;
+            if (pc.Is(CustomRoles.GM) || (pc.HasSubRole() && Options.LimitAddonsNum.GetBool()) && pc.GetCustomSubRoles().Count >= Options.AddonsNumMax.GetInt() || pc.Is(CustomRoles.Needy) || pc.Is(CustomRoles.Ntr) || pc.Is(CustomRoles.God) || pc.Is(CustomRoles.FFF) || pc.Is(CustomRoles.Captain) || pc.Is(CustomRoles.Believer) || pc.Is(CustomRoles.Crush) || pc.Is(CustomRoles.Cupid)) continue;
             allPlayers.Add(pc);
         }
         var role = CustomRoles.Lovers;

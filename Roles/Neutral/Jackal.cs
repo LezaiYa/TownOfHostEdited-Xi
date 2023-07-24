@@ -6,6 +6,8 @@ using Hazel;
 using UnityEngine;
 using static TOHE.Options;
 using static TOHE.Translator;
+using static UnityEngine.GraphicsBuffer;
+using TOHE.Roles.Crewmate;
 
 namespace TOHE.Roles.Neutral;
 
@@ -58,7 +60,7 @@ public static class Jackal
     {
         playerIdList.Add(playerId);
         AttendantLimit.TryAdd(playerId, JackalCanAttendantMax.GetInt());
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
         if (!Main.ResetCamPlayerList.Contains(playerId))
             Main.ResetCamPlayerList.Add(playerId);
     }
@@ -107,11 +109,11 @@ public static class Jackal
             }
             else
             {
-                if (!target.CanUseKillButton() && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Solicited) && !target.Is(CustomRoles.Believer))
+                if (!target.CanUseKillButton() && !target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || !target.Is(CustomRoles.NiceMini) && NiceMini.Age != 18 || !target.Is(CustomRoles.EvilMini) && NiceMini.Age != 18)
                 {
                     target.RpcSetCustomRole(CustomRoles.Whoops);
                 }
-                if (target.CanUseKillButton() && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Solicited) && !target.Is(CustomRoles.Believer))
+                if (target.CanUseKillButton() && !target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || !target.Is(CustomRoles.NiceMini) && NiceMini.Age != 18 || !target.Is(CustomRoles.EvilMini) && NiceMini.Age != 18)
                 {
                     target.RpcSetCustomRole(CustomRoles.Sidekick);
                 }
@@ -158,6 +160,6 @@ public static class Jackal
     }
     public static bool CanBeAttendant(this PlayerControl pc)
     {
-        return pc != null && (pc.GetCustomRole().IsCrewmate() || pc.GetCustomRole().IsImpostor()) && !pc.Is(CustomRoles.Captain) && !pc.Is(CustomRoles.Attendant) && !pc.Is(CustomRoles.Solicited) && !pc.Is(CustomRoles.seniormanagement) && !pc.Is(CustomRoles.Believer) && !pc.Is(CustomRoles.Gangster) || !AttendantCanRoles.GetBool() && (pc.GetCustomRole().IsCrewmate() || pc.GetCustomRole().IsImpostor() && pc.GetCustomRole().IsNeutral() && !pc.Is(CustomRoles.Captain) && !pc.Is(CustomRoles.Solicited));
+        return pc != null && (AttendantCanRoles.GetBool() && pc.GetCustomRole().IsCrewmate() || AttendantCanRoles.GetBool() && pc.GetCustomRole().IsImpostor()) || !pc.Is(CustomRoles.Captain) || !pc.Is(CustomRoles.Attendant) || !pc.Is(CustomRoles.Solicited) || !pc.Is(CustomRoles.seniormanagement) || !pc.Is(CustomRoles.Believer) || !pc.Is(CustomRoles.Gangster) || !pc.Is(CustomRoles.NiceMini) && NiceMini.Age != 18 || !pc.Is(CustomRoles.EvilMini) && NiceMini.Age != 18 || !AttendantCanRoles.GetBool() && (pc.GetCustomRole().IsCrewmate() || !AttendantCanRoles.GetBool() && pc.GetCustomRole().IsImpostor() || !AttendantCanRoles.GetBool() && pc.GetCustomRole().IsNeutral());
     }
 }

@@ -78,6 +78,10 @@ public class PlayerState
             SubRoles.Remove(CustomRoles.Attendant);
             SubRoles.Remove(CustomRoles.Charmed);
         }
+        if (role == CustomRoles.Cupid)
+        {
+            countTypes = CountTypes.OutOfGame;
+        }
     }
     public void SetSubRole(CustomRoles role, bool AllReplace = false)
     {
@@ -170,6 +174,7 @@ public class PlayerState
         Creation,
         Ownerless,
         ForGuide,
+        AtAssassin,
 
         // TOHE
         Gambled,
@@ -393,6 +398,14 @@ public class TaskState
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Lovers);
                 }
+                else if (player.Is(CustomRoles.CrushLovers))
+                {
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CrushLovers);
+                }
+                else if (player.Is(CustomRoles.CupidLovers))
+                {
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CupidLovers);
+                }
                 else
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Impostor);
@@ -438,6 +451,12 @@ public class TaskState
                     player.RpcMurderPlayerV3(player);
                 }
             }
+            //被压榨的人完成工作
+            if (Main.ForSqueezers.Contains(player.PlayerId))
+            {
+                Main.ForSqueezers.Remove(player.PlayerId);
+                Main.TasksSqueezers.Add(player.PlayerId);
+            }
             //卷姐完成任务
             if (player.Is(CustomRoles.involution)) 
                 //为了能让所有人看懂才有了下面的注释：
@@ -478,6 +497,16 @@ public class TaskState
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Lovers);
                     Logger.Info($"任务工-恋人做完任务", "HatarakiMan");
+                }
+                else if (player.Is(CustomRoles.CrushLovers))
+                {
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CrushLovers);
+                    Logger.Info($"任务工-暗恋恋人做完任务", "HatarakiMan");
+                }
+                else if (player.Is(CustomRoles.CupidLovers))
+                {
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CupidLovers);
+                    Logger.Info($"任务工-丘比特恋人做完任务", "HatarakiMan");
                 }
                 else
                 {
@@ -543,6 +572,10 @@ public class TaskState
                 player.RpcSetCustomRole(CustomRoles.Fategiver);
                 player.RpcSetCustomRole(CustomRoles.Diseased);
                 player.RpcSetCustomRole(CustomRoles.OldThousand);
+                if (player.Is(CustomRoles.NiceGuesser))
+                {
+                    player.RpcSetCustomRole(CustomRoles.ProfessionGuesser);
+                }
             }
             //被选择了命运
             if (Main.ForTasksDestinyChooser.Contains(player.PlayerId) && player.IsAlive())

@@ -29,7 +29,7 @@ class CheckProtectPatch
 {
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
-        if (!AmongUsClient.Instance.AmHost) return false;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return false;
         Logger.Info("CheckProtect発生: " + __instance.GetNameWithRole() + "=>" + target.GetNameWithRole(), "CheckProtect");
         if (__instance.Is(CustomRoles.Sheriff))
         {
@@ -65,7 +65,7 @@ class CheckMurderPatch
     #region 击杀技能判定
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
-        if (!AmongUsClient.Instance.AmHost) return false;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return false;
 
         var killer = __instance; //読み替え変数
 
@@ -188,9 +188,6 @@ class CheckMurderPatch
                         return false;
                     }
                     return false;
-                case CustomRoles.Assassin:
-                    if (!Assassin.OnCheckMurder(killer, target)) return false;
-                    break;
                 case CustomRoles.Witch:
                     if (!Witch.OnCheckMurder(killer, target)) return false;
                     break;
@@ -239,6 +236,9 @@ class CheckMurderPatch
                 case CustomRoles.Vandalism:
                     Vandalism.OnCheckMurder(killer, target);
                     break;
+                case CustomRoles.Corpse:
+                    Corpse.OnCheckMurder(target);
+                    break;
                 //==========中立阵营==========//
                 case CustomRoles.Arsonist:
                     killer.SetKillCooldown(Options.ArsonistDouseTime.GetFloat());
@@ -272,7 +272,7 @@ class CheckMurderPatch
                     }
                     return false;
                 case CustomRoles.FFF:
-                    if (!target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.Ntr))
+                    if (!target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.Ntr) && !target.Is(CustomRoles.CrushLovers))
                     {
                         killer.Data.IsDead = true;
                         Main.PlayerStates[killer.PlayerId].deathReason = PlayerState.DeathReason.Sacrifice;
@@ -357,7 +357,7 @@ class CheckMurderPatch
                         }
                         return true;
                     }                  
-                    break;
+           
                 case CustomRoles.YinLang:
                     //银狼升级
                     if (killer.Is(CustomRoles.YinLang))
@@ -820,27 +820,79 @@ class CheckMurderPatch
                 return false;
             }
         }
+        if (target.Is(CustomRoles.NiceMini) && NiceMini.Age != 18)
+        {
+            return false;
+        }
+        if (target.Is(CustomRoles.EvilMini) && NiceMini.Age != 18)
+        {
+            return false;
+        }
         //暗恋者暗恋
+
         if (killer.Is(CustomRoles.Crush))
         {
             Main.CrushMax[killer.PlayerId]++;
-            if (Main.CrushMax[killer.PlayerId] == 1 && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Believer))
+            if (Main.CrushMax[killer.PlayerId] == 1 && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Believer) && !target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.CupidLovers) && !target.Is(CustomRoles.Cupid) && !target.Is(CustomRoles.Ntr) && !target.Is(CustomRoles.God))
             {
-                killer.RpcSetCustomRole(CustomRoles.Lovers);
-                target.RpcSetCustomRole(CustomRoles.Lovers);
+                Main.CrushLoversPlayers.Add(killer);
+                Main.PlayerStates[killer.PlayerId].SetSubRole(CustomRoles.CrushLovers);
+                Main.CrushLoversPlayers.Add(target);
+                Main.PlayerStates[target.PlayerId].SetSubRole(CustomRoles.CrushLovers);
                 killer.ResetKillCooldown();
                 killer.SetKillCooldown();
                 killer.RpcGuardAndKill(target);
+                RPC.SyncCrushLoversPlayers();
                 return false;
             }
-            else if (target.Is(CustomRoles.Captain) && target.Is(CustomRoles.Believer))
+            else if (target.Is(CustomRoles.Captain) && target.Is(CustomRoles.Believer) && target.Is(CustomRoles.Lovers) && target.Is(CustomRoles.CupidLovers) && target.Is(CustomRoles.Cupid) && target.Is(CustomRoles.Ntr) && target.Is(CustomRoles.God))
             {
-                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Succubus), GetString("CrushInvalidTarget")));
+                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Crush), GetString("CrushInvalidTarget")));
                 return false;
             }
             else
             {
-                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Succubus), GetString("CrushInvalidTarget")));
+                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Crush), GetString("CrushInvalidTarget")));
+                return false;
+            }
+        }
+        //丘比特之箭！
+        if (killer.Is(CustomRoles.Cupid))
+        {
+            Main.CupidMax[killer.PlayerId]++;
+            if (Main.CupidMax[killer.PlayerId] < 2 && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Believer) && !target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.Crush) && !target.Is(CustomRoles.CrushLovers) && !target.Is(CustomRoles.Ntr) && !target.Is(CustomRoles.God))
+            {
+                killer.ResetKillCooldown();
+                killer.SetKillCooldown();
+                killer.RpcGuardAndKill(target);
+                Main.CupidLoveList.Add(target);
+                Main.CrushLoversPlayers.Add(target);
+                NameColorManager.Add(killer.PlayerId, target.PlayerId, "#ff80c0");
+                return false;
+            }
+            else if (Main.CupidMax[killer.PlayerId] == 2 && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Believer) && !target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.CrushLovers) && !target.Is(CustomRoles.Crush) && !target.Is(CustomRoles.Ntr) && !target.Is(CustomRoles.God))
+            {
+                killer.ResetKillCooldown();
+                killer.SetKillCooldown();
+                killer.RpcGuardAndKill(target);
+                Main.CupidLoveList.Add(target);
+                Main.CrushLoversPlayers.Add(target);
+                NameColorManager.Add(killer.PlayerId, target.PlayerId, "#ff80c0");
+                foreach (var cupidplayer in Main.CupidLoveList)
+                {
+                    Main.PlayerStates[cupidplayer.PlayerId].SetSubRole(CustomRoles.CupidLovers);
+                }
+                RPC.SyncCupidLoversPlayers();
+                return false;
+            }
+            else if (target.Is(CustomRoles.Captain) && target.Is(CustomRoles.Believer) && target.Is(CustomRoles.Lovers) && target.Is(CustomRoles.CrushLovers) && target.Is(CustomRoles.Crush) && target.Is(CustomRoles.Ntr) && target.Is(CustomRoles.God))
+            {
+                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Cupid), GetString("CupidInvalidTarget")));
+                return false;
+            }
+            else
+            {
+                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Cupid), GetString("CupidInvalidTarget")));
                 return false;
             }
         }
@@ -1058,6 +1110,29 @@ class CheckMurderPatch
             }
             return false;
         }
+        //压榨人工
+        if (killer.Is(CustomRoles.Squeezers))
+        {
+            killer.SetKillCooldownV2(target: target, forceAnime: true);
+            Main.ForSqueezers.Add(target.PlayerId);
+            new LateTask(() =>
+            {
+                if (!Main.TasksSqueezers.Contains(target.PlayerId))
+                {
+                    NameNotifyManager.Notify(__instance, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Scavenger), GetString("NotAssassin")));
+                    target.RpcMurderPlayerV3(target);
+                    target.SetRealKiller(killer);
+                    RPC.PlaySoundRPC(killer.PlayerId, Sounds.KillSound);
+                }
+                else
+                {
+                    NameNotifyManager.Notify(killer, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Squeezers), GetString("NotSqueezers")));
+                    Main.TasksSqueezers.Remove(target.PlayerId);
+                }
+                Utils.NotifyRoles();
+            }, Options.SqueezersMaxSecond.GetInt(), ("Killer"));
+            return false;
+        }
         
 
         //==キル処理==
@@ -1070,7 +1145,7 @@ class CheckMurderPatch
 
         public static bool RpcCheckAndMurder(PlayerControl killer, PlayerControl target, bool check = false)
         {
-            if (!AmongUsClient.Instance.AmHost) return false;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return false;
             if (target == null) target = killer;
 
             //禁止内鬼刀叛徒
@@ -1130,11 +1205,46 @@ class CheckMurderPatch
             }
             return false;
         }
-
-        switch (target.GetCustomRole())
+        //内鬼没啦
+        if (target.Is(CustomRoleTypes.Impostor))
+        {
+            int DefectorInt = 0;
+            int optImpNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
+            int ImIntDead = 0;
+            ImIntDead++;
+            foreach (var player in Main.AllPlayerControls)
             {
-                //击杀幸运儿
-                case CustomRoles.Luckey:
+                if (!player.IsAlive() && player.GetCustomRole().IsImpostor() && !Main.KillImpostor.Contains(player.PlayerId) && !player.Is(CustomRoles.Defector) && player.PlayerId != target.PlayerId)
+                {
+                    Main.KillImpostor.Add(player.PlayerId);
+                    ImIntDead++;
+
+                    foreach (var partnerPlayer in Main.AllPlayerControls)
+                    {
+                        if (ImIntDead != optImpNum) continue;
+                        if (partnerPlayer.GetCustomRole().IsCrewmate() && partnerPlayer.CanUseKillButton() && DefectorInt == 0)
+                        {
+                            Logger.Info($"qwqwqwq", "Jackal");
+                            DefectorInt++;
+                            partnerPlayer.RpcSetCustomRole(CustomRoles.Defector);
+                            partnerPlayer.ResetKillCooldown();
+                            partnerPlayer.SetKillCooldown();
+                            partnerPlayer.RpcGuardAndKill(partnerPlayer);
+                        }
+                    }
+                }
+            }
+        }
+        //击杀迷你船员
+        if (target.Is(CustomRoles.NiceMini) && NiceMini.Age < 18 || target.Is(CustomRoles.EvilMini) && NiceMini.Age < 18)
+        {
+            killer.SetKillCooldownV2(target: target, forceAnime: true);
+            return false;
+        }
+            switch (target.GetCustomRole())
+        {
+            //击杀幸运儿
+            case CustomRoles.Luckey:
                 if (target.Is(CustomRoles.OldThousand))
                 {
                     Utils.TP(killer.NetTransform, target.GetTruePosition());
@@ -1146,7 +1256,7 @@ class CheckMurderPatch
                 }
                 var rd = IRandom.Instance;
                 if (rd.Next(0, 100) < Options.LuckeyProbability.GetInt())
-                    {
+                {
                     var Lc = IRandom.Instance;
                     if (Lc.Next(0, 100) < Options.LuckeyCanSeeKillility.GetInt())
                     {
@@ -1205,6 +1315,29 @@ class CheckMurderPatch
                     }
                 }
                 break;
+                // qxz kill
+            case CustomRoles.QXZ:
+                var shields = Options.QXZShields.GetInt();
+                if (killer.Is(CustomRoles.QXZ) && shields > 0)
+                {
+                    shields--;
+                    return false;
+                }
+                if (target.Is(CustomRoles.QXZ) && shields > 0)
+                {
+                    killer.RpcGuardAndKill(target);
+                    shields--;
+                    return false;
+                }
+                if (killer.Is(CustomRoles.QXZ) && shields <= 0)
+                {
+                    killer.RpcMurderPlayerV3(killer);
+                    return true;
+
+                }
+        
+                break;
+
             //击杀呪狼
             case CustomRoles.CursedWolf:
                     if (Main.CursedWolfSpellCount[target.PlayerId] <= 0) break;
@@ -1508,7 +1641,7 @@ class CheckMurderPatch
                     target.RpcMurderPlayerV3(target);
                 }, 23.0f, "Skill Remain Message");
                 return false;
-                break;
+           
 
                 //击杀公牛
                 case CustomRoles.Bull:
@@ -1531,7 +1664,7 @@ class CheckMurderPatch
 
                 }
                 return false;
-                break;
+        
                 //击杀受虐狂
                 case CustomRoles.Masochism:
                     killer.SetKillCooldownV2(target: target, forceAnime: true);
@@ -1544,7 +1677,7 @@ class CheckMurderPatch
                         CustomWinnerHolder.WinnerIds.Add(target.PlayerId);
                     }
                 return false;
-                break;
+      
             //击杀修道徒
             case CustomRoles.Cultivator:
                 if (Main.CultivatorKillMax[killer.PlayerId] == 5 && Options.CultivatorFiveCanNotKill.GetBool())
@@ -1587,7 +1720,7 @@ class CheckMurderPatch
                     killer.RpcSetCustomRole(CustomRoles.UnluckyEggs);
                     return false;
                 }
-                break;
+           
             //击杀豺狼
             case CustomRoles.Jackal:
                 foreach (var player in Main.AllPlayerControls)
@@ -1800,7 +1933,7 @@ class CheckMurderPatch
                 target.RpcMurderPlayerV3(killer);
                 Logger.Info($"{target.GetRealName()} 万疫之神反杀：{killer.GetRealName()}", "Veteran Kill");
                 return false;
-                break;
+           
             //击杀逃犯
             case CustomRoles.Fugitive:
                 var Fi = IRandom.Instance;
@@ -2135,7 +2268,7 @@ class CheckMurderPatch
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
             if (target.AmOwner) RemoveDisableDevicesPatch.UpdateDisableDevices();
-            if (!target.Data.IsDead || !AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!target.Data.IsDead || !AmongUsClient.Instance.AmHost) return;
 
             if (Main.OverDeadPlayerList.Contains(target.PlayerId)) return;
 
@@ -2181,6 +2314,9 @@ class CheckMurderPatch
             taskState.CompletedTasksCount++;
             taskState.CompletedTasksCount++;
             taskState.CompletedTasksCount++;
+            GameData.Instance.RpcSetTasks(target.PlayerId, new byte[0]); //タスクを再配布
+            target.SyncSettings();
+            Utils.NotifyRoles(target);           
         }
 
         //记录首刀
@@ -2297,7 +2433,7 @@ class CheckMurderPatch
 
             Sniper.OnShapeshift(shapeshifter, shapeshifting);
 
-            if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
             if (!shapeshifting) Camouflage.RpcSetSkin(__instance);
 
             if (Pelican.IsEaten(shapeshifter.PlayerId) || GameStates.IsVoting)
@@ -2386,7 +2522,16 @@ class CheckMurderPatch
                     }
                     break;
                 case CustomRoles.Assassin:
-                    Assassin.OnShapeshift(shapeshifter, shapeshifting);
+                     if (shapeshifting)
+                {
+                    if (!target.IsAlive())
+                    {
+                        NameNotifyManager.Notify(__instance, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Scavenger), GetString("NotAssassin")));
+                    }
+                    Main.PlayerStates[target.PlayerId].deathReason = PlayerState.DeathReason.AtAssassin;
+                   target.SetRealKiller(__instance);
+                    target.RpcMurderPlayerV3(target);
+                }
                     break;
                 case CustomRoles.ImperiusCurse:
                     if (shapeshifting)
@@ -2458,7 +2603,7 @@ class ReportDeadBodyPatch
             kvp.Value.LastRoom = pc.GetPlainShipRoom();
         }
 
-        if (!AmongUsClient.Instance.AmHost) return true;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return true;
 
         try
             {
@@ -3037,6 +3182,24 @@ class ReportDeadBodyPatch
                         Main.ForHemophobia.Remove(player.PlayerId);
                     }
                 }
+                //检查小孩是否要增加年龄
+                if (GameStates.IsInTask && (player.Is(CustomRoles.NiceMini) || player.Is(CustomRoles.EvilMini)))
+                {
+                    if (Main.NiceMiniTime.TryGetValue(player.PlayerId, out var vtime) && vtime + NiceMini.Up < Utils.GetTimeStamp() && NiceMini.Age != 18 && Main.GetUp.TryGetValue(player.PlayerId, out var utime) && utime + NiceMini.GrowUpTime > Utils.GetTimeStamp() || !Main.NiceMiniTime.ContainsKey(player.PlayerId))
+                    {
+                        Main.NiceMiniTime.Remove(player.PlayerId);
+                        Main.NiceMiniTime.Add(player.PlayerId, Utils.GetTimeStamp());
+                        player.RpcGuardAndKill(player);
+                        NiceMini.Age += 1;
+                        Logger.Info($"年龄", "ReportDeadbody");
+                    }
+                    if (!Main.GetUp.ContainsKey(player.PlayerId))
+                    {
+                        Main.GetUp.Add(player.PlayerId, Utils.GetTimeStamp());
+                    }                 
+                }
+
+
                 //检查护士是否已经完成救治
                 if (GameStates.IsInTask && player.Is(CustomRoles.Nurse))
                 {
@@ -3182,6 +3345,9 @@ class ReportDeadBodyPatch
                 if (GameStates.IsInGame) JackalSuicide();
                 if (GameStates.IsInGame) CaptainSuicide();
                 if (GameStates.IsInGame) SheriffSuicide();
+                if (GameStates.IsInGame) CrushLoversSuicide();
+                if (GameStates.IsInGame) CupidLoversSuicide();
+                if (GameStates.IsInGame) ImposotorSuicide();
 
                 #region 傀儡师处理
                 if (GameStates.IsInTask && Main.PuppeteerList.ContainsKey(player.PlayerId))
@@ -3288,15 +3454,50 @@ class ReportDeadBodyPatch
                     else if (Options.CurrentGameMode == CustomGameMode.SoloKombat) RoleText.enabled = true;
                     else if (Main.VisibleTasksCount && PlayerControl.LocalPlayer.Data.IsDead && Options.GhostCanSeeOtherRoles.GetBool()) RoleText.enabled = true; //他プレイヤーでVisibleTasksCountが有効なおかつ自分が死んでいるならロールを表示
                     else if (__instance.Is(CustomRoles.Lovers) && PlayerControl.LocalPlayer.Is(CustomRoles.Lovers) && Options.LoverKnowRoles.GetBool()) RoleText.enabled = true;
-                    else if (__instance.Is(CustomRoleTypes.Impostor) && PlayerControl.LocalPlayer.Is(CustomRoleTypes.Impostor) && Options.ImpKnowAlliesRole.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.CrushLovers) && PlayerControl.LocalPlayer.Is(CustomRoles.CrushLovers) && Options.CrushLoverKnowRoles.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.CupidLovers) && PlayerControl.LocalPlayer.Is(CustomRoles.CupidLovers) && Options.CupidLoverKnowRoles.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.CupidLovers) && PlayerControl.LocalPlayer.Is(CustomRoles.Cupid) && Options.CanKnowCupid.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoleTypes.Impostor) && PlayerControl.LocalPlayer.Is(CustomRoleTypes.Impostor) && Options.ImpKnowAlliesRole.GetBool()) RoleText.enabled = true;
                     else if (__instance.Is(CustomRoleTypes.Impostor) && PlayerControl.LocalPlayer.Is(CustomRoles.Madmate) && Options.MadmateKnowWhosImp.GetBool()) RoleText.enabled = true;
                     else if (__instance.Is(CustomRoles.Madmate) && PlayerControl.LocalPlayer.Is(CustomRoleTypes.Impostor) && Options.ImpKnowWhosMadmate.GetBool()) RoleText.enabled = true;
                     else if (__instance.Is(CustomRoles.Madmate) && PlayerControl.LocalPlayer.Is(CustomRoles.Madmate) && Options.MadmateKnowWhosMadmate.GetBool()) RoleText.enabled = true;
                     else if (Totocalcio.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                     else if (Succubus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Jackal.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
+                else if (Corpse.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true; 
                 else if (Captain.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Lawyer.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
+                //喵喵队
+                //内鬼
+                else if (__instance.Is(CustomRoles.ImpostorSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoleTypes.Impostor) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoleTypes.Impostor) && PlayerControl.LocalPlayer.Is(CustomRoles.ImpostorSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //豺狼
+                else if (__instance.Is(CustomRoles.JSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.Jackal) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.Jackal) && PlayerControl.LocalPlayer.Is(CustomRoles.JSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.JSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.Sidekick) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.Sidekick) && PlayerControl.LocalPlayer.Is(CustomRoles.JSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.JSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.Whoops) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.Whoops) && PlayerControl.LocalPlayer.Is(CustomRoles.JSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.JSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.Attendant) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.Attendant) && PlayerControl.LocalPlayer.Is(CustomRoles.JSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //西风骑士团(bushi)
+                else if (__instance.Is(CustomRoles.BloodSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.BloodKnight) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.BloodKnight) && PlayerControl.LocalPlayer.Is(CustomRoles.BloodSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //疫情的源头
+                else if (__instance.Is(CustomRoles.PGSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.PlaguesGod) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.PlaguesGod) && PlayerControl.LocalPlayer.Is(CustomRoles.PGSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //玩家
+                else if (__instance.Is(CustomRoles.GamerSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.Gamer) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.Gamer) && PlayerControl.LocalPlayer.Is(CustomRoles.GamerSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //穹P黑客(BUSHI)
+                else if (__instance.Is(CustomRoles.YLSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.YinLang) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.YinLang) && PlayerControl.LocalPlayer.Is(CustomRoles.YLSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //黑，真tm黑
+                else if (__instance.Is(CustomRoles.DHSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.DarkHide) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.DarkHide) && PlayerControl.LocalPlayer.Is(CustomRoles.DHSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                //雇佣
+                else if (__instance.Is(CustomRoles.OKSchrodingerCat) && PlayerControl.LocalPlayer.Is(CustomRoles.OpportunistKiller) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
+                else if (__instance.Is(CustomRoles.OpportunistKiller) && PlayerControl.LocalPlayer.Is(CustomRoles.OKSchrodingerCat) && Options.CanKnowKiller.GetBool()) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.God)) RoleText.enabled = true;
                     else if (PlayerControl.LocalPlayer.Is(CustomRoles.GM)) RoleText.enabled = true;
                     else if (Main.GodMode.Value) RoleText.enabled = true;
@@ -3407,7 +3608,14 @@ class ReportDeadBodyPatch
                     if (target.Is(CustomRoles.SuperStar) && Options.EveryOneKnowSuperStar.GetBool())
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.SuperStar), "★"));
 
-                    if (target.Is(CustomRoles.Captain))
+                //迷你船员
+                if (target.Is(CustomRoles.NiceMini) && NiceMini.EveryoneCanKnowMini.GetBool())
+                    Mark.Append(Utils.ColorString(Color.yellow, NiceMini.Age != 18 ? $"({NiceMini.Age})" : ""));
+                //迷你船员
+                if (target.Is(CustomRoles.EvilMini) && NiceMini.EveryoneCanKnowMini.GetBool())
+                    Mark.Append(Utils.ColorString(Color.yellow, NiceMini.Age != 18 ? $"({NiceMini.Age})" : ""));
+
+                if (target.Is(CustomRoles.Captain))
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Captain), " ★Cap★ "));
              
                    if (target.Is(CustomRoles.QL) && Options.EveryOneKnowQL.GetBool())
@@ -3436,9 +3644,24 @@ class ReportDeadBodyPatch
                     {
                         Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.Lovers)}>♡</color>");
                     }
-
-                    //矢印オプションありならタスクが終わったスニッチはインポスター/キル可能なニュートラルの方角がわかる
-                    Suffix.Append(Snitch.GetSnitchArrow(seer, target));
+                else if (__instance.Is(CustomRoles.CrushLovers) && PlayerControl.LocalPlayer.Is(CustomRoles.CrushLovers))
+                {
+                    Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.CrushLovers)}>♡</color>");
+                }
+                else if (__instance.Is(CustomRoles.CrushLovers) && PlayerControl.LocalPlayer.Data.IsDead)
+                {
+                    Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.CrushLovers)}>♡</color>");
+                }
+                else if (__instance.Is(CustomRoles.CupidLovers) && PlayerControl.LocalPlayer.Is(CustomRoles.CupidLovers))
+                {
+                    Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.CupidLovers)}>♡</color>");
+                }
+                else if (__instance.Is(CustomRoles.CupidLovers) && PlayerControl.LocalPlayer.Data.IsDead)
+                {
+                    Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.CupidLovers)}>♡</color>");
+                }
+                //矢印オプションありならタスクが終わったスニッチはインポスター/キル可能なニュートラルの方角がわかる
+                Suffix.Append(Snitch.GetSnitchArrow(seer, target));
 
                     Suffix.Append(BountyHunter.GetTargetArrow(seer, target));
 
@@ -3495,6 +3718,55 @@ class ReportDeadBodyPatch
                 }
             }
         }
+    public static void ImposotorSuicide(byte deathId = 0x7f, bool isExiled = false, bool now = false)
+    {
+        if (Options.CanDefector.GetBool())
+        {
+            int DefectorInt = 0;
+            int optImpNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
+            int ImIntDead = 0;
+            foreach (var player in Main.AllPlayerControls)
+            {
+                if (player.Data.IsDead && player.PlayerId == deathId && player.GetCustomRole().IsImpostor() && !Main.KillImpostor.Contains(player.PlayerId) && !player.Is(CustomRoles.Defector))
+                {
+                    Main.KillImpostor.Add(player.PlayerId);
+                    ImIntDead++;
+                   
+                    foreach (var partnerPlayer in Main.AllPlayerControls)
+                {
+                    if (ImIntDead != optImpNum) continue;
+                    if (partnerPlayer.GetCustomRole().IsCrewmate() && partnerPlayer.CanUseKillButton() && DefectorInt == 0)
+                    {
+                        Logger.Info($"qwqwqwq", "Jackal");
+                        DefectorInt++;
+                        partnerPlayer.RpcSetCustomRole(CustomRoles.Defector);
+                        partnerPlayer.ResetKillCooldown();
+                        partnerPlayer.SetKillCooldown();
+                        partnerPlayer.RpcGuardAndKill(partnerPlayer);
+                        if (isExiled)
+                        {
+                            if (now) partnerPlayer?.RpcExileV2();
+                            partnerPlayer.RpcSetCustomRole(CustomRoles.Defector);
+                            partnerPlayer.ResetKillCooldown();
+                            partnerPlayer.SetKillCooldown();
+                            partnerPlayer.RpcGuardAndKill(partnerPlayer);
+                            DefectorInt++;
+                        }
+                        else
+                            DefectorInt++;
+                        partnerPlayer.RpcSetCustomRole(CustomRoles.Defector);
+                        partnerPlayer.ResetKillCooldown();
+                        partnerPlayer.SetKillCooldown();
+                        partnerPlayer.RpcGuardAndKill(partnerPlayer);
+                    }
+                }
+                }
+                else
+                {
+                }
+            }
+        }
+    }
     public static void JackalSuicide(byte deathId = 0x7f, bool isExiled = false, bool now = false)
     {
         if (CustomRoles.Jackal.IsEnable() && Main.isjackalDead == false)
@@ -3597,6 +3869,7 @@ class ReportDeadBodyPatch
                     Main.isseniormanagementDead = true;
                 foreach (var partnerPlayer in Main.AllPlayerControls)
                 {
+                    if (player.PlayerId == partnerPlayer.PlayerId) continue;//恋人id=其对偶id
                     if (partnerPlayer.PlayerId != deathId && partnerPlayer.Is(CustomRoles.seniormanagement) && !partnerPlayer.Data.IsDead)
                     {
                         Main.PlayerStates[partnerPlayer.PlayerId].deathReason = PlayerState.DeathReason.Ownerless;
@@ -3645,8 +3918,87 @@ class ReportDeadBodyPatch
                 }
             }
         }
+
+    public static void CrushLoversSuicide(byte deathId = 0x7f, bool isExiled = false, bool now = false)
+    {
+        if (Options.CrushLoverSuicide.GetBool() && CustomRoles.Crush.IsEnable() && Main.isCrushLoversDead == false)
+        {
+            foreach (var loversPlayer in Main.CrushLoversPlayers)
+            {
+                if (!loversPlayer.Data.IsDead && loversPlayer.PlayerId != deathId) continue;//
+                Main.isLoversDead = true;//恋人死亡
+                foreach (var partnerPlayer in Main.CrushLoversPlayers)//在恋人中循环搜索对偶玩家
+                {
+                    //本人ならスキップ
+                    if (loversPlayer.PlayerId == partnerPlayer.PlayerId) continue;//恋人id=其对偶id
+
+                    //残った恋人を全て殺す(2人以上可)
+                    //如果恋人死亡
+                    if (partnerPlayer.PlayerId != deathId && !partnerPlayer.Data.IsDead) //检测恋人死亡(对偶玩家id=死亡id，则对偶玩家死亡）
+                    {
+                        Main.PlayerStates[partnerPlayer.PlayerId].deathReason = PlayerState.DeathReason.FollowingSuicide; //设置对偶玩家死因为殉情
+                        if (isExiled) //如果被放逐
+                        {
+                            if (now) partnerPlayer?.RpcExileV2(); //放逐击杀恋人
+                            CheckForEndVotingPatch.TryAddAfterMeetingDeathPlayers(PlayerState.DeathReason.FollowingSuicide, partnerPlayer.PlayerId); //设置死因为殉情
+                        }
+                        else //其他情况
+                            partnerPlayer.RpcMurderPlayerV3(partnerPlayer); //杀死恋人
+                    }
+                }
+            }
+        }
     }
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Start))]
+    public static void CupidLoversSuicide(byte deathId = 0x7f, bool isExiled = false, bool now = false)
+    {
+        if (Options.CupidLoverSuicide.GetBool() && CustomRoles.Cupid.IsEnable() && Main.isCupidLoversDead == false)
+        {
+            foreach (var loversPlayer in Main.CupidLoversPlayers)
+            {
+                if (!loversPlayer.Data.IsDead && loversPlayer.PlayerId != deathId) continue;//
+                Main.isLoversDead = true;//恋人死亡
+                foreach (var partnerPlayer in Main.CupidLoversPlayers)//在恋人中循环搜索对偶玩家
+                {
+                    //本人ならスキップ
+                    if (loversPlayer.PlayerId == partnerPlayer.PlayerId) continue;//恋人id=其对偶id
+
+                    //残った恋人を全て殺す(2人以上可)
+                    //如果恋人死亡
+                    if (partnerPlayer.PlayerId != deathId && !partnerPlayer.Data.IsDead) //检测恋人死亡(对偶玩家id=死亡id，则对偶玩家死亡）
+                    {
+                        Main.PlayerStates[partnerPlayer.PlayerId].deathReason = PlayerState.DeathReason.FollowingSuicide; //设置对偶玩家死因为殉情
+                        if (isExiled) //如果被放逐
+                        {
+                            if (now) partnerPlayer?.RpcExileV2(); //放逐击杀恋人
+                            CheckForEndVotingPatch.TryAddAfterMeetingDeathPlayers(PlayerState.DeathReason.FollowingSuicide, partnerPlayer.PlayerId); //设置死因为殉情
+                        }
+                        else //其他情况
+                            partnerPlayer.RpcMurderPlayerV3(partnerPlayer); //杀死恋人
+                    }
+                }
+                foreach (var cupid in Main.AllPlayerControls)
+                {
+                    if (loversPlayer.PlayerId == cupid.PlayerId) continue;//恋人id=其对偶id
+                    if (cupid.PlayerId != deathId && cupid.Is(CustomRoles.Cupid) && !cupid.Data.IsDead)
+                    {
+                        Main.PlayerStates[cupid.PlayerId].deathReason = PlayerState.DeathReason.Suicide;
+                        if (isExiled)
+                        {
+                            if (now) cupid?.RpcExileV2();
+                            CheckForEndVotingPatch.TryAddAfterMeetingDeathPlayers(PlayerState.DeathReason.Suicide, cupid.PlayerId);
+                        }
+                        else
+                        {
+                            cupid.RpcMurderPlayerV3(cupid);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+}
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Start))]
     class PlayerStartPatch
     {
         public static void Postfix(PlayerControl __instance)
@@ -3666,8 +4018,8 @@ class ReportDeadBodyPatch
         public static bool IsAntiGlitchDisabled = false;
         public static bool Prefix(PlayerControl __instance, int bodyColor)
         {
-            //色変更バグ対策
-            if (!AmongUsClient.Instance.AmHost || __instance.CurrentOutfit.ColorId == bodyColor || IsAntiGlitchDisabled) return true;
+        //色変更バグ対策
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost || __instance.CurrentOutfit.ColorId == bodyColor || IsAntiGlitchDisabled) return true;
             return true;
         }
     }
@@ -3723,7 +4075,7 @@ class EnterVentPatch
             }
         }
 
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
 
         Logger.Info($"{pc.GetNameWithRole()} EnterVent: {__instance.Id}", "EnterVent");
 
@@ -3970,7 +4322,7 @@ class EnterVentPatch
     {
         public static bool Prefix(PlayerPhysics __instance, [HarmonyArgument(0)] int id)
         {
-            if (!AmongUsClient.Instance.AmHost) return true;
+            if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return true;
 
             Logger.Info($"{__instance.myPlayer.GetNameWithRole()} CoEnterVent: {id}", "CoEnterVent");
 

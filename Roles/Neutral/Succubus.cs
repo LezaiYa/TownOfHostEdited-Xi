@@ -1,5 +1,6 @@
 ﻿using Hazel;
 using System.Collections.Generic;
+using TOHE.Roles.Crewmate;
 using UnityEngine;
 using static TOHE.Options;
 using static TOHE.Translator;
@@ -50,7 +51,7 @@ public static class Succubus
         playerIdList.Add(playerId);
         CharmLimit = CharmMax.GetInt();
 
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (Options.CurrentGameMode != CustomGameMode.TOEX || Options.AllModMode.GetBool()) if (!AmongUsClient.Instance.AmHost) return;
         if (!Main.ResetCamPlayerList.Contains(playerId))
             Main.ResetCamPlayerList.Add(playerId);
     }
@@ -105,6 +106,6 @@ public static class Succubus
     public static string GetCharmLimit() => Utils.ColorString(CharmLimit >= 1 ? Utils.GetRoleColor(CustomRoles.Succubus) : Color.gray, $"({CharmLimit})");
     public static bool CanBeCharmed(this PlayerControl pc)
     {
-        return pc != null && (pc.GetCustomRole().IsCrewmate() || pc.GetCustomRole().IsImpostor()) && !pc.Is(CustomRoles.seniormanagement) && !pc.Is(CustomRoles.Captain) && !pc.Is(CustomRoles.Charmed) && !pc.Is(CustomRoles.Solicited) && !pc.Is(CustomRoles.Believer) && !pc.Is(CustomRoles.Gangster);
+        return pc != null && (pc.GetCustomRole().IsCrewmate() || pc.GetCustomRole().IsImpostor()) || !pc.Is(CustomRoles.seniormanagement) || !pc.Is(CustomRoles.Captain) || !pc.Is(CustomRoles.Charmed) || !pc.Is(CustomRoles.Solicited) || !pc.Is(CustomRoles.Believer) || !pc.Is(CustomRoles.Gangster) || !pc.Is(CustomRoles.NiceMini) && NiceMini.Age != 18 || !pc.Is(CustomRoles.EvilMini) && NiceMini.Age != 18;
     }
 }

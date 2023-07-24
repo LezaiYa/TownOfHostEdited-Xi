@@ -24,7 +24,7 @@ internal class CustomRoleSelector
         int optNeutralNum = 0;
         int optNKNum = 0;
         int optHPNum = HotPotatoManager.HotQuan.GetInt();
-        int Count = -1;
+        //int Count = -1;
         if (Options.NeutralRolesMaxPlayer.GetInt() > 0 && Options.NeutralRolesMaxPlayer.GetInt() >= Options.NeutralRolesMinPlayer.GetInt())
             optNeutralNum = rd.Next(Options.NeutralRolesMinPlayer.GetInt(), Options.NeutralRolesMaxPlayer.GetInt() + 1);
         if (Options.NeutralKillersMaxPlayer.GetInt() > 0 && Options.NeutralKillersMaxPlayer.GetInt() >= Options.NeutralKillersMinPlayer.GetInt())
@@ -32,6 +32,7 @@ internal class CustomRoleSelector
 
         int readyRoleNum = 0;
         int readyDeputyNum = 0;
+        int readyMiniNum = 0;
         int readyPTNum = 0;
         int readyNeutralNum = 0;
         int readyNKNum = 0;
@@ -63,7 +64,7 @@ internal class CustomRoleSelector
                 RoleResult.Add(pc, CustomRoles.KB_Normal);
             return;
         }
-        /*if (Options.CurrentGameMode == CustomGameMode.ModeArrest)
+        if (Options.CurrentGameMode == CustomGameMode.ModeArrest)
         {
             while (readyKLANum < 1)
             {
@@ -76,7 +77,7 @@ internal class CustomRoleSelector
                 if (!pc.Is(CustomRoles.captor))
                     RoleResult.Add(pc, CustomRoles.runagat);
             return;
-        }*/
+        }
         if (Options.CurrentGameMode == CustomGameMode.HotPotato)
         {
             while (readyPTNum < optHPNum)
@@ -152,7 +153,36 @@ internal class CustomRoleSelector
                 else if (role.IsNKS()) NKRateList.Add(role);
                 else roleRateList.Add(role);
         }
+        
 
+
+        //RPCによる同期
+        foreach (var pair in Main.PlayerStates)
+        {
+            ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
+
+            foreach (var subRole in pair.Value.SubRoles)
+            ExtendedPlayerControl.RpcSetCustomRole(pair.Key, subRole);
+        }
+        if (CustomRoles.NiceMini.IsEnable())
+        {
+            Random mn = new Random();
+            int randomNumber = mn.Next(1, 100);
+            while (readyMiniNum < 1)
+            {
+                if (CustomRoles.NiceMini.IsEnable() && randomNumber <= NiceMini.EvilMiniSpawnChances.GetInt() && NiceMini.CanBeEvil.GetBool())
+                {
+                    rolesToAssign.Add(CustomRoles.EvilMini);
+                }
+                else if (CustomRoles.NiceMini.IsEnable() && randomNumber > NiceMini.EvilMiniSpawnChances.GetInt())
+                {
+                    rolesToAssign.Add(CustomRoles.NiceMini);
+
+                }
+                readyRoleNum++;
+                readyMiniNum++;
+            }
+        }
         // 抽取优先职业（内鬼）
         while (ImpOnList.Count > 0)
         {

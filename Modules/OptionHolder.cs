@@ -815,6 +815,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Poeple);
         GuideKillRadius = FloatOptionItem.Create(4156456, "GuideKillRadius", new(0.5f, 5f, 0.5f), 2f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Guide])
             .SetValueFormat(OptionFormat.Multiplier);
+        DoubleKiller.SetupCustomOption();
 
         TextOptionItem.Create(909090, "ImpMeet", TabGroup.ImpostorRoles)//会议技能型
             .SetGameMode(CustomGameMode.Standard)

@@ -131,7 +131,9 @@ internal class ChangeRoleSettings
             Main.TimeStopsstop = new();
             Main.ForGrenadiers = new();
             Main.isjackalDead = false;
-            
+            Main.DoubleKillerMax = new();
+
+
             Main.isSheriffDead = false;
             Main.isCrushLoversDead = false;
             Main.isCupidLoversDead = false;
@@ -279,6 +281,7 @@ internal class ChangeRoleSettings
             ChiefOfPolice.Init();
             Knight.Init();
             Corpse.Init();
+            DoubleKiller.Init();
 
             SoloKombatManager.Init();
             HotPotatoManager.Init();
@@ -739,6 +742,10 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.EvilGuesser:
                         Main.PGuesserMax[pc.PlayerId] = 1;
+                        break;
+                    case CustomRoles.DoubleKiller:
+                        Main.DoubleKillerKillSeacond.Add(pc.PlayerId, Utils.GetTimeStamp());
+                        DoubleKiller.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())

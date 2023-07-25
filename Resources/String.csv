@@ -118,6 +118,7 @@
 "Corpse","拾荒者"
 "Defector","背叛者"
 "EvilMini","坏迷你船员"
+"DoubleKiller","双刀手"
 
 "# 船员阵营 / Crewmates"
 "Luckey","幸运儿","Lucky Dog","Удачник","幸運兒","Suertudo"
@@ -398,6 +399,7 @@
 "CorpseInfo","横扫尸体，做回自己"
 "DefectorInfo","内鬼也太逊了（（（"
 "EvilMiniInfo","长大前没人能伤害你"
+"DoubleKillerInfo","一把刀不够？两把！"
 
 "# 船员阵营 / Crewmate descriptions"
 "LuckeyInfo","你擅长治疗内鬼的低血压","Your Killer may Miss the Kill","Убийца может промазать по вам","是生是死，看你是歐還是非","你擅长治疗内鬼的低血压"
@@ -463,7 +465,7 @@
 "SpiritualizerInfo","来让我操控！"
 "KnightInfo","お前はもう死んでいる！"
 "NurseInfo","白衣天使！"
-"NiceMiniInfo","长大前没人能伤害你""
+"NiceMiniInfo","长大前没人能伤害你"
 
 "# 中立阵营 / Neutral descriptions"
 "ArsonistInfo","乖乖站好！","Douse Everyone and Ignite","Облейте всех игроков, а потом подожгите","燒吧，燒吧，燃燒吧","乖乖站好！"
@@ -637,6 +639,7 @@
 "CorpseInfoLong","(内鬼阵营):\n当拾荒者击杀时会得知被击杀者的职业"
 "DefectorInfoLong","(内鬼阵营):\n当最后一个内鬼死亡时，会随机场上一个带刀船员成为背叛者，背叛者需要带领内鬼胜利"
 "EvilMiniInfoLong","(内鬼阵营):\n坏迷你船员在长大前不可被击杀或招募，他的初始击杀冷却很长，当他长大后击杀冷却会大幅缩短"
+"DoubleKillerInfoLong","(内鬼阵营):\n双刀手拥有第二把刀，但是因为技术限制，不会显示这把刀，而是作为时间的形式存在，当第二把刀冷却好时会有提示，当第二把刀冷却好了下一次击杀的CD变为0秒"
 
 "# 船员阵营 / Crewmates descriptions"
 "LuckeyInfoLong","(船员阵营):\n幸运儿被击杀时，有概率抵挡这次死亡，具体概率根据房主设定。抵挡生效时凶手会看到幸运儿的身上出现护盾破碎的效果，但幸运儿自己什么都不会知道。","(Crewmates):\nWhen a player attempts to kill the Luckey, there is a probability for the Luckey to evade the kill, and the specific probability is set by the host. When the evasion takes effect, the killer will see the shield-animation on Luckey's body, but Luckey themselves will not know anything.","(Член Экипажа):\nУ Удачника будет возникать определенная вероятность того, что Убийца не сможет убить Удачника, вероятность устанавливается в зависимости от настроек Хоста. Убийца увидит эффект разрушения щита ангела на теле Удачника, но сам Удачник при этом ничего не узнает.","(船員陣營):\n幸運兒被嘗試殺死時，有機率抵擋這次死亡，具體機率依房主設定。抵擋生效時兇手會看到幸運兒身上出現盾牌破碎的效果，但幸運兒自己甚麼都不知道。此外，如果幸運兒被劊子手絞殺，那麼技能將不會生效。","(船员阵营):\n幸运儿被击杀时，有概率抵挡这次死亡，具体概率根据房主设定。抵挡生效时凶手会看到幸运儿的身上出现护盾破碎的效果，但幸运儿自己什么都不会知道。"
@@ -1433,6 +1436,7 @@
 "EveryoneCanKnowMini","所有人都能看到迷你船员"
 "CanBeEvil","可以成为坏迷你船员"
 "MajorCooldown","长大后的击杀冷却"
+"DoubleKillerKillCooldown","第二把刀冷却时间"
 
 "## 死因 / Death Reasons"
 "DeathReason.Kill","被杀","Kill","Убит","被殺","被杀"
@@ -1678,6 +1682,7 @@
 "NotSqueezers","目标已完成任务"
 "CupidInvalidTarget","不可对目标进行牵线"
 "GuessWrong","猜错了！{0}不是这个职业！"
+"DoubleKillerKillColldownTure","第二把刀冷却完毕"
 
 "## 信息 / Message"
 "Message.SetToSeconds","信息发送冷却时间为【{0}】秒","Set to 【{0}】 seconds.","Установлен на 【{0}】 секунды","訊息傳送冷卻時間設為【{0}】秒","信息发送冷却时间为【{0}】秒"

@@ -145,6 +145,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Defector => CustomRoles.Impostor,
                 CustomRoles.NiceMini => CustomRoles.Crewmate,
                 CustomRoles.EvilMini => CustomRoles.Impostor,
+                CustomRoles.DoubleKiller => CustomRoles.Impostor,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };;
     }
@@ -440,7 +441,8 @@ internal static class CustomRolesHelper
         CustomRoles.Squeezers or
         CustomRoles.Corpse or
         CustomRoles.EvilMini or
-        CustomRoles.Defector;
+        CustomRoles.Defector or
+        CustomRoles.DoubleKiller;
     }
     public static bool IsHotPotato(this CustomRoles role)
     {

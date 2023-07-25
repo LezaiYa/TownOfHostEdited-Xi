@@ -257,6 +257,8 @@ public class Main : BasePlugin
     public static List<byte> KillImpostor = new();
     public static Dictionary<byte, long> NiceMiniTime = new(); 
           public static Dictionary<byte, long> GetUp = new();
+    public static Dictionary<byte, long> DoubleKillerKillSeacond = new();
+    public static List<byte> DoubleKillerMax = new(); 
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();
@@ -660,6 +662,7 @@ public enum CustomRoles
     Corpse,
     Defector,
     EvilMini,
+    DoubleKiller,
     //船员（原版）
     Engineer,
     GuardianAngel,

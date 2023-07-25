@@ -800,6 +800,9 @@ static class ExtendedPlayerControl
             case CustomRoles.Squeezers:
                 Main.AllPlayerKillCooldown[player.PlayerId] = Options.SqueezersKillColldown.GetInt();
                 break;
+            case CustomRoles.DoubleKiller:
+                DoubleKiller.SetKillCooldown(player.PlayerId);
+                break;
         }
         if (player.PlayerId == LastImpostor.currentId)
             LastImpostor.SetKillCooldown();

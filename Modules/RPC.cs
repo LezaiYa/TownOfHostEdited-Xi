@@ -884,7 +884,10 @@ internal static class RPC
                 Knight.Add(targetId);
                 break;
             case CustomRoles.Corpse:
-                Corpse.Add(targetId); 
+                Corpse.Add(targetId);
+                break;
+            case CustomRoles.DoubleKiller:
+                DoubleKiller.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);

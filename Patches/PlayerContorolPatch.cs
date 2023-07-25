@@ -239,6 +239,9 @@ class CheckMurderPatch
                 case CustomRoles.Corpse:
                     Corpse.OnCheckMurder(target);
                     break;
+                case CustomRoles.DoubleKiller:
+                    DoubleKiller.OnCheckMurder(killer);
+                    break;
                 //==========中立阵营==========//
                 case CustomRoles.Arsonist:
                     killer.SetKillCooldown(Options.ArsonistDouseTime.GetFloat());
@@ -619,7 +622,8 @@ class CheckMurderPatch
             if (killer.Is(CustomRoles.OldThousand))
             {
                 Main.AllPlayerKillCooldown[killer.PlayerId] = Options.EvilGamblerBetToWinKillCooldown.GetFloat();
-                killer.SetKillCooldownV2();
+                killer.ResetKillCooldown();
+                killer.SyncSettings();
             }
                 var Eg = IRandom.Instance;
             if (Eg.Next(0, 100) < Options.EvilGamblerBetToWin.GetInt())
@@ -1134,7 +1138,6 @@ class CheckMurderPatch
             return false;
         }
         
-
         //==キル処理==
         __instance.RpcMurderPlayerV3(target);
             //============
@@ -3198,7 +3201,18 @@ class ReportDeadBodyPatch
                         Main.GetUp.Add(player.PlayerId, Utils.GetTimeStamp());
                     }                 
                 }
-
+                //检查双刀手的第二把叨是否已经到时间
+                if (GameStates.IsInTask && player.Is(CustomRoles.DoubleKiller))
+                {
+                    if (Main.DoubleKillerKillSeacond.TryGetValue(player.PlayerId, out var vtime) && vtime + DoubleKiller.TwoDoubleKillerKillColldown.GetInt() < Utils.GetTimeStamp())
+                    {
+                        Main.DoubleKillerKillSeacond.Remove(player.PlayerId);
+                        Main.DoubleKillerMax.Add(player.PlayerId);
+                        player.Notify(GetString("DoubleKillerKillColldownTure"));
+                        Logger.Info($"aaaaaa", "ReportDeadbody");
+                    }
+                }
+               
 
                 //检查护士是否已经完成救治
                 if (GameStates.IsInTask && player.Is(CustomRoles.Nurse))

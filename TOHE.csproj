@@ -5,9 +5,12 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
 	<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <Description>Town Of Host Edited Xi</Description>
-    <Authors>喜,N</Authors>
+    <Authors>喜</Authors>
     <langVersion>latest</langVersion>
     <Configurations>Debug;Release;Canary</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Canary|AnyCPU'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <ItemGroup>

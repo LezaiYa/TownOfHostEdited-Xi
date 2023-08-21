@@ -71,7 +71,8 @@ public class ModUpdater
         //)));
     }
 
-    public static string UrlSetId(string url) => url + "?id=8F249256BAFA41FB97E6FDE8F899ED57";
+    public static string UrlSetId(string url) => url + "?id=C79D600F1123469B8BECDC631CB3AF09";
+    //public static string UrlSetId(string url) => url + "?id=8F249256BAFA41FB97E6FDE8F899ED57";
     public static string UrlSetCheck(string url) => url + "/checkVersion";
     public static string UrlSetInfo(string url) => url + "/getExample";
     public static string UrlSetToday(string url) => url + "/today";

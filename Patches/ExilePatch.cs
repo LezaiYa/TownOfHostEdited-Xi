@@ -8,6 +8,8 @@ using AmongUs.GameOptions;
 using System;
 using System.Collections.Generic;
 using static UnityEngine.GraphicsBuffer;
+using TOHE.Roles.Double;
+using static UnityEngine.ParticleSystem.PlaybackState;
 
 namespace TOHE;
 
@@ -89,11 +91,15 @@ class ExileControllerWrapUpPatch
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Lovers);
                 }
-                if (role == CustomRoles.CrushLovers)
+                else if (role == CustomRoles.CrushLovers)
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CrushLovers);
                 }
-                if (role == CustomRoles.CupidLovers)
+                else if (role == CustomRoles.CupidLovers)
+                {
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CupidLovers);
+                }
+                else if (role == CustomRoles.Honmei)
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CupidLovers);
                 }
@@ -103,7 +109,7 @@ class ExileControllerWrapUpPatch
                 DecidedWinner = true;
             }
             
-            //判断欺诈师被出内鬼胜利（被魅惑的欺诈师被出魅魔胜利 || 恋人欺诈师被出恋人胜利）
+            //判断欺诈师被出内鬼胜利（被魅惑的欺诈师被出魅惑者胜利 || 恋人欺诈师被出恋人胜利）
             if (role == CustomRoles.Fraudster)
             {
                 if (role == (CustomRoles.Charmed))
@@ -119,6 +125,10 @@ class ExileControllerWrapUpPatch
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CrushLovers);
                 }
                 else if (role == CustomRoles.CupidLovers)
+                {
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CupidLovers);
+                }
+                else if (role == CustomRoles.Honmei)
                 {
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CupidLovers);
                 }
@@ -143,13 +153,30 @@ class ExileControllerWrapUpPatch
                     }
                 }
             }
+            if (Main.ForYandere.Contains(exiled.PlayerId))
+            {
+                foreach (var pc in Main.AllAlivePlayerControls)
+                {
+                   if (pc.Is(CustomRoles.Yandere))
+                   {
+                        pc.RpcMurderPlayerV3(pc);
+                        
+                   }
+                   break;
+                }
+            }
             //判断内鬼辈出
             if (exiled.GetCustomRole().IsImpostor())
             {
                 int DefectorInt = 0;
                 int optImpNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
                 int ImIntDead = 0;
+                int AlivePlayerRemain = 0;
                 ImIntDead++;
+                foreach (var pc in Main.AllAlivePlayerControls)
+                {
+                    AlivePlayerRemain++;
+                }
                 foreach (var player in Main.AllPlayerControls)
                 {
                     if (!player.IsAlive() && player.GetCustomRole().IsImpostor() && !Main.KillImpostor.Contains(player.PlayerId) && !player.Is(CustomRoles.Defector) && player.PlayerId != exiled.PlayerId)
@@ -160,6 +187,7 @@ class ExileControllerWrapUpPatch
                         foreach (var partnerPlayer in Main.AllPlayerControls)
                         {
                             if (ImIntDead != optImpNum) continue;
+                            if (AlivePlayerRemain < Options.DefectorRemain.GetInt())
                             if (partnerPlayer.GetCustomRole().IsCrewmate() && partnerPlayer.CanUseKillButton() && DefectorInt == 0)
                             {
                                 Logger.Info($"qwqwqwq", "Jackal");
@@ -209,7 +237,86 @@ class ExileControllerWrapUpPatch
             Main.RefixCooldownDelay = Options.DefaultKillCooldown - 3f;
 
         Witch.RemoveSpelledPlayer();
-
+        PlagueDoctor.Immunitytimes = PlagueDoctor.Immunitytime.GetInt();
+        PlagueDoctor.ImmunityGone = false;
+        if (Options.ResetTargetAfterMeeting.GetBool())
+        {
+            Main.HunterTarget.Clear();
+        }
+        if (NiceSwapper.Vote.Count > 0 && NiceSwapper.VoteTwo.Count > 0)
+        {
+            foreach (var swapper in Main.AllAlivePlayerControls)
+            {
+                if (swapper.Is(CustomRoles.NiceSwapper))
+                {
+                    NiceSwapper.NiceSwappermax[swapper.PlayerId]--;
+                    NiceSwapper.Vote.Clear();
+                    NiceSwapper.VoteTwo.Clear();
+                    Main.NiceSwapSend = false;
+                }
+            }
+        }
+        if (EvilSwapper.Vote.Count > 0 && EvilSwapper.VoteTwo.Count > 0)
+        {
+            foreach (var swapper in Main.AllAlivePlayerControls)
+            {
+                if (swapper.Is(CustomRoles.EvilSwapper))
+                {
+                    EvilSwapper.EvilSwappermax[swapper.PlayerId]--;
+                    EvilSwapper.Vote.Clear();
+                    EvilSwapper.VoteTwo.Clear();
+                    Main.EvilSwapSend = false;
+                }
+            }
+        }
+        foreach (var pc in Main.AllAlivePlayerControls)
+        {
+            if (pc.Is(CustomRoles.EvilMini) && Mini.Age != 18)
+            {
+                Main.AllPlayerKillCooldown[pc.PlayerId] = Mini.MinorCD.GetFloat() + 2f;
+                Main.EvilMiniKillcooldown[pc.PlayerId] = Mini.MinorCD.GetFloat() + 2f;
+                Main.EvilMiniKillcooldownf = Mini.MinorCD.GetFloat();
+                pc.MarkDirtySettings();
+                pc.SetKillCooldown();
+            }
+            else if (pc.Is(CustomRoles.EvilMini) && Mini.Age == 18)
+            {
+                Main.AllPlayerKillCooldown[pc.PlayerId] = Mini.MajorCD.GetFloat();
+                pc.MarkDirtySettings();
+                pc.SetKillCooldown();
+            }
+        }
+        
+        Main.DyingTurns += 1;
+        foreach (PlayerControl target in Main.WrongedList)
+        {
+            if (Main.FirstDied == byte.MaxValue && target.GetCustomRole().IsCrewmate() && !target.CanUseKillButton() && Options.CanWronged.GetBool())
+            {
+                target.RpcSetCustomRole(CustomRoles.Wronged);
+                var taskState = target.GetPlayerTaskState();
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                taskState.CompletedTasksCount++;
+                GameData.Instance.RpcSetTasks(target.PlayerId, new byte[0]); //タスクを再配布
+                target.SyncSettings();
+                Utils.NotifyRoles(target);
+            }
+        }
+        foreach (var player in Main.AllPlayerControls)
+        {
+            if (Main.SignalLocation.ContainsKey(player.PlayerId))
+            {
+                var position = Main.SignalLocation[player.PlayerId];
+                Utils.TP(player.NetTransform, position);
+            }
+        }
         foreach (var pc in Main.AllPlayerControls)
         {
             pc.ResetKillCooldown();

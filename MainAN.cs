@@ -2,6 +2,25 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using AmongUs.GameOptions;
+using MS.Internal.Xml.XPath;
+using Sentry.Internal.Extensions;
+using System.Linq;
+using System.Text;
+using TOHE.Roles.Crewmate;
+using TOHE.Roles.Impostor;
+using TOHE.Roles.Neutral;
+using static TOHE.Translator;
+using Hazel;
+using InnerNet;
+using System.Threading.Tasks;
+using TOHE.Modules;
+using TOHE.Roles.AddOns.Crewmate;
+using UnityEngine.Profiling;
+using System.Runtime.Intrinsics.X86;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
+using UnityEngine.Networking.Types;
 
 namespace TOHE;
 [HarmonyPatch(typeof(MainMenuManager))]
@@ -17,7 +36,10 @@ public class MainAN
     
         if (!template) return;
         // 示例，创建一个名为Gitee的按钮，点击后打开https://gitee.com/xigua_ya/tohex
-        CreateButton(__instance, template, GameObject.Find("RightPanel")?.transform, new(0.2f, 0.38f), "官方Gitee", () => { Application.OpenURL("https://gitee.com/xigua_ya/tohex"); },Color.yellow);
+        CreateButton(__instance, template, GameObject.Find("RightPanel")?.transform, new(0.2f, 0.2f), "Gitee", () => { Application.OpenURL("https://gitee.com/xigua_ya/tohex"); }, new Color32(255, 151, 0,byte.MaxValue));
+        CreateButton(__instance, template, GameObject.Find("RightPanel")?.transform, new(0.4f, 0.2f), "Github", () => { Application.OpenURL("https://github.com/TOHEX-Official/TownOfHostEdited-Xi"); }, new Color32(0, 0, 0, byte.MaxValue));
+        CreateButton(__instance, template, GameObject.Find("RightPanel")?.transform, new(0.6f, 0.2f), "Discord", () => { Application.OpenURL("https://discord.gg/WKYdzxKhNm"); }, new Color32(0, 8, 255, byte.MaxValue));
+        CreateButton(__instance, template, GameObject.Find("RightPanel")?.transform, new(0.2f, 0.3f), "QQ", () => { Application.OpenURL("http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=92p_Sv_eLa544FWS83251lPQxpok_i2s&authKey=e918u6eWXT9x2kVo88PPMdEIzg3wZARl0duYhLke9DKhLwujwsmcTKpovM8X01l%2B&noverify=0&group_code=704560281"); }, new Color32(0, 255, 247, byte.MaxValue));
     }
     
     private static readonly List<PassiveButton> Buttons = new();

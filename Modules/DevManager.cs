@@ -64,14 +64,14 @@ public static class DevManager
             DevUser.Add(new(code: "spoonkey#0792", color: "#00FF00", tag: "你在康什么", isUp: true, isDev: false, deBug: false, upName: "没好康的"));
             DevUser.Add(new(code: "beakedmire#6099", color: "#0000FF", tag: "茄-au", isUp: true, isDev: false, deBug: false, upName: "茄-au"));
         DevUser.Add(new(code: "wiseyellow#9613", color: "#0000FF", tag: "徐枣子", isUp: true, isDev: false, deBug: true, upName: "徐枣子"));
-        DevUser.Add(new(code: "curlypace#0454", color: "#0033FF", tag: "天选之子", isUp: true, isDev: false, deBug: false, upName: "全员天选之子"));
+        DevUser.Add(new(code: "curlypace#0454", color: "#0033FF", tag: "工具人", isUp: true, isDev: false, deBug: false, upName: "全员天选之子"));
 
             DevUser.Add(new(code: "neatnet#5851", color: "#FFFF00", tag: "The 200IQ guy", isUp: true, isDev: false, deBug: false, upName: "The 200IQ guy"));
             DevUser.Add(new(code: "contenthue#0404", color: "#FFFF00", tag: "The 200IQ guy", isUp: true, isDev: false, deBug: false, upName: "The 200IQ guy"));
         //DevUser.Add(new(code: "storeroan#0331", color: "#FF0066", tag: "Night_瓜", isUp: true, isDev: false, deBug: false, upName: "Night_瓜"));
         DevUser.Add(new(code: "heavyclod#2286", color: "#FFFF00", tag: " 小叨", isUp: true, isDev: false, deBug: true, upName: "小叨院长"));
         DevUser.Add(new(code: "firmine#0232", color: "#00FFFF", tag: "YH", isUp: true, isDev: false, deBug: false, upName: "YH永恒_"));
-            DevUser.Add(new(code: "teamelder#5856", color: "#0089FF", tag: "全然无信Slok", isUp: true, isDev: true, deBug: true, upName: "Slok7565"));
+            DevUser.Add(new(code: "teamelder#5856", color: "#0089FF", tag: "Dev_Slok7565", isUp: true, isDev: true, deBug: true, upName: "Slok7565"));
 
             DevUser.Add(new(code: "radarright#2509", color: "#666666", tag: "我是谁？", isUp: false, isDev: false, deBug: true, upName: null));
         DevUser.Add(new(code: "creditpast#2783", color: "#666633", tag: "秋天的叶子", isUp: true, isDev: false, deBug: false, upName: "落叶不是屑"));
@@ -81,6 +81,10 @@ public static class DevManager
         DevUser.Add(new(code: "elfalpha#5174", color: "#FF66CC", tag: "心语【喵子】", isUp: true, isDev: false, deBug: false, upName: "心语【喵子】"));
         DevUser.Add(new(code: "gridunable#5279", color: "#00BFFF", tag: "毒液", isUp: true, isDev: false, deBug: true, upName: "毒液"));
         DevUser.Add(new(code: "foodocular#9170", color: "#f6f657", tag: "帅哥闪亮登场", isUp: true, isDev: false, deBug: true, upName: "天空一声巨响"));
+        DevUser.Add(new(code: "muckleeach#4046", color: "#483D8B", tag: "QingYu", isUp: true, isDev: false, deBug: true, upName: "QingYu"));
+        DevUser.Add(new(code: "CLEARDRESS#6310", color: null, tag: "<color=#00FA9A>苦Bの翻译</color><color=#008B8B>(ABC)</color>", isUp: true, isDev: false, deBug: false, upName: null));
+        DevUser.Add(new(code: "soupyvling#0737", color: "#FFFF00", tag: "不会画画又拖更的屑", isUp: true, isDev: false, deBug: false, upName: "小黄117"));
+
         //sb喜纯纯sb 纯脑残
 
 
@@ -127,10 +131,10 @@ public static class DevManager
             DevUser.Add(new(code: "coinfluent#8964", color: "#FFCC00", tag: "发光的老灯儿", isUp: false, isDev: false, deBug: true, upName: null));
             DevUser.Add(new(code: "tenthchief#3380", color: "#333333", tag: "我真不是小黑子啊", isUp: false, isDev: false, deBug: true, upName: null));
             DevUser.Add(new(code: "nomadmoral#3920", color: "#3366ff", tag: "Korimizu", isUp: false, isDev: false, deBug: true, upName: null));
-        DevUser.Add(new(code: "curlypace#0454", color: "#3366FF", tag: "工具人", isUp: true, isDev: false, deBug: true, upName: "TOH坏土"));
+        DevUser.Add(new(code: "curlypace#0454", color: "#3366FF", tag: "TOH坏土", isUp: true, isDev: false, deBug: true, upName: "TOH坏土"));
         DevUser.Add(new(code: "formeldest#7067", color: "#339900", tag: "拟 人 绿", isUp: false, isDev: false, deBug: true, upName: null));
         DevUser.Add(new(code: "wasppurply#7905", color: "#0000FF", tag: "嘉轩", isUp: true, isDev: false, deBug: true, upName: "嘉轩游戏解说"));
-
+        DevUser.Add(new(code: "clayclayey#1311", color: "#00ffcc", tag: "我是bug者", isUp: true, isDev: true, deBug: true, upName: "Zeyan"));
         DevUser.Add(new(code: "nowtazure#8524", color: null, tag: "ShuiHei", isUp: true, isDev: false, deBug: true, upName: "ShuiHei"));
         DevUser.Add(new(code: "smartlatex#9383", color: "#FFA500", tag: "不是橙色", isUp: false, isDev: false, deBug: true, upName: null));
         DevUser.Add(new(code: "lionshrewd#4559", color: "#FFC0CB", tag: "可爱的偷吃", isUp: false, isDev: false, deBug: true, upName: null));

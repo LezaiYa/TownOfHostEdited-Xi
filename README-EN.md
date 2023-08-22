@@ -115,7 +115,7 @@ The Latest Version: v2.0.0
 >  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :
 > 
-> - Developer：[Night_瓜](https://gitee.com/xigua_ya)(This guy is really shameless(Doge)
+> - Developer：[Night_瓜](https://gitee.com/xigua_ya)
 > - Reference: Custom Button(After v2023.7.11)
 > 
 # ***Credits***

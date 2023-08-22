@@ -2,7 +2,7 @@
 <h1 align="center">~ TownofHost Edited Xi ~</h1>
 
 ## Language
-[English](https://github.com/TOHEX-Official/TownOfHostEdited-Xi/blob/TOHEX/README-EN.md)
+[English](https://github.com/TOHEX-Official/TownOfHostEdited-Xi/blob/TOHEXG/README-EN.md)
 
 
 <br>

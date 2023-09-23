@@ -19,22 +19,6 @@ using TOHE.Roles.Impostor;
 
 namespace TOHE;
 
-
-[HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
-class UpdateServerPatch
-{ 
-    
-    static void Postfix(ref int __result)
-    {
-        if (!GameStates.IsOnlineGame) return;
-        if (!Main.QSM.Value)
-        {
-            __result = Constants.GetVersion(2222, 0, 0, 0);
-            Logger.Info($"{__result}", "重置服务器版本号为（2222, 0, 0, 0)");
-        }
-        else return;
-    }
-}
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
 class OnGameJoinedPatch
 {

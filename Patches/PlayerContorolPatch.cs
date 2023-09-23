@@ -103,6 +103,11 @@ class CheckMurderPatch
             Logger.Info("会议中，击杀被取消", "CheckMurder");
             return false;
         }
+        if (AmongUsClient.Instance.AmHost && Main.HostPublic.Value)
+        {
+            __instance.RpcMurderPlayerV3(target);
+            return false; //Cancel all the checks as public host
+        }
 
         var divice = Options.CurrentGameMode == CustomGameMode.SoloKombat ? 3000f : 2000f;
         var pivice = Options.CurrentGameMode == CustomGameMode.HotPotato ? 3000f : 2000f;

@@ -1,47 +1,40 @@
 using HarmonyLib;
+using Sentry.Unity.Protocol;
 using UnityEngine;
-using System;
 
 namespace TOHE;
 
 //��Դ��https://github.com/tukasa0001/TownOfHost/pull/1265
-
-public class sml
-{
-    public static int ifQSM = 0;
-}
 [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
 public static class OptionsMenuBehaviourStartPatch
 {
     private static ClientOptionItem UnlockFPS;
+    private static ClientOptionItem ShowFPS;
+    private static ClientOptionItem EnableGM;
     private static ClientOptionItem AutoStart;
     private static ClientOptionItem ForceOwnLanguage;
     private static ClientOptionItem ForceOwnLanguageRoleName;
     private static ClientOptionItem EnableCustomButton;
     private static ClientOptionItem EnableCustomSoundEffect;
+    private static ClientOptionItem ShowTextOverlay;
+    private static ClientOptionItem ModeForSmallScreen;
+    private static ClientOptionItem EnableRoleSummary;
     private static ClientOptionItem SwitchVanilla;
-    private static ClientOptionItem QSM;
-    private static ClientOptionItem Music;
-    //private static ClientOptionItem Devtx;
-    //private static ClientOptionItem FastBoot;
+    private static ClientOptionItem HostPublic;
     private static ClientOptionItem VersionCheat;
     private static ClientOptionItem GodMode;
-    public static ClientOptionItem CanPublic;
-    //int ifQSM = 0;
 
     public static void Postfix(OptionsMenuBehaviour __instance)
     {
         if (__instance.DisableMouseMovement == null) return;
 
         Main.SwitchVanilla.Value = false;
-        Main.QSM.Value = false;
-
-        //Main.Devtx.Value = false;
         if (Main.ResetOptions || !DebugModeManager.AmDebugger)
         {
             Main.ResetOptions = false;
             Main.VersionCheat.Value = false;
             Main.GodMode.Value = false;
+            Main.HostPublic.Value = true;
         }
 
         if (UnlockFPS == null || UnlockFPS.ToggleButton == null)
@@ -90,47 +83,21 @@ public static class OptionsMenuBehaviourStartPatch
                 Main.Instance.Unload();
             }
         }
-
-        if (QSM == null || QSM.ToggleButton == null)
+        if (DebugModeManager.AmDebugger)
         {
-            QSM = ClientOptionItem.Create("QSM", Main.QSM, __instance,QSMButtonToggle);
-            static void QSMButtonToggle()
+            if (HostPublic == null || HostPublic.ToggleButton == null)
             {
-                if(sml.ifQSM == 0)
-                {
-                    sml.ifQSM = 1;
-                }
-                else
-                {
-                    Logger.SendInGame(string.Format(Translator.GetString("NoQSMInfo"), Application.targetFrameRate));
-                }
-
+                HostPublic = ClientOptionItem.Create("HostPublic", Main.HostPublic, __instance);
             }
 
-        }
-        if (Music == null)
-        {
-
-        }
-     //   if (CanPublic == null || CanPublic.ToggleButton == null)
-       // {
-         //   CanPublic = ClientOptionItem.Create("CanPublic", Main.CanPublic, __instance);
-       //TO }
-        //if (Devtx == null || Devtx.ToggleButton == null)
-        //{
-        //    Devtx = ClientOptionItem.Create("Devtx", Main.Devtx, __instance);
-        //}
-        //if (FastBoot == null || FastBoot.ToggleButton == null)
-        //{
-        //    FastBoot = ClientOptionItem.Create("FastBoot", Main.FastBoot, __instance);
-        //}
-        if ((VersionCheat == null || VersionCheat.ToggleButton == null) && DebugModeManager.AmDebugger)
-        {
-            VersionCheat = ClientOptionItem.Create("VersionCheat", Main.VersionCheat, __instance);
-        }
-        if ((GodMode == null || GodMode.ToggleButton == null) && DebugModeManager.AmDebugger)
-        {
-            GodMode = ClientOptionItem.Create("GodMode", Main.GodMode, __instance);
+            if ((VersionCheat == null || VersionCheat.ToggleButton == null) && DebugModeManager.AmDebugger)
+            {
+                VersionCheat = ClientOptionItem.Create("VersionCheat", Main.VersionCheat, __instance);
+            }
+            if ((GodMode == null || GodMode.ToggleButton == null) && DebugModeManager.AmDebugger)
+            {
+                GodMode = ClientOptionItem.Create("GodMode", Main.GodMode, __instance);
+            }
         }
     }
 }

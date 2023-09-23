@@ -36,6 +36,7 @@ public class Main : BasePlugin
     public const string PluginVersion = "2.0.2";
     public const string PluginDisplayVersion = "2.0.2";
     public const string CanaryPluginVersion = "Canary_裤";
+    public static readonly string SupportedVersionAU = "2023.7.11";
     public const int PluginCreate = 7;
 
     //没错，那个没树枝的N删了
@@ -60,7 +61,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> EnableCustomButton { get; private set; }
     public static ConfigEntry<bool> EnableCustomSoundEffect { get; private set; }
     public static ConfigEntry<bool> SwitchVanilla { get; private set; }
-    public static ConfigEntry<bool> QSM { get; private set; }
+    public static ConfigEntry<bool> HostPublic { get; private set; }
     //public static ConfigEntry<bool> Devtx { get; private set; }
     //public static ConfigEntry<bool> FastBoot { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
@@ -336,13 +337,15 @@ public class Main : BasePlugin
         EnableCustomButton = Config.Bind("Client Options", "EnableCustomButton", true);
         EnableCustomSoundEffect = Config.Bind("Client Options", "EnableCustomSoundEffect", true);
         SwitchVanilla = Config.Bind("Client Options", "SwitchVanilla", false);
-        QSM =  Config.Bind("Client Options", "QSM", false);
+        HostPublic = Config.Bind("Client Options", "HostPublic", false);
         //Devtx = Config.Bind("Client Options", "Devtx", false);
         //FastBoot = Config.Bind("Client Options", "FastBoot", false);
         VersionCheat = Config.Bind("Client Options", "VersionCheat", false);
         GodMode = Config.Bind("Client Options", "GodMode", false);
         //CanPublic = Config.Bind("Client Options", "CanPublic", false);
 
+
+        HostPublic.Value = true;
 
         Logger = BepInEx.Logging.Logger.CreateLogSource("TOHEX");
         TOHE.Logger.Enable();

@@ -1,6 +1,5 @@
 using HarmonyLib;
 using InnerNet;
-using System.Linq;
 using TOHE.Modules;
 using UnityEngine;
 using static TOHE.Translator;
@@ -20,9 +19,10 @@ internal class MakePublicPatch
             Logger.SendInGame(message);
             return false;
         }
-        if (ModUpdater.isBroken || (ModUpdater.hasUpdate && ModUpdater.forceUpdate))
+        if (ModUpdater.isBroken || (ModUpdater.hasUpdate && ModUpdater.forceUpdate) || !VersionChecker.IsSupported)
         {
             var message = "";
+            if (!VersionChecker.IsSupported) message = GetString("UnsupportedVersion");
             if (ModUpdater.isBroken) message = GetString("ModBrokenMessage");
             if (ModUpdater.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
             Logger.Info(message, "MakePublicPatch");
@@ -37,7 +37,7 @@ internal class MMOnlineManagerStartPatch
 {
     public static void Postfix(MMOnlineManager __instance)
     {
-        if (!((ModUpdater.hasUpdate && ModUpdater.forceUpdate) || ModUpdater.isBroken)) return;
+        if (!((ModUpdater.hasUpdate && ModUpdater.forceUpdate) || ModUpdater.isBroken || !VersionChecker.IsSupported)) return;
         var obj = GameObject.Find("FindGameButton");
         if (obj)
         {
@@ -46,9 +46,21 @@ internal class MMOnlineManagerStartPatch
             var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TMPro.TextMeshPro>());
             textObj.transform.position = new Vector3(1f, -0.3f, 0);
             textObj.name = "CanNotJoinPublic";
-            var message = ModUpdater.isBroken ? $"<size=2>{Utils.ColorString(Color.red, GetString("ModBrokenMessage"))}</size>"
-                : $"<size=2>{Utils.ColorString(Color.red,GetString("CanNotJoinPublicRoomNoLatest"))}</size>";
-            new LateTask(() => { textObj.text = message; }, 0.01f, "CanNotJoinPublic");
+
+            string message = "";
+            if (!VersionChecker.IsSupported)
+            {
+                message = GetString("UnsupportedVersion");
+            }
+            else if (ModUpdater.isBroken)
+            {
+                message = GetString("ModBrokenMessage");
+            }
+            else if (ModUpdater.hasUpdate)
+            {
+                message = GetString("CanNotJoinPublicRoomNoLatest");
+            }
+            _ = new LateTask(() => { textObj.text = $"<size=2>{Utils.ColorString(Color.red, message)}</size>"; }, 0.01f, "CanNotJoinPublic");
         }
     }
 }
@@ -57,11 +69,11 @@ internal class SplashLogoAnimatorPatch
 {
     public static void Prefix(SplashManager __instance)
     {
-        //if (DebugModeManager.AmDebugger || Main.FastBoot.Value)
-        //{
-        //    __instance.sceneChanger.AllowFinishLoadingScene();
-        //    __instance.startedSceneLoad = true;
-        //}
+        if (DebugModeManager.AmDebugger)
+        {
+            __instance.sceneChanger.AllowFinishLoadingScene();
+            __instance.startedSceneLoad = true;
+        }
     }
 }
 [HarmonyPatch(typeof(EOSManager), nameof(EOSManager.IsAllowedOnline))]
@@ -71,7 +83,7 @@ internal class RunLoginPatch
     public static void Prefix(ref bool canOnline)
     {
 #if DEBUG
-        if (ClickCount < 10) canOnline = false;
+        if (ClickCount < 10) canOnline = true;
         if (ClickCount >= 10) ModUpdater.forceUpdate = false;
 #endif
     }
@@ -89,28 +101,22 @@ internal class BanMenuSetVisiblePatch
         return false;
     }
 }
-[HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.CanBan))]
+[HarmonyPatch(typeof(InnerNetClient), nameof(InnerNet.InnerNetClient.CanBan))]
 internal class InnerNetClientCanBanPatch
 {
-    public static bool Prefix(InnerNetClient __instance, ref bool __result)
+    public static bool Prefix(InnerNet.InnerNetClient __instance, ref bool __result)
     {
         __result = __instance.AmHost;
         return false;
     }
 }
-[HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.KickPlayer))]
+[HarmonyPatch(typeof(InnerNet.InnerNetClient), nameof(InnerNet.InnerNetClient.KickPlayer))]
 internal class KickPlayerPatch
 {
-    public static bool Prefix(InnerNetClient __instance, int clientId, bool ban)
+    public static void Prefix(InnerNet.InnerNetClient __instance, int clientId, bool ban)
     {
-        if (DevManager.DevUser.Where(x => x.IsDev).Any(x => AmongUsClient.Instance.GetRecentClient(clientId).FriendCode == x.Code))
-        {
-            Logger.SendInGame(GetString("Warning.CantKickDev"));
-            return false;
-        }
-        if (!AmongUsClient.Instance.AmHost) return true;
+        if (!AmongUsClient.Instance.AmHost) return;
         if (ban) BanManager.AddBanPlayer(AmongUsClient.Instance.GetRecentClient(clientId));
-        return true;
     }
 }
 [HarmonyPatch(typeof(ResolutionManager), nameof(ResolutionManager.SetResolution))]
@@ -118,12 +124,12 @@ internal class SetResolutionManager
 {
     public static void Postfix()
     {
-        if (MainMenuManagerPatch.qqButton != null)
-            MainMenuManagerPatch.qqButton.transform.localPosition = Vector3.Reflect(MainMenuManagerPatch.template.transform.localPosition, Vector3.left);
-    //    if (MainMenuManagerPatch.discordButton != null)
+        //if (MainMenuManagerPatch.qqButton != null)
+        //    MainMenuManagerPatch.qqButton.transform.localPosition = Vector3.Reflect(MainMenuManagerPatch.template.transform.localPosition, Vector3.left);
+        //if (MainMenuManagerPatch.discordButton != null)
         //    MainMenuManagerPatch.discordButton.transform.localPosition = Vector3.Reflect(MainMenuManagerPatch.template.transform.localPosition, Vector3.left);
-        if (MainMenuManagerPatch.updateButton != null)
-            MainMenuManagerPatch.updateButton.transform.localPosition = MainMenuManagerPatch.template.transform.localPosition + new Vector3(0.25f, 0.75f);
+        //if (MainMenuManagerPatch.updateButton != null)
+        //    MainMenuManagerPatch.updateButton.transform.localPosition = MainMenuManagerPatch.template.transform.localPosition + new Vector3(0.25f, 0.75f);
     }
 }
 

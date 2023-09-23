@@ -236,7 +236,7 @@ static class ExtendedPlayerControl
         }
         else
         {
-            MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)RpcCalls.MurderPlayer, SendOption.Reliable, killer.GetClientId());
+            MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)RpcCalls.MurderPlayer, Main.HostPublic.Value ? SendOption.None : SendOption.Reliable, killer.GetClientId());
             messageWriter.WriteNetObject(target);
             AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
         }
@@ -946,6 +946,13 @@ static class ExtendedPlayerControl
         player.Exiled();
         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(player.NetId, (byte)RpcCalls.Exiled, SendOption.None, -1);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
+    }
+    public static void RpcMurderPlayerV0(this PlayerControl killer, PlayerControl target)
+    {
+        if (killer.AmOwner || !Main.HostPublic.Value)
+            killer.RpcMurderPlayer(target);
+        else
+            killer.RpcMurderPlayerV2(target);
     }
     public static void RpcMurderPlayerV3(this PlayerControl killer, PlayerControl target)
     {

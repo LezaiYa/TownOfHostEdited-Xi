@@ -51,7 +51,7 @@ public class ErrorText : MonoBehaviour
     {
         AllErrors.ForEach(err => err.IncreaseTimer());
         var ToRemove = AllErrors.Where(err => err.ErrorLevel <= 1 && 30f < err.Timer);
-        if (0 < ToRemove.Count())
+        if (ToRemove.Any())
         {
             AllErrors.RemoveAll(err => ToRemove.Contains(err));
             UpdateText();
@@ -63,8 +63,8 @@ public class ErrorText : MonoBehaviour
     {
         if (!Text.enabled) return;
 
-        if (Camera == null)
-            Camera = !HudManager.InstanceExists ? Camera.main : HudManager.Instance.PlayerCam.GetComponent<Camera>();
+        if (Camera == null) Camera = !HudManager.InstanceExists ? Camera.main : HudManager.Instance.PlayerCam.GetComponent<Camera>();
+
         if (Camera != null)
         {
             transform.position = AspectPosition.ComputeWorldPosition(Camera, AspectPosition.EdgeAlignments.Top, TextOffset);
@@ -155,6 +155,8 @@ public enum ErrorCode
     // ==========
     // 001 Main
     Main_DictionaryError = 0010003, // 001-000-3 Main Dictionary Error
+    // 002 Support related
+    UnsupportedVersion = 002_000_1,  // 002-000-1 AmongUs version is outdated
     // ==========
     // 000 Test
     NoError = 0000000, // 000-000-0 No Error

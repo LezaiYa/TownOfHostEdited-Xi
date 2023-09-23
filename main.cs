@@ -33,8 +33,8 @@ public class Main : BasePlugin
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = "<color=#fffcbe>喜！</color><color=#FF0066>瓜！</color><color=#FFFF00>叨！</color>";
     public const string PluginGuid = "com.xi.tohexi";
-    public const string PluginVersion = "2.0.0.5";
-    public const string PluginDisplayVersion = "2.0.0c(beta)";
+    public const string PluginVersion = "2.0.2";
+    public const string PluginDisplayVersion = "2.0.2";
     public const string CanaryPluginVersion = "Canary_裤";
     public const int PluginCreate = 7;
 
@@ -291,6 +291,8 @@ public class Main : BasePlugin
     public static Dictionary<byte, int> ChattyMax = new();
     public static List<byte> ForSpiritualists = new();
     public static Dictionary<byte, Vector2> Spiritualistsbacktrack = new();
+    public static List<byte> HangTheDevilKiller = new();
+    public static List<byte> ForHangTheDevil = new(); 
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();
@@ -300,6 +302,8 @@ public class Main : BasePlugin
     public static bool NiceSwapSend;
     public static bool EvilSwapSend;
     public static int MerchantTaskMax = new();
+    public static int RefuserTurns = new();
+    public static int RefuserShields = new();
     public static Dictionary<byte, int> MerchantMax = new();
     public static IEnumerable<PlayerControl> AllPlayerControls => PlayerControl.AllPlayerControls.ToArray().Where(p => p != null);
     public static IEnumerable<PlayerControl> AllAlivePlayerControls => PlayerControl.AllPlayerControls.ToArray().Where(p => p != null && p.IsAlive() && !p.Data.Disconnected && !Pelican.IsEaten(p.PlayerId));
@@ -534,6 +538,13 @@ public class Main : BasePlugin
                 {CustomRoles.Loners, "#B0C4DE"},
                 {CustomRoles.MrDesperate,"#808080" },
                 {CustomRoles.Meditator,"#669999" },
+                {CustomRoles.Challenger, "#74ba43"},
+                                 {CustomRoles.Refuser,"#00ff00" },
+                {CustomRoles.AnimalRefuser,"#00ff00" },
+                {CustomRoles.UnanimalRefuser,"#00ff00" },
+                {CustomRoles.AttendRefuser,"#00ff00" },
+                {CustomRoles.CrazyRefuser,"#00ff00" },
+                {CustomRoles.ZeyanRefuser,"#00ffcc" },
                 //管理员
                 {CustomRoles.GM, "#ff5b70"},
                 //附加职业颜色设置
@@ -733,6 +744,10 @@ public enum CustomRoles
     Blackmailer,
     EvilSwapper,
     AbandonedCrew,
+    Batter,
+    BloodSeekers,
+    SoulSucker,
+    HangTheDevil,
     //双阵营
     Mini,
     //船员（原版）
@@ -872,6 +887,13 @@ public enum CustomRoles
     Loners,
     MrDesperate,
     Meditator,
+    Challenger,
+    Refuser,
+    AnimalRefuser,
+    AttendRefuser,
+    UnanimalRefuser,
+    CrazyRefuser,
+    ZeyanRefuser,
 
     //SoloKombat
     KB_Normal,
@@ -998,6 +1020,7 @@ public enum CustomWinner
     Loners = CustomRoles.Loners,
     MrDesperate = CustomRoles.MrDesperate,
     Meditator = CustomRoles.Meditator,
+    Challenger = CustomRoles.Challenger,
 }
 public enum AdditionalWinners
 {
@@ -1018,6 +1041,12 @@ public enum AdditionalWinners
     Lawyer = CustomRoles.Lawyer,
     Slaveowner = CustomRoles.Slaveowner, 
     Prosecutors = CustomRoles.Prosecutors,
+    Refuser = CustomRoles.Refuser,
+    AnimalRefuser = CustomRoles.AnimalRefuser,
+    UnanimalRefuser = CustomRoles.UnanimalRefuser,
+    ZeyanRefuser = CustomRoles.ZeyanRefuser,
+    AttendRefuser = CustomRoles.AttendRefuser,
+    CrazyRefuser = CustomRoles.CrazyRefuser,
 }
 public enum SuffixModes
 {

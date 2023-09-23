@@ -364,7 +364,7 @@ internal class CustomRoleSelector
             if (rd.Next(0, 100) < 80 && rolesToAssign.Remove(CustomRoles.CyberStar)) rolesToAssign.Add(CustomRoles.LostCrew);
             if (rd.Next(0, 100) < Options.LuckeyProbability.GetInt() && rolesToAssign.Remove(CustomRoles.Luckey)) rolesToAssign.Add(CustomRoles.BadLuck);
         }
-
+    /*
         // EAC封禁名单玩家开房将被起飞
         if (BanManager.CheckEACList(PlayerControl.LocalPlayer.FriendCode))
         {
@@ -372,6 +372,7 @@ internal class CustomRoleSelector
             Logger.Info($"{PlayerControl.LocalPlayer.name}存在于EAC封禁名单", "BAN");
             return;
         }
+    */
 
         // Dev Roles List Edit
         foreach (var dr in Main.DevRole)

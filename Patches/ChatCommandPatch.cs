@@ -66,6 +66,10 @@ internal class ChatCommands
         {
             ChatManager.cancel = false; goto Canceled;
         }
+        if (Challenger.ChallengerMsg(PlayerControl.LocalPlayer, text))
+        {
+            ChatManager.cancel = false; goto Canceled;
+        }
         if (EvilSwapper.SwapMsg(PlayerControl.LocalPlayer, text))
         {
             ChatManager.cancel = false; goto Canceled;
@@ -707,12 +711,11 @@ internal class ChatCommands
             var txt = sb.ToString();
             sb.Clear().Append(txt.RemoveHtmlTags());
         }
-
         bool canSpecify = false;
         if ((isDev || isUp) && GameStates.IsLobby)
         {
             canSpecify = true;
-            if (role.IsAdditionRole() || role.IsVanilla() || role is CustomRoles.GM or CustomRoles.NotAssigned or CustomRoles.KB_Normal or CustomRoles.Hotpotato or CustomRoles.Coldpotato|| !Options.CustomRoleSpawnChances.ContainsKey(role)) canSpecify = false;
+            if (role.IsAdditionRole() || role.IsVanilla() || role is CustomRoles.GM or CustomRoles.NotAssigned or CustomRoles.KB_Normal or CustomRoles.Hotpotato or CustomRoles.Coldpotato || !Options.CustomRoleSpawnChances.ContainsKey(role)) canSpecify = false;
             if (role.GetCount() < 1 || role.GetMode() == 0) canSpecify = false;
             if (canSpecify)
             {
@@ -744,6 +747,8 @@ internal class ChatCommands
         if (Copycat.CopycatMsg(player, text)){ canceled = true; ChatManager.cancel = false; return; }
         if (NiceSwapper.SwapMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if (EvilSwapper.SwapMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
+        if (Challenger.ChallengerMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
+        
         if (GuessManager.ID(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if ((Options.NewHideMsg.GetBool() && ChatManager.cancel == true || Blackmailer.ForBlackmailer.Contains(PlayerControl.LocalPlayer.PlayerId)) && PlayerControl.LocalPlayer.IsAlive() && player.PlayerId != 0)
         {

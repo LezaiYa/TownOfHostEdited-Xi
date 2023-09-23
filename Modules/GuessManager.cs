@@ -13,7 +13,9 @@ using TOHE.Roles.Crewmate;
 using TOHE.Roles.Double;
 using TOHE.Roles.Neutral;
 using UnityEngine;
+using static TOHE.ChatCommands;
 using static TOHE.Translator;
+using static UnityEngine.ParticleSystem.PlaybackState;
 
 namespace TOHE;
 
@@ -99,7 +101,7 @@ public static class GuessManager
         if (CheckCommond(ref msg, "id|guesslist|gl编号|玩家编号|玩家id|id列表|玩家列表|列表|所有id|全部id")) operate = 1;
         else if (CheckCommond(ref msg, "shoot|guess|bet|st|gs|bt|猜|赌", false)) operate = 2;
         else return false;
-          
+
         if (!pc.IsAlive())
         {
             if (!isUI) Utils.SendMessage(GetString("GuessDead"), pc.PlayerId);
@@ -255,15 +257,15 @@ public static class GuessManager
                 }
                 if (pc.Is(CustomRoles.ProfessionGuesser) && Main.PGuesserMax[pc.PlayerId] >= 1 && !target.Is(role))
                 {
-                    
+
                     Utils.SendMessage(GetString("GuessWrong"), target.PlayerId);
                     pc.KillFlash();
-                    Main.PGuesserMax[pc.PlayerId]--;   
+                    Main.PGuesserMax[pc.PlayerId]--;
                     return true;
                 }
                 else if (pc.Is(CustomRoles.NiceGuesser) && role.IsCrewmate() && !Options.GGCanGuessCrew.GetBool() && !pc.Is(CustomRoles.Madmate)) guesserSuicide = true;
-                else if (pc.Is(CustomRoles.EvilGuesser) && (role.IsImpostor() || role == CustomRoles.SchrodingerCat && SchrodingerCat.isimp == true) && !Options.EGCanGuessImp.GetBool()) guesserSuicide = true;
-                
+                else if (pc.Is(CustomRoles.EvilGuesser) && role.IsImpostor() && !Options.EGCanGuessImp.GetBool()) guesserSuicide = true;
+
                 else if (pc.Is(CustomRoles.ProfessionGuesser) && Main.PGuesserMax[pc.PlayerId] < 1 && !target.Is(role) || !pc.Is(CustomRoles.ProfessionGuesser) && !target.Is(role)) guesserSuicide = true;
 
                 Logger.Info($"{pc.GetNameWithRole()} 猜测了 {target.GetNameWithRole()}", "Guesser");

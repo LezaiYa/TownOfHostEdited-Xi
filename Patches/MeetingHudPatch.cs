@@ -251,23 +251,45 @@ class CheckForEndVotingPatch
                         }
                     if (swap1 != null && swap2 != null)
                     {
-                        foreach (var playerVoteArea in meetingHud.playerStates)
+                        for (int ia = 0; ia < __instance.playerStates.Length; ia++) //Loops through all players
                         {
-                            if (playerVoteArea.VotedFor != swap1.PlayerId) continue;
+                            PlayerVoteArea playerVoteArea = __instance.playerStates[ia];
                             var voteAreaPlayer = Utils.GetPlayerById(playerVoteArea.TargetPlayerId);
-                            playerVoteArea.UnsetVote();
-                            meetingHud.CastVote(voteAreaPlayer.PlayerId, swap2.PlayerId);
-                            playerVoteArea.VotedFor = swap2.PlayerId;
-                            NiceList1.Add(voteAreaPlayer.PlayerId);
+                            if (playerVoteArea.VotedFor == swap1.PlayerId && !playerVoteArea.AmDead)
+                            {
+                                
+                                //playerVoteArea.UnsetVote();
+                                //meetingHud.CastVote(voteAreaPlayer.PlayerId, swap2.PlayerId);
+                                playerVoteArea.VotedFor = swap2.PlayerId;
+                                NiceList1.Add(voteAreaPlayer.PlayerId);
+                            }
                         }
-                        foreach (var playerVoteArea in meetingHud.playerStates)
+                        for (int ia = 0; ia < __instance.playerStates.Length; ia++) //Loops through all players
                         {
-                            if (playerVoteArea.VotedFor != swap2.PlayerId) continue;
+                            PlayerVoteArea playerVoteArea = __instance.playerStates[ia];
                             var voteAreaPlayer = Utils.GetPlayerById(playerVoteArea.TargetPlayerId);
-                            if (NiceList1.Contains(voteAreaPlayer.PlayerId)) continue;
-                            playerVoteArea.UnsetVote();
-                            playerVoteArea.VotedFor = swap1.PlayerId;
-                            meetingHud.CastVote(voteAreaPlayer.PlayerId, swap1.PlayerId);
+                            if (playerVoteArea.VotedFor == swap1.PlayerId && !playerVoteArea.AmDead && !NiceList1.Contains(voteAreaPlayer.PlayerId))
+                            {
+                              
+                               //if (NiceList1.Contains(voteAreaPlayer.PlayerId)) continue;
+                                //playerVoteArea.UnsetVote();
+                                playerVoteArea.VotedFor = swap1.PlayerId;
+                                //meetingHud.CastVote(voteAreaPlayer.PlayerId, swap1.PlayerId);
+                                NiceList2.Add(voteAreaPlayer.PlayerId);
+                            }
+                        }
+                        for (int ia = 0; ia < __instance.playerStates.Length; ia++) //Loops through all players
+                        {
+                            PlayerVoteArea playerVoteArea = __instance.playerStates[ia];
+                            var voteAreaPlayer = Utils.GetPlayerById(playerVoteArea.TargetPlayerId);
+                            if (playerVoteArea.VotedFor == swap1.PlayerId && !playerVoteArea.AmDead && !NiceList2.Contains(voteAreaPlayer.PlayerId))
+                            {
+
+                                //playerVoteArea.UnsetVote();
+                                //meetingHud.CastVote(voteAreaPlayer.PlayerId, swap2.PlayerId);
+                                playerVoteArea.VotedFor = swap2.PlayerId;
+                                NiceList1.Add(voteAreaPlayer.PlayerId);
+                            }
                         }
                         if (Main.NiceSwapSend == false)
                         {
@@ -310,25 +332,46 @@ class CheckForEndVotingPatch
                     }
                     if (swap1 != null && swap2 != null)
                     {
-                        foreach (var playerVoteArea in meetingHud.playerStates)
+                        for (int ia = 0; ia < __instance.playerStates.Length; ia++) //Loops through all players
                         {
-                            if (playerVoteArea.VotedFor != swap1.PlayerId) continue;
+                            PlayerVoteArea playerVoteArea = __instance.playerStates[ia];
                             var voteAreaPlayer = Utils.GetPlayerById(playerVoteArea.TargetPlayerId);
-                            playerVoteArea.UnsetVote();
-                            meetingHud.CastVote(voteAreaPlayer.PlayerId, swap2.PlayerId);
-                            playerVoteArea.VotedFor = swap2.PlayerId;
-                            NiceList1.Add(voteAreaPlayer.PlayerId);
+                            if (playerVoteArea.VotedFor == swap1.PlayerId && !playerVoteArea.AmDead)
+                            {
+
+                                //playerVoteArea.UnsetVote();
+                                //meetingHud.CastVote(voteAreaPlayer.PlayerId, swap2.PlayerId);
+                                playerVoteArea.VotedFor = swap2.PlayerId;
+                                NiceList1.Add(voteAreaPlayer.PlayerId);
+                            }
                         }
-                        foreach (var playerVoteArea in meetingHud.playerStates)
+                        for (int ia = 0; ia < __instance.playerStates.Length; ia++) //Loops through all players
                         {
-                            if (playerVoteArea.VotedFor != swap2.PlayerId) continue;
+                            PlayerVoteArea playerVoteArea = __instance.playerStates[ia];
                             var voteAreaPlayer = Utils.GetPlayerById(playerVoteArea.TargetPlayerId);
-                            if (NiceList1.Contains(voteAreaPlayer.PlayerId)) continue;
-                            playerVoteArea.UnsetVote();
-                            meetingHud.CastVote(voteAreaPlayer.PlayerId, swap1.PlayerId);
-                            playerVoteArea.VotedFor = swap1.PlayerId;
+                            if (playerVoteArea.VotedFor == swap1.PlayerId && !playerVoteArea.AmDead && !NiceList1.Contains(voteAreaPlayer.PlayerId))
+                            {
+
+                                //if (NiceList1.Contains(voteAreaPlayer.PlayerId)) continue;
+                                //playerVoteArea.UnsetVote();
+                                playerVoteArea.VotedFor = swap1.PlayerId;
+                                //meetingHud.CastVote(voteAreaPlayer.PlayerId, swap1.PlayerId);
+                                NiceList2.Add(voteAreaPlayer.PlayerId);
+                            }
                         }
-               
+                        for (int ia = 0; ia < __instance.playerStates.Length; ia++) //Loops through all players
+                        {
+                            PlayerVoteArea playerVoteArea = __instance.playerStates[ia];
+                            var voteAreaPlayer = Utils.GetPlayerById(playerVoteArea.TargetPlayerId);
+                            if (playerVoteArea.VotedFor == swap1.PlayerId && !playerVoteArea.AmDead && !NiceList2.Contains(voteAreaPlayer.PlayerId))
+                            {
+
+                                //playerVoteArea.UnsetVote();
+                                //meetingHud.CastVote(voteAreaPlayer.PlayerId, swap2.PlayerId);
+                                playerVoteArea.VotedFor = swap2.PlayerId;
+                                NiceList1.Add(voteAreaPlayer.PlayerId);
+                            }
+                        }
                         if (Main.EvilSwapSend == false)
                         {
                             Utils.SendMessage(string.Format(GetString("SwapVote"), swap1.GetRealName(), swap2.GetRealName()), 255, Utils.ColorString(Utils.GetRoleColor(CustomRoles.NiceSwapper), GetString("SwapTitle")));
@@ -1198,7 +1241,7 @@ class MeetingHudStartPatch
                 case CustomRoles.NiceGuesser:
                 case CustomRoles.EvilGuesser:
                     if (!seer.Data.IsDead && !target.Data.IsDead)
-                        pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(seer.Is(CustomRoles.NiceGuesser) ? CustomRoles.NiceGuesser : CustomRoles.EvilGuesser), target.PlayerId.ToString()) + " " + pva.NameText.text;
+                        pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Judge), target.PlayerId.ToString()) + " " + pva.NameText.text;
                     break;
                 case CustomRoles.Judge:
                     if (!seer.Data.IsDead && !target.Data.IsDead)
@@ -1845,6 +1888,14 @@ class MeetingHudOnDestroyPatch
                         }
                     }
                     Copycat.ForCopycat.Remove(player.PlayerId);
+                }
+                if (Challenger.ForChallenger.Contains(player.PlayerId) || Challenger.ForChallengerTwo.Contains(player.PlayerId))
+                {
+                    Challenger.ForChallenger.Remove(player.PlayerId);
+                        Challenger.ForChallengerTwo.Remove(player.PlayerId);
+                    var position = Challenger.Challengerbacktrack[player.PlayerId];
+                    Utils.TP(player.NetTransform, position);
+                    Challenger.Challengerbacktrack.Remove(player.PlayerId);
                 }
             }
             Main.LastVotedPlayerInfo = null;

@@ -162,22 +162,27 @@ class BeginCrewmatePatch
                 __instance.BackgroundBar.material.color = Utils.GetRoleColor(role);
                 PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Crewmate);
                 break;
-            case CustomRoleTypes.NotNK:
-                __instance.TeamTitle.text = GetString("TeamNeutral");
-                __instance.ImpostorText.gameObject.SetActive(true);
-                __instance.ImpostorText.text = GetString("TeamNeutrala");
-                __instance.TeamTitle.color = new Color32(255, 171, 27, byte.MaxValue);
-                __instance.BackgroundBar.material.color = Utils.GetRoleColor(role);
-                PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Impostor);
+            case CustomRoleTypes.Neutral:
+                if (!role.IsNK())
+                {
+                    __instance.TeamTitle.text = GetString("TeamNeutral");
+                    __instance.ImpostorText.gameObject.SetActive(true);
+                    __instance.ImpostorText.text = GetString("TeamNeutrala");
+                    __instance.TeamTitle.color = new Color32(255, 171, 27, byte.MaxValue);
+                    __instance.BackgroundBar.material.color = Utils.GetRoleColor(role);
+                    PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Impostor);
+                }
+                else if (role.IsNK())
+                {
+                    __instance.TeamTitle.text = GetString("TeamNK");
+                    __instance.ImpostorText.gameObject.SetActive(true);
+                    __instance.ImpostorText.text = GetString("TeamNKa");
+                    __instance.TeamTitle.color = new Color32(152, 152, 152, byte.MaxValue);
+                    __instance.BackgroundBar.material.color = Utils.GetRoleColor(role);
+                    PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Shapeshifter);
+                }
                 break;
-            case CustomRoleTypes.NK:
-                __instance.TeamTitle.text = GetString("TeamNK");
-                __instance.ImpostorText.gameObject.SetActive(true);
-                __instance.ImpostorText.text = GetString("TeamNKa");
-                __instance.TeamTitle.color = new Color32(152, 152, 152, byte.MaxValue);
-                __instance.BackgroundBar.material.color = Utils.GetRoleColor(role);
-                PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Shapeshifter);
-                break;
+           
         }
         switch (role)
         {

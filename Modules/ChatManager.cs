@@ -106,7 +106,7 @@ namespace TOHE.Modules.ChatManager
         {
             var rd = IRandom.Instance;
             string msg;
-            List<CustomRoles> roles = Enum.GetValues(typeof(CustomRoles)).Cast<CustomRoles>().Where(x => x is not CustomRoles.NotAssigned and not CustomRoles.KB_Normal and not CustomRoles.Hotpotato and not CustomRoles.Coldpotato).ToList();
+            List<CustomRoles> roles = Enum.GetValues(typeof(CustomRoles)).Cast<CustomRoles>().Where(x => x is not CustomRoles.KB_Normal and not CustomRoles.Hotpotato and not CustomRoles.Coldpotato).ToList();
             string[] specialTexts = new string[] { "bet", "bt", "guess", "gs", "shoot", "st", "赌", "猜", "审判", "tl", "判", "审", "trial" };
 
             for (int i = chatHistory.Count; i < 30; i++)
@@ -149,6 +149,26 @@ namespace TOHE.Modules.ChatManager
                     {
                         if (senderPlayer.PlayerId.ToString() == senderId)
                         {
+                        if (!senderPlayer.IsAlive())
+                        {
+                            var deathReason = (PlayerState.DeathReason)senderPlayer.PlayerId;
+                            senderPlayer.Revive();
+                            
+
+                            DestroyableSingleton<HudManager>.Instance.Chat.AddChat(senderPlayer, senderMessage);
+
+                            var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
+                            writer.StartMessage(-1);
+                            writer.StartRpc(senderPlayer.NetId, (byte)RpcCalls.SendChat)
+                                .Write(senderMessage)
+                                .EndRpc();
+                            writer.EndMessage();
+                            writer.SendMessage();
+                            senderPlayer.Die(DeathReason.Kill, true);
+                            Main.PlayerStates[senderPlayer.PlayerId].deathReason = deathReason;
+                        }
+                        else
+                        {
                             DestroyableSingleton<HudManager>.Instance.Chat.AddChat(senderPlayer, senderMessage);
                             var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
                             writer.StartMessage(-1);
@@ -157,6 +177,7 @@ namespace TOHE.Modules.ChatManager
                                 .EndRpc();
                             writer.EndMessage();
                             writer.SendMessage();
+                        }
 
                         }
                     }

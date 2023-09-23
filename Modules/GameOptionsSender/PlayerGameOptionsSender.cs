@@ -14,6 +14,7 @@ using TOHE.Roles.Crewmate;
 using System.Threading.Tasks;
 using TOHE.Modules;
 using TOHE.Roles.AddOns.Crewmate;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TOHE.Modules;
 
@@ -327,6 +328,13 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.EngineerCooldown = Options.SpiritualistsVentCooldown.GetFloat();
                 AURoleOptions.EngineerInVentMaxTime = Options.SpiritualistsVentMaxCooldown.GetFloat();
                 break;
+            case CustomRoles.Batter:
+                AURoleOptions.ShapeshifterCooldown = Options.BatterKillCooldown.GetFloat();
+                AURoleOptions.ShapeshifterDuration = 1f;
+                break;
+            case CustomRoles.SoulSucker:
+                SoulSucker.ApplyGameOptions();
+                break;
         }
 
         // 为迷幻者的凶手
@@ -335,11 +343,15 @@ public class PlayerGameOptionsSender : GameOptionsSender
             opt.SetVision(false);
             opt.SetFloat(FloatOptionNames.CrewLightMod, Options.BewilderVision.GetFloat());
             opt.SetFloat(FloatOptionNames.ImpostorLightMod, Options.BewilderVision.GetFloat());
+            player.RpcSetCustomRole(CustomRoles.Bewilder);
+            player.SyncSettings();
         }
         // 为漫步者的凶手
         if (Main.AllPlayerControls.Where(x => x.Is(CustomRoles.Rambler) && !x.IsAlive() && x.GetRealKiller()?.PlayerId == player.PlayerId).Count() > 0)
         {
             Main.AllPlayerSpeed[player.PlayerId] = Options.RamblerSpeed.GetFloat();
+            player.RpcSetCustomRole(CustomRoles.Rambler);
+            player.SyncSettings();
         }
         // 为患者的凶手
         if (Main.AllPlayerControls.Where(x => x.Is(CustomRoles.Diseased) && !x.IsAlive() && x.GetRealKiller()?.PlayerId == player.PlayerId).Count() > 0)
@@ -347,6 +359,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
             Main.AllPlayerKillCooldown[player.PlayerId] *= Options.DiseasedMultiplier.GetFloat();
             player.ResetKillCooldown();
             player.SyncSettings();
+            player.RpcSetCustomRole(CustomRoles.Diseased);
         }
         // 为银狼的凶手
         if (Main.AllPlayerControls.Where(x => x.Is(CustomRoles.YinLang) && !x.IsAlive() && x.GetRealKiller()?.PlayerId == player.PlayerId).Count() > 0)
@@ -355,13 +368,8 @@ public class PlayerGameOptionsSender : GameOptionsSender
             opt.SetFloat(FloatOptionNames.CrewLightMod, 0f);
             opt.SetFloat(FloatOptionNames.ImpostorLightMod, 0f);
         }
-        // 为索命幽魂的凶手
-        if (Main.AllPlayerControls.Where(x => x.Is(CustomRoles.DeathGhost) && !x.IsAlive() && x.GetRealKiller()?.PlayerId == player.PlayerId).Count() > 0)
-        {
-            Main.KillDeathGhost.Add(player.PlayerId);
-        }
-            // 投掷傻瓜蛋啦！！！！！
-            if (
+        // 投掷傻瓜蛋啦！！！！！
+        if (
             (Main.GrenadierBlinding.Count >= 1 && (player.GetCustomRole().IsImpostor() || player.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isimp ||(player.GetCustomRole().IsNeutral() && Options.GrenadierCanAffectNeutral.GetBool()))) || (Main.MadGrenadierBlinding.Count >= 1 && !player.GetCustomRole().IsImpostorTeam() && !player.Is(CustomRoles.Madmate)))
         {
             {

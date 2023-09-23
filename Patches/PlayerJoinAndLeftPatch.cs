@@ -307,6 +307,7 @@ class CreatePlayerPatch
         //{
         //    version_text += $"{kvp.Key}:{Main.AllPlayerNames[kvp.Key]}:{kvp.Value.forkId}/{kvp.Value.version}({kvp.Value.tag})\n";
         //}
+        //client in Main.playerVersion.OrderBy(pair => pair.Key);
         //规范昵称
         var name = client.PlayerName;
         if (Options.FormatNameMode.GetInt() == 2 && client.Id != AmongUsClient.Instance.ClientId)

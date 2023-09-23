@@ -28,7 +28,7 @@ public static class Vandalism
         SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.Vandalism);
         SkillCooldown = FloatOptionItem.Create(Id + 10, "KillCooldown", new(0f, 180f, 2.5f), 65f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Vandalism])
                 .SetValueFormat(OptionFormat.Seconds);
-        SkillLimitOpt = FloatOptionItem.Create(Id + 11, "VandalismSkillLimitOpt", new(0f, 180f, 2.5f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Vandalism])
+        SkillLimitOpt = FloatOptionItem.Create(Id + 11, "VandalismSkillLimitOpt", new(0f, 180f, 1f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Vandalism])
                 .SetValueFormat(OptionFormat.Times);
     }
     public static void Init()

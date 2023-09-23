@@ -369,6 +369,36 @@ class GameEndChecker
 
                         }
                     }
+                    if (pc.Is(CustomRoles.Refuser) && pc.IsAlive())
+                    {
+                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
+                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Refuser);
+                    }
+                    if (pc.Is(CustomRoles.AnimalRefuser) && pc.IsAlive())
+                    {
+                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
+                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.AnimalRefuser);
+                    }
+                    if (pc.Is(CustomRoles.UnanimalRefuser) && pc.IsAlive())
+                    {
+                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
+                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.UnanimalRefuser);
+                    }
+                    if (pc.Is(CustomRoles.AttendRefuser) && pc.IsAlive())
+                    {
+                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
+                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.AttendRefuser);
+                    }
+                    if (pc.Is(CustomRoles.CrazyRefuser) && pc.IsAlive())
+                    {
+                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
+                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.CrazyRefuser);
+                    }
+                    if (pc.Is(CustomRoles.ZeyanRefuser) && pc.IsAlive())
+                    {
+                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
+                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.ZeyanRefuser);
+                    }
                     //自由人免费辣
                     if (pc.Is(CustomRoles.FreeMan) && pc.IsAlive())
                     {

@@ -361,6 +361,12 @@ public static class Options
     public static OptionItem TomSecond;
     public static OptionItem SpiritualistsVentCooldown;
     public static OptionItem SpiritualistsVentMaxCooldown;
+    public static OptionItem BatterRadius;
+ public static OptionItem BatterKillCooldown;
+    public static OptionItem BatterCooldown;
+    public static OptionItem RefuserKillCooldown;
+    public static OptionItem ZeyanRefuserVote;
+
 
     // タスク無効化
     public static OptionItem DisableTasks;
@@ -834,6 +840,7 @@ public static class Options
         GuideKillRadius = FloatOptionItem.Create(4156456, "GuideKillRadius", new(0.5f, 5f, 0.5f), 2f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Guide])
             .SetValueFormat(OptionFormat.Multiplier);
         DoubleKiller.SetupCustomOption();
+        SoulSucker.SetupCustomOption();
 
         TextOptionItem.Create(909096, "ImpMeet", TabGroup.ImpostorRoles)//会议技能型
             .SetGameMode(CustomGameMode.Standard)
@@ -855,6 +862,7 @@ public static class Options
         sabcatCooldown = FloatOptionItem.Create(2142812328, "sabcatCooldown", new(5f, 999f, 1f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.sabcat]);
         Blackmailer.SetupCustomOption();
         EvilSwapper.SetupCustomOption();
+        SetupRoleOptions(8794567, TabGroup.ImpostorRoles, CustomRoles.HangTheDevil); 
 
         TextOptionItem.Create(909093, "ImpTr", TabGroup.ImpostorRoles)//传送技能型
            .SetGameMode(CustomGameMode.Standard)
@@ -962,6 +970,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Multiplier);
         BomberKillCooldown = FloatOptionItem.Create(34454541, "BomberKillCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Bomber])
             .SetValueFormat(OptionFormat.Seconds);
+        BloodSeekers.SetupCustomOption();
 
 
         // Crewmate
@@ -1248,7 +1257,6 @@ public static class Options
            .SetValueFormat(OptionFormat.Times);
         Henry.SetupCustomOption();
         MrDesperate.SetupCustomOption();
-
         //这里以后是中立杀手
         TextOptionItem.Create(909092, "NeutralRoles.NK", TabGroup.NeutralRoles)
            .SetGameMode(CustomGameMode.Standard)
@@ -1392,6 +1400,13 @@ public static class Options
         SetupRoleOptions(907090, TabGroup.OtherRoles, CustomRoles.Crewpostor);
         CrewpostorCanKillAllies = BooleanOptionItem.Create(907092, "CanKillAllies", true, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Crewpostor]);
         CrewpostorTasks = OverrideTasksData.Create(9079094, TabGroup.OtherRoles, CustomRoles.Crewpostor);
+        SetupRoleOptions(8799135, TabGroup.OtherRoles, CustomRoles.Batter);
+        BatterRadius = FloatOptionItem.Create(9189137, "BatterRadius", new(0.5f, 5f, 0.5f), 2f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
+    .SetValueFormat(OptionFormat.Multiplier);
+        BatterKillCooldown = FloatOptionItem.Create(198954541, "BomberKillCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
+            .SetValueFormat(OptionFormat.Seconds);
+        BatterCooldown = FloatOptionItem.Create(3196541, "BomberCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
+            .SetValueFormat(OptionFormat.Seconds);
 
         // 船员
         TextOptionItem.Create(9090920, "OtherRoles.CrewmateRoles", TabGroup.OtherRoles)
@@ -1430,7 +1445,12 @@ public static class Options
         RevolutionistVentCountDown = FloatOptionItem.Create(5050621, "RevolutionistVentCountDown", new(1f, 180f, 1f), 15f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
             .SetValueFormat(OptionFormat.Seconds);
         SetupRoleOptions(5051412, TabGroup.OtherRoles, CustomRoles.Provocateur);
-        
+        Challenger.SetupCustomOption();
+        SetupRoleOptions(50300, TabGroup.OtherRoles, CustomRoles.Refuser);
+      
+        RefuserKillCooldown = FloatOptionItem.Create(50320, "RefuserKillCooldown", new(15, 60, 5), 20, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Refuser]);
+        ZeyanRefuserVote = IntegerOptionItem.Create(50330, "ZeyanRefuserVote", new(2, 5, 1), 3, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Refuser]);
+
 
         // 副职
         TextOptionItem.Create(9090960, "OtherRoles.Addons", TabGroup.OtherRoles)

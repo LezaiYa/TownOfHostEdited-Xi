@@ -483,6 +483,12 @@ static class ExtendedPlayerControl
             CustomRoles.RewardOfficer => pc.IsAlive(),
             CustomRoles.Loners => pc.IsAlive(),
             CustomRoles.Meditator => pc.IsAlive(),
+            CustomRoles.Challenger => pc.IsAlive(),
+            CustomRoles.AnimalRefuser => pc.IsAlive(),
+            CustomRoles.UnanimalRefuser => pc.IsAlive(),
+            CustomRoles.AttendRefuser => pc.IsAlive(),
+            CustomRoles.CrazyRefuser => pc.IsAlive(),
+            CustomRoles.Refuser => pc.IsAlive(),
             _ => pc.Is(CustomRoleTypes.Impostor),
 
         } ;
@@ -531,7 +537,8 @@ static class ExtendedPlayerControl
             CustomRoles.Fake or
             CustomRoles.RewardOfficer or
             CustomRoles.Loners or
-            CustomRoles.Meditator
+            CustomRoles.Meditator or
+            CustomRoles.Challenger
             => false,
 
             CustomRoles.Jackal => Jackal.CanVent.GetBool(),
@@ -558,7 +565,7 @@ static class ExtendedPlayerControl
             CustomRoles.Hotpotato => false,
 
             _ => pc.Is(CustomRoleTypes.Impostor),
-        };
+        } ;
     }
     public static bool IsDousedPlayer(this PlayerControl arsonist, PlayerControl target)
     {
@@ -884,6 +891,24 @@ static class ExtendedPlayerControl
                 break;
             case CustomRoles.Meditator:
                 Meditator.SetKillCooldown(player.PlayerId);
+                break;
+            case CustomRoles.Challenger:
+                Main.AllPlayerKillCooldown[player.PlayerId] = 10f;
+                break;
+            case CustomRoles.AnimalRefuser:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.RefuserKillCooldown.GetFloat();
+                break;
+            case CustomRoles.UnanimalRefuser:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.RefuserKillCooldown.GetFloat();
+                break;
+            case CustomRoles.CrazyRefuser:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.RefuserKillCooldown.GetFloat();
+                break;
+            case CustomRoles.ZeyanRefuser:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.RefuserKillCooldown.GetFloat();
+                break;
+            case CustomRoles.Refuser:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.RefuserKillCooldown.GetFloat();
                 break;
         }
         if (player.PlayerId == LastImpostor.currentId)

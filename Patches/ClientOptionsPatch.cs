@@ -21,6 +21,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem EnableCustomSoundEffect;
     private static ClientOptionItem SwitchVanilla;
     private static ClientOptionItem QSM;
+    private static ClientOptionItem Music;
     //private static ClientOptionItem Devtx;
     //private static ClientOptionItem FastBoot;
     private static ClientOptionItem VersionCheat;
@@ -34,7 +35,7 @@ public static class OptionsMenuBehaviourStartPatch
 
         Main.SwitchVanilla.Value = false;
         Main.QSM.Value = false;
-        
+
         //Main.Devtx.Value = false;
         if (Main.ResetOptions || !DebugModeManager.AmDebugger)
         {
@@ -105,6 +106,10 @@ public static class OptionsMenuBehaviourStartPatch
                 }
 
             }
+
+        }
+        if (Music == null)
+        {
 
         }
      //   if (CanPublic == null || CanPublic.ToggleButton == null)

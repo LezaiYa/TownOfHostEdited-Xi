@@ -1527,7 +1527,7 @@ public static class Utils
                 }
                 if (seer.Is(CustomRoles.NiceGuesser) || seer.Is(CustomRoles.EvilGuesser))
                 {
-                    if (seer.IsAlive() && target.IsAlive() && isForMeeting)
+                    if (seer.IsAlive() && target.IsAlive())
                     {
                         TargetPlayerName = ColorString(GetRoleColor(seer.Is(CustomRoles.NiceGuesser) ? CustomRoles.NiceGuesser : CustomRoles.EvilGuesser), target.PlayerId.ToString()) + " " + TargetPlayerName;
                     }
@@ -1541,7 +1541,7 @@ public static class Utils
                 }
                 if (seer.Is(CustomRoles.NiceSwapper))
                 {
-                    if (seer.IsAlive() && target.IsAlive() && isForMeeting)
+                    if (seer.IsAlive() && target.IsAlive())
                     {
                         TargetPlayerName = ColorString(GetRoleColor(CustomRoles.NiceSwapper), target.PlayerId.ToString()) + " " + TargetPlayerName;
                     }

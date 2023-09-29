@@ -1498,6 +1498,16 @@ class CheckMurderPatch
                 return false;
             }           
         }
+        if (killer.Is(CustomRoles.AbandonedCrew))
+        {
+
+            new LateTask(() =>
+            {
+                target.Revive();
+            }, 1f, ("Killer"));
+
+
+        }
         //复活代码：目前在试验中
         // target.Revive();
         //==キル処理==
@@ -4088,10 +4098,17 @@ class ReportDeadBodyPatch
                             {
                                 foreach (var pc in Main.AllPlayerControls)
                                 {
-                                    pc.RpcGuardAndKill(player);
+                                    if (pc.PlayerId != player.PlayerId) continue;
+                                    player.Notify(GetString("MiniUp"));
                                 }
                             }
                         }
+                    }
+                    if(!player.IsAlive())
+                    {
+                        CustomWinnerHolder.ResetAndSetWinner(CustomWinner.NiceMini);
+                        CustomWinnerHolder.WinnerIds.Add(player.PlayerId);
+                        return;
                     }
                 }
                 if (GameStates.IsInTask && player.Is(CustomRoles.EvilMini))
@@ -4116,13 +4133,13 @@ class ReportDeadBodyPatch
                             Mini.Age += 1;
                             Mini.GrowUpTime = 0;
                             Logger.Info($"年龄增加1", "Child");
-                            player.SetKillCooldown();
 
                             if (Mini.UpDateAge.GetBool())
                             {
                                 foreach (var pc in Main.AllPlayerControls)
                                 {
-                                    pc.RpcGuardAndKill(player);
+                                    if (pc.PlayerId != player.PlayerId) continue;
+                                    player.Notify(GetString("MiniUp"));
                                 }
                             }
                             Logger.Info($"重置击杀冷却{Main.EvilMiniKillcooldownf -1f}", "Child");
@@ -5482,6 +5499,7 @@ class EnterVentPatch
                 Swooper.OnCoEnterVent(__instance, id);
             if (__instance.myPlayer.Is(CustomRoles.Chameleon))
                 Chameleon.OnCoEnterVent(__instance, id);
+           
             if (Buried.landmineDict.TryGetValue(id, out byte value) && value == 1 && __instance.myPlayer.CanUseImpostorVentButton() || Buried.landmineDict.TryGetValue(id, out byte aalue) && aalue == 1 && __instance.myPlayer.Data.Role.Role == RoleTypes.Engineer)
             {                
                 new LateTask(() =>

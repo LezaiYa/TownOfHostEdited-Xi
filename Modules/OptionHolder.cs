@@ -589,10 +589,6 @@ public static class Options
         "SuffixMode.NoAndroidPlz",
         "SuffixMode.Test"
     };
-    public static readonly string[] ratesNoPublic =
-{
-        "NoPublic"
-    };
     public static readonly string[] roleAssigningAlgorithms =
     {
         "RoleAssigningAlgorithm.Default",
@@ -1839,14 +1835,12 @@ public static class Options
         IsLoaded = true;
     }
 
-    public static void SetupRoleOptions(int id, TabGroup tab, CustomRoles role, CustomGameMode customGameMode = CustomGameMode.Standard, bool zeroOne = false, bool canPublic = false)
+    public static void SetupRoleOptions(int id, TabGroup tab, CustomRoles role, CustomGameMode customGameMode = CustomGameMode.Standard, bool zeroOne = false)
     {
-        bool activerole = (canPublic && Main.HostPublic.Value) || !Main.HostPublic.Value;
-        var spawnOption = StringOptionItem.Create(id, role.ToString(), !activerole ? ratesNoPublic : zeroOne ? ratesZeroOne : ratesToggle, 0, tab, false).SetColor(Utils.GetRoleColor(role))
+        var spawnOption = StringOptionItem.Create(id, role.ToString(), zeroOne ? ratesZeroOne : ratesToggle, 0, tab, false).SetColor(Utils.GetRoleColor(role))
             .SetHeader(true)
             .SetGameMode(customGameMode) as StringOptionItem;
-        var countOption = IntegerOptionItem.Create(id + 1, "Maximum", new(1, 15, 1), 1, tab, false)
-        .SetParent(spawnOption)
+        var countOption = IntegerOptionItem.Create(id + 1, "Maximum", new(1, 15, 1), 1, tab, false).SetParent(spawnOption)
             .SetValueFormat(OptionFormat.Players)
             .SetGameMode(customGameMode);
 
@@ -1878,21 +1872,18 @@ public static class Options
         CustomRoleCounts.Add(role, countOption);
     }
 
-    public static void SetupAdtRoleOptions(int id, CustomRoles role, CustomGameMode customGameMode = CustomGameMode.Standard, bool canSetNum = false, TabGroup tab = TabGroup.Addons, bool canSetChance = true, bool canPublic = false)
+    private static void SetupAdtRoleOptions(int id, CustomRoles role, CustomGameMode customGameMode = CustomGameMode.Standard, bool canSetNum = false, TabGroup tab = TabGroup.Addons, bool canSetChance = true)
     {
-        bool activerole = (canPublic && Main.HostPublic.Value) || !Main.HostPublic.Value;
-        var spawnOption = StringOptionItem.Create(id, role.ToString(), !activerole ? ratesNoPublic : ratesZeroOne, 0, tab, false).SetColor(Utils.GetRoleColor(role))
+        var spawnOption = StringOptionItem.Create(id, role.ToString(), ratesZeroOne, 0, tab, false).SetColor(Utils.GetRoleColor(role))
             .SetHeader(true)
             .SetGameMode(customGameMode) as StringOptionItem;
 
-        var countOption = IntegerOptionItem.Create(id + 1, "Maximum", new(1, canSetNum ? 10 : 1, 1), 1, tab, false)
-        .SetParent(spawnOption)
+        var countOption = IntegerOptionItem.Create(id + 1, "Maximum", new(1, canSetNum ? 6 : 1, 1), 1, tab, false).SetParent(spawnOption)
             .SetValueFormat(OptionFormat.Players)
             .SetHidden(!canSetNum)
             .SetGameMode(customGameMode);
 
-        var spawnRateOption = IntegerOptionItem.Create(id + 2, "AdditionRolesSpawnRate", new(0, 100, 5), canSetChance ? 65 : 100, tab, false)
-        .SetParent(spawnOption)
+        var spawnRateOption = IntegerOptionItem.Create(id + 2, "AdditionRolesSpawnRate", new(0, 100, 5), canSetChance ? 65 : 100, tab, false).SetParent(spawnOption)
             .SetValueFormat(OptionFormat.Percent)
             .SetHidden(!canSetChance)
             .SetGameMode(customGameMode) as IntegerOptionItem;
@@ -1902,16 +1893,13 @@ public static class Options
         CustomRoleCounts.Add(role, countOption);
     }
 
-    public static void SetupSingleRoleOptions(int id, TabGroup tab, CustomRoles role, int count, CustomGameMode customGameMode = CustomGameMode.Standard, bool zeroOne = false, bool canPublic = false)
+    public static void SetupSingleRoleOptions(int id, TabGroup tab, CustomRoles role, int count, CustomGameMode customGameMode = CustomGameMode.Standard, bool zeroOne = false)
     {
-        bool activerole = (canPublic && Main.HostPublic.Value) || !Main.HostPublic.Value;
-        var spawnOption = StringOptionItem.Create(id, role.ToString(), !activerole ? ratesNoPublic : zeroOne ? ratesZeroOne : ratesToggle, 0, tab, false).SetColor(Utils.GetRoleColor(role))
+        var spawnOption = StringOptionItem.Create(id, role.ToString(), zeroOne ? ratesZeroOne : ratesToggle, 0, tab, false).SetColor(Utils.GetRoleColor(role))
             .SetHeader(true)
             .SetGameMode(customGameMode) as StringOptionItem;
         // 初期値,最大値,最小値が同じで、stepが0のどうやっても変えることができない個数オプション
-        var countOption = IntegerOptionItem.Create(id + 1, "Maximum", new(count, count, count), count, tab, false)
-        .SetParent(spawnOption)
-            .SetHidden(true)
+        var countOption = IntegerOptionItem.Create(id + 1, "Maximum", new(count, count, count), count, tab, false).SetParent(spawnOption)
             .SetGameMode(customGameMode);
 
         CustomRoleSpawnChances.Add(role, spawnOption);

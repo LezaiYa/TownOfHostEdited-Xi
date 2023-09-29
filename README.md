@@ -6,7 +6,7 @@
 
 
 <br>
-<img align="left" alt="Cover" src="Resources/Images/TOHE-BG.jpg" width="50%" height="auto" /> 
+<img align="left" alt="Cover" src="Resources/Images/TOHEXI-BG.png" width="50%" height="auto" /> 
 <p align="right">
   
 > ### 关于这个模组

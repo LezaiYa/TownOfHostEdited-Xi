@@ -19,10 +19,9 @@ internal class MakePublicPatch
             Logger.SendInGame(message);
             return false;
         }
-        if (ModUpdater.isBroken || (ModUpdater.hasUpdate && ModUpdater.forceUpdate) || !VersionChecker.IsSupported)
+        if (ModUpdater.isBroken || (ModUpdater.hasUpdate && ModUpdater.forceUpdate))
         {
             var message = "";
-            if (!VersionChecker.IsSupported) message = GetString("UnsupportedVersion");
             if (ModUpdater.isBroken) message = GetString("ModBrokenMessage");
             if (ModUpdater.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
             Logger.Info(message, "MakePublicPatch");
@@ -37,7 +36,7 @@ internal class MMOnlineManagerStartPatch
 {
     public static void Postfix(MMOnlineManager __instance)
     {
-        if (!((ModUpdater.hasUpdate && ModUpdater.forceUpdate) || ModUpdater.isBroken || !VersionChecker.IsSupported)) return;
+        if (!((ModUpdater.hasUpdate && ModUpdater.forceUpdate) || ModUpdater.isBroken)) return;
         var obj = GameObject.Find("FindGameButton");
         if (obj)
         {
@@ -48,11 +47,7 @@ internal class MMOnlineManagerStartPatch
             textObj.name = "CanNotJoinPublic";
 
             string message = "";
-            if (!VersionChecker.IsSupported)
-            {
-                message = GetString("UnsupportedVersion");
-            }
-            else if (ModUpdater.isBroken)
+            if (ModUpdater.isBroken)
             {
                 message = GetString("ModBrokenMessage");
             }

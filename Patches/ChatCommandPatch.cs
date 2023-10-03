@@ -48,7 +48,7 @@ internal class ChatCommands
         Logger.Info(text, "SendChat");
         if ((Options.NewHideMsg.GetBool() || Blackmailer.ForBlackmailer.Contains(PlayerControl.LocalPlayer.PlayerId)) && PlayerControl.LocalPlayer.IsAlive())
         {
-            ChatManager.SendMessage(PlayerControl.LocalPlayer, text);
+            ChatManager.GetMessage(PlayerControl.LocalPlayer, text);
         }
         if (GuessManager.GuesserMsg(PlayerControl.LocalPlayer, text))
         {
@@ -740,7 +740,7 @@ internal class ChatCommands
         if (!AmongUsClient.Instance.AmHost) return;
         if ((Options.NewHideMsg.GetBool() || Blackmailer.ForBlackmailer.Contains(player.PlayerId)) && PlayerControl.LocalPlayer.IsAlive() && player.PlayerId != 0)
         {
-            ChatManager.SendMessage(player, text);
+            ChatManager.GetMessage(player, text);
         }
         if (GuessManager.GuesserMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if (Judge.TrialMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }

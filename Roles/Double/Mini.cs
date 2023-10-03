@@ -24,7 +24,6 @@ public class Mini
     public static int GrowUp = new();
     public static int EvilKillCDmin = new();
     public static int Age = new();
-    public static int Up = new();
     public static OptionItem GrowUpDuration;
     public static OptionItem EveryoneCanKnowMini;
     public static OptionItem OnMeetingStopCountdown;
@@ -54,7 +53,6 @@ public class Mini
         playerIdList = new();
         GrowUp = GrowUpDuration.GetInt() / 18;
         Age = 0;
-        Up = GrowUp;
     }
     public static void Add(byte playerId)
     {

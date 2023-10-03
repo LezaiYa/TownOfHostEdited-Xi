@@ -103,11 +103,6 @@ class CheckMurderPatch
             Logger.Info("会议中，击杀被取消", "CheckMurder");
             return false;
         }
-        if (AmongUsClient.Instance.AmHost && Main.HostPublic.Value)
-        {
-            __instance.RpcMurderPlayerV3(target);
-            return false; //Cancel all the checks as public host
-        }
 
         var divice = Options.CurrentGameMode == CustomGameMode.SoloKombat ? 3000f : 2000f;
         var pivice = Options.CurrentGameMode == CustomGameMode.HotPotato ? 3000f : 2000f;
@@ -1815,7 +1810,7 @@ class CheckMurderPatch
                             killer.RpcMurderPlayerV3(target);
                             killer.RpcMurderPlayerV3(killer);
                             killer.SetRealKiller(target);
-                        CustomWinnerHolder.WinnerIds.Remove(killer.PlayerId);
+                        Main.ForRudepeople.Add(killer.PlayerId);
                         return false;
                         }
                     break;
@@ -5426,6 +5421,14 @@ class EnterVentPatch
         if (Main.ForTasksDestinyChooser.Contains(pc.PlayerId))
         {
             pc.RpcMurderPlayerV3(pc);
+        }
+        if (pc.Is(CustomRoles.Plumber))
+        {
+            foreach (var player in Main.AllAlivePlayerControls)
+            {
+                if (player.PlayerId == pc.PlayerId) continue;
+                pc?.MyPhysics?.RpcBootFromVent(__instance.Id);
+            }
         }
     }
         [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.CoEnterVent))]

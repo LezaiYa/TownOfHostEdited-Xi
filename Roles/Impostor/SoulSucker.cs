@@ -24,7 +24,7 @@ public static class SoulSucker
         SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.SoulSucker);
         SoulCooldown = FloatOptionItem.Create(Id + 10, "SoulCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SoulSucker])
             .SetValueFormat(OptionFormat.Seconds);
-        DefaultKillCooldown = FloatOptionItem.Create(Id + 10, "SansDefaultKillCooldown", new(0f, 180f, 2.5f), 65f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SoulSucker])
+        DefaultKillCooldown = FloatOptionItem.Create(Id + 14, "SansDefaultKillCooldown", new(0f, 180f, 2.5f), 65f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SoulSucker])
     .SetValueFormat(OptionFormat.Seconds);
         ReduceKillCooldown = FloatOptionItem.Create(Id + 11, "SansReduceKillCooldown", new(0f, 180f, 2.5f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SoulSucker])
             .SetValueFormat(OptionFormat.Seconds);

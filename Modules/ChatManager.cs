@@ -56,9 +56,9 @@ namespace TOHE.Modules.ChatManager
             return false;
         }
 
-        public static void SendMessage(PlayerControl player, string message)
+        public static void GetMessage(PlayerControl player, string message)
         {
-            int operate = 0; // 1:ID 2:猜测
+            int operate; // 1:ID 2:猜测
             string msg = message;
             string playername = player.GetNameWithRole();
             message = message.ToLower().TrimStart().TrimEnd();
@@ -111,22 +111,7 @@ namespace TOHE.Modules.ChatManager
 
             for (int i = chatHistory.Count; i < 30; i++)
             {
-                msg = "/";
-                if (rd.Next(1, 100) < 20)
-                {
-                    msg += "id";
-                }
-                else
-                {
-                    msg += specialTexts[rd.Next(0, specialTexts.Length - 1)];
-                    msg += rd.Next(1, 100) < 50 ? string.Empty : " ";
-                    msg += rd.Next(0, 15).ToString();
-                    msg += rd.Next(1, 100) < 50 ? string.Empty : " ";
-                    CustomRoles role = roles[rd.Next(0, roles.Count())];
-                    msg += rd.Next(1, 100) < 50 ? string.Empty : " ";
-                    msg += Utils.GetRoleName(role);
-                }
-
+                msg = $"{Translator.GetString("HideMessage")}";
                 var player = Main.AllAlivePlayerControls.ToArray()[rd.Next(0, Main.AllAlivePlayerControls.Count())];
                 DestroyableSingleton<HudManager>.Instance.Chat.AddChat(player, msg);
                 var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);

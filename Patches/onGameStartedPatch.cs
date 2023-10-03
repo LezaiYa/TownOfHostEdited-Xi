@@ -106,6 +106,7 @@ internal class ChangeRoleSettings
             Main.GuideMax = new();
             Main.ForYandere = new();
             Main.NeedKillYandere = new();
+            Main.ForRudepeople = new();
 
             Main.AfterMeetingDeathPlayers = new();
             Main.ResetCamPlayerList = new();

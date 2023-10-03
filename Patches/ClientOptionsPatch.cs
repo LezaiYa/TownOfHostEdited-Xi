@@ -34,7 +34,6 @@ public static class OptionsMenuBehaviourStartPatch
             Main.ResetOptions = false;
             Main.VersionCheat.Value = false;
             Main.GodMode.Value = false;
-            Main.HostPublic.Value = true;
         }
 
         if (UnlockFPS == null || UnlockFPS.ToggleButton == null)
@@ -85,10 +84,6 @@ public static class OptionsMenuBehaviourStartPatch
         }
         if (DebugModeManager.AmDebugger)
         {
-            if (HostPublic == null || HostPublic.ToggleButton == null)
-            {
-                HostPublic = ClientOptionItem.Create("HostPublic", Main.HostPublic, __instance);
-            }
 
             if ((VersionCheat == null || VersionCheat.ToggleButton == null) && DebugModeManager.AmDebugger)
             {

@@ -24,6 +24,7 @@ public static class Sheriff
     public static OptionItem MadCanKillImp;
     public static OptionItem MadCanKillNeutral;
     public static OptionItem HasDeputy;
+    public static OptionItem AnotherDeath;
     public static Dictionary<CustomRoles, OptionItem> KillTargetOptions = new();
     public static Dictionary<byte, int> ShotLimit = new();
     public static Dictionary<byte, float> CurrentKillCooldown = new();
@@ -49,6 +50,7 @@ public static class Sheriff
         MadCanKillImp = BooleanOptionItem.Create(Id + 19, "SheriffMadCanKillImp", true, TabGroup.CrewmateRoles, false).SetParent(SetMadCanKill);
         MadCanKillNeutral = BooleanOptionItem.Create(Id + 20, "SheriffMadCanKillNeutral", true, TabGroup.CrewmateRoles, false).SetParent(SetMadCanKill);
         MadCanKillCrew = BooleanOptionItem.Create(Id + 21, "SheriffMadCanKillCrew", true, TabGroup.CrewmateRoles, false).SetParent(SetMadCanKill);
+        AnotherDeath = BooleanOptionItem.Create(Id + 60, "AnotherDeath", false, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Sheriff]);
         HasDeputy = BooleanOptionItem.Create(Id + 40, "HasDeputy", false, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Sheriff]);
         Deputy.SkillCooldown = FloatOptionItem.Create(Id + 42, "DeputySkillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.CrewmateRoles, false).SetParent(HasDeputy)
             .SetValueFormat(OptionFormat.Seconds);
@@ -143,7 +145,15 @@ public static class Sheriff
             ))
         {
             SetKillCooldown(killer.PlayerId);
-            Main.PlayerStates[target.PlayerId].deathReason = PlayerState.DeathReason.LawEnforcement;
+            if (AnotherDeath.GetBool())
+            {
+                Main.PlayerStates[target.PlayerId].deathReason = PlayerState.DeathReason.LawEnforcement;
+            }
+            else
+            {
+                Main.PlayerStates[target.PlayerId].deathReason = PlayerState.DeathReason.Kill;
+
+            }
             return true;
         }
         Main.PlayerStates[killer.PlayerId].deathReason = PlayerState.DeathReason.Misfire;

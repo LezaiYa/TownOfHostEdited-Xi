@@ -64,7 +64,7 @@ class GameEndChecker
             {
                 case CustomWinner.Crewmate:
                     Main.AllPlayerControls
-                        .Where(pc => (pc.Is(CustomRoleTypes.Crewmate)) && !pc.Is(CustomRoles.Lovers) && !pc.Is(CustomRoles.CrushLovers) && !pc.Is(CustomRoles.Honmei) && !pc.Is(CustomRoles.CupidLovers) && !pc.Is(CustomRoles.Madmate) && !pc.Is(CustomRoles.Charmed) && !pc.Is(CustomRoles.Attendant) && !pc.Is(CustomRoles.Fugitive) && !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => (pc.Is(CustomRoleTypes.Crewmate)) && !pc.Is(CustomRoles.Lovers) && !pc.Is(CustomRoles.CrushLovers) && !pc.Is(CustomRoles.Honmei) && !pc.Is(CustomRoles.CupidLovers) && !pc.Is(CustomRoles.Madmate) && !pc.Is(CustomRoles.Charmed) && !pc.Is(CustomRoles.Attendant) && !pc.Is(CustomRoles.Fugitive))
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.Impostor:
@@ -74,7 +74,7 @@ class GameEndChecker
                     break;
                 case CustomWinner.Succubus:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.Succubus) || pc.Is(CustomRoles.Charmed) || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.Succubus) || pc.Is(CustomRoles.Charmed))
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.Jackal:
@@ -84,7 +84,7 @@ class GameEndChecker
                     break;
                 case CustomWinner.Yandere:
                     Main.AllPlayerControls
-                        .Where(pc => Main.ForYandere.Contains(pc.PlayerId) || pc.Is(CustomRoles.Yandere) || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => Main.ForYandere.Contains(pc.PlayerId) || pc.Is(CustomRoles.Yandere))
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.Henry:
@@ -104,7 +104,7 @@ class GameEndChecker
                     break;
                 case CustomWinner.YinLang:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.YinLang) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isyl == true || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.YinLang) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isyl == true)
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.captor:
@@ -119,32 +119,32 @@ class GameEndChecker
                     break;
                 case CustomWinner.MengJiangGirl:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.MengJiangGirl) || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.MengJiangGirl))
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.BloodKnight:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.BloodKnight) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isbk == true || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.BloodKnight) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isbk == true)
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.Gamer:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.Gamer) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isgam == true || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.Gamer) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isgam == true)
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.PlaguesGod:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.PlaguesGod) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.ispg == true || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.PlaguesGod) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.ispg == true)
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.Loners:
                     Main.AllPlayerControls
-                        .Where(pc => pc.Is(CustomRoles.Loners) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isln == true || !Main.ForFake.Contains(pc.PlayerId))
+                        .Where(pc => pc.Is(CustomRoles.Loners) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isln == true)
                         .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
                 case CustomWinner.Meditator:
                     Main.AllPlayerControls
-                       .Where(pc => pc.Is(CustomRoles.Meditator) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isln == true || !Main.ForFake.Contains(pc.PlayerId))
+                       .Where(pc => pc.Is(CustomRoles.Meditator) || pc.Is(CustomRoles.SchrodingerCat) && SchrodingerCat.isln == true)
                        .Do(pc => CustomWinnerHolder.WinnerIds.Add(pc.PlayerId));
                     break;
             }
@@ -324,6 +324,14 @@ class GameEndChecker
                         CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                         CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Prosecutors);
                     }
+                   if (Main.ForRudepeople.Contains(pc.PlayerId))
+                    {
+                        CustomWinnerHolder.WinnerIds.Remove(pc.PlayerId);
+                    }
+                    if (Main.ForFake.Contains(pc.PlayerId))
+                    {
+                        CustomWinnerHolder.WinnerIds.Remove(pc.PlayerId);
+                    }
                     //Sunnyboy
                     if (pc.Is(CustomRoles.Sunnyboy) && !pc.IsAlive())
                     {
@@ -398,16 +406,14 @@ class GameEndChecker
                         CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                         CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.FreeMan);
                     }
-                    //自由人免费辣
+                    //伪人
                     if (pc.Is(CustomRoles.Fake) && pc.IsAlive() && Main.NeedFake.TryGetValue(pc.PlayerId, out var tr))
                     {
                             if (!CustomWinnerHolder.WinnerIds.Contains(tr))
                             {
                                 CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
-                                CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Provocateur);
+                                CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Fake);
                             }
-                            CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
-                        CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.FreeMan);
                     }
                     //奴隶主晋级辣
                     if (pc.Is(CustomRoles.Slaveowner) && pc.IsAlive() && Main.SlaveownerMax[pc.PlayerId] >= Options.ForSlaveownerSlav.GetInt() && CustomWinnerHolder.WinnerTeam == CustomWinner.Crewmate)

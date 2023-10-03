@@ -6,7 +6,7 @@
 
 
 <br>
-<img align="left" alt="Cover" src="Resources/Images/TOHE-BG.jpg" width="50%" height="auto" /> 
+<img align="left" alt="Cover" src="Resources/Images/TOHEXI-BG.jpg" width="50%" height="auto" /> 
 <p align="right">
   
 > ### 关于这个模组
@@ -34,7 +34,7 @@
 ### 最新版本：
 支持AmongUs v2023.7.11及以上版本
 
-最新版本：v2.0.0
+最新版本：v2.0.3
 
 <a href="https://gitee.com/xigua_ya/tohex/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Gitee获取新版本%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 

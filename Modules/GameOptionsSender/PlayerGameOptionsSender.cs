@@ -335,6 +335,10 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.SoulSucker:
                 SoulSucker.ApplyGameOptions();
                 break;
+            case CustomRoles.Plumber:
+                AURoleOptions.EngineerCooldown = Options.PlumberCooldown.GetFloat();
+                AURoleOptions.EngineerInVentMaxTime = 1f;
+                break;
         }
 
         // 为迷幻者的凶手

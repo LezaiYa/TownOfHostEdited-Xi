@@ -31,10 +31,10 @@ public class Main : BasePlugin
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
-    public static readonly string MainMenuText = "<color=#fffcbe>喜！</color><color=#FF0066>瓜！</color><color=#FFFF00>叨！</color>";
+    public static readonly string MainMenuText = "</color><color=#FFFF00>国庆节快乐！</color>";
     public const string PluginGuid = "com.xi.tohexi";
-    public const string PluginVersion = "2.0.2";
-    public const string PluginDisplayVersion = "2.0.2";
+    public const string PluginVersion = "2.0.3";
+    public const string PluginDisplayVersion = "2.0.3";
     public const string CanaryPluginVersion = "Canary_裤";
     public static readonly string SupportedVersionAU = "2023.7.11";
     public const int PluginCreate = 7;
@@ -49,6 +49,7 @@ public class Main : BasePlugin
     public static bool ExceptionMessageIsShown = false;
     public static bool AlreadyShowMsgBox = false;
     public static string credentialsText;
+    public static readonly bool ShowWebsiteButton = true;
     public static NormalGameOptionsV07 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
     //Client Options
     public static ConfigEntry<string> HideName { get; private set; }
@@ -61,7 +62,6 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> EnableCustomButton { get; private set; }
     public static ConfigEntry<bool> EnableCustomSoundEffect { get; private set; }
     public static ConfigEntry<bool> SwitchVanilla { get; private set; }
-    public static ConfigEntry<bool> HostPublic { get; private set; }
     //public static ConfigEntry<bool> Devtx { get; private set; }
     //public static ConfigEntry<bool> FastBoot { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
@@ -293,7 +293,8 @@ public class Main : BasePlugin
     public static List<byte> ForSpiritualists = new();
     public static Dictionary<byte, Vector2> Spiritualistsbacktrack = new();
     public static List<byte> HangTheDevilKiller = new();
-    public static List<byte> ForHangTheDevil = new(); 
+    public static List<byte> ForHangTheDevil = new();
+    public static List<byte> ForRudepeople = new(); 
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();
@@ -337,7 +338,6 @@ public class Main : BasePlugin
         EnableCustomButton = Config.Bind("Client Options", "EnableCustomButton", true);
         EnableCustomSoundEffect = Config.Bind("Client Options", "EnableCustomSoundEffect", true);
         SwitchVanilla = Config.Bind("Client Options", "SwitchVanilla", false);
-        HostPublic = Config.Bind("Client Options", "HostPublic", false);
         //Devtx = Config.Bind("Client Options", "Devtx", false);
         //FastBoot = Config.Bind("Client Options", "FastBoot", false);
         VersionCheat = Config.Bind("Client Options", "VersionCheat", false);
@@ -345,7 +345,6 @@ public class Main : BasePlugin
         //CanPublic = Config.Bind("Client Options", "CanPublic", false);
 
 
-        HostPublic.Value = true;
 
         Logger = BepInEx.Logging.Logger.CreateLogSource("TOHEX");
         TOHE.Logger.Enable();
@@ -483,6 +482,7 @@ public class Main : BasePlugin
                  {CustomRoles.Tom,"#87CEFA" },
                  {CustomRoles.Copycat,"#00CC00" },
                 {CustomRoles.Spiritualists,"#87CEFA" },
+                {CustomRoles.Plumber,"#99CCCC" },
                 //中立职业颜色设置
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -797,6 +797,7 @@ public enum CustomRoles
     ET,
     GlennQuagmire,
     Wronged,
+    Plumber,
     //Hypnotist,
     XiaoMu,
     Indomitable,
@@ -1050,6 +1051,7 @@ public enum AdditionalWinners
     ZeyanRefuser = CustomRoles.ZeyanRefuser,
     AttendRefuser = CustomRoles.AttendRefuser,
     CrazyRefuser = CustomRoles.CrazyRefuser,
+    Fake = CustomRoles.Fake,
 }
 public enum SuffixModes
 {

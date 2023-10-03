@@ -366,6 +366,7 @@ public static class Options
     public static OptionItem BatterCooldown;
     public static OptionItem RefuserKillCooldown;
     public static OptionItem ZeyanRefuserVote;
+    public static OptionItem PlumberCooldown;
 
 
     // タスク無効化
@@ -805,7 +806,7 @@ public static class Options
         SetupRoleOptions(124654, TabGroup.ImpostorRoles, CustomRoles.Assassin);
         AssassinateCooldown = FloatOptionItem.Create(156457, "AssassinAssassinateCooldown", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Assassin])
             .SetValueFormat(OptionFormat.Seconds);
-        AssassinateCanKill = BooleanOptionItem.Create(1567467, "AssassinCanKillAfterAssassinate", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Assassin]);
+        AssassinateCanKill = BooleanOptionItem.Create(15674670, "AssassinCanKillAfterAssassinate", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Assassin]);
         SetupRoleOptions(1165987, TabGroup.ImpostorRoles, CustomRoles.Squeezers);
         SqueezersKillColldown = FloatOptionItem.Create(15649679, "SqueezersKillColldown", new(0f, 180f, 2.5f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Squeezers])
             .SetValueFormat(OptionFormat.Seconds);
@@ -995,7 +996,7 @@ public static class Options
         GGCanGuessAllTime = IntegerOptionItem.Create(102266, "GuesserCanGuessAllTimes", new(1, 20, 1), 15, TabGroup.CrewmateRoles, false).SetParent(Options.SetGGCanGuessAllTime)
             .SetValueFormat(OptionFormat.Times);
         GGCanGuessShe = BooleanOptionItem.Create(102268, "GGCanGuessShe", true, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
-        GGCanGuessCrew = BooleanOptionItem.Create(102259, "GGCanGuessCrew", true, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
+        GGCanGuessCrew = BooleanOptionItem.Create(1022570, "GGCanGuessCrew", true, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
         GGCanGuessAdt = BooleanOptionItem.Create(102263, "GGCanGuessAdt", false, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
         GGCanGuessVanilla = BooleanOptionItem.Create(102262, "GGCanGuessVanilla", true, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser]);
         Judge.SetupCustomOption();
@@ -1081,6 +1082,9 @@ public static class Options
         TextOptionItem.Create(909200, "CF", TabGroup.CrewmateRoles)//辅助型
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(247, 70, 49, byte.MaxValue));
+        SetupRoleOptions(1566694, TabGroup.CrewmateRoles, CustomRoles.Plumber);
+        PlumberCooldown = FloatOptionItem.Create(1106495, "PlumberCooldown", new(0f, 990f, 1f), 25f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Plumber])
+   .SetValueFormat(OptionFormat.Seconds);
         SetupRoleOptions(156489694, TabGroup.CrewmateRoles, CustomRoles.Spiritualists);
         SpiritualistsVentMaxCooldown = FloatOptionItem.Create(11990495, "SpiritualistsVentMaxCooldown", new(0f, 990f, 1f), 10f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Spiritualists])
            .SetValueFormat(OptionFormat.Seconds);

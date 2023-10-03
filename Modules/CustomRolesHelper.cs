@@ -168,6 +168,7 @@ internal static class CustomRolesHelper
                 CustomRoles.BloodSeekers => CustomRoles.Impostor,
                 CustomRoles.SoulSucker => CustomRoles.Shapeshifter,
                 CustomRoles.HangTheDevil => CustomRoles.Impostor,
+                CustomRoles.Plumber => CustomRoles.Engineer,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };;
     }

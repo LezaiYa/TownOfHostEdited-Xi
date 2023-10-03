@@ -52,6 +52,7 @@
 [Town Of Host : The Other Roles](https://github.com/music-discussion/TownOfHost-TheOtherRoles)<br>
 [Super New Roles](https://github.com/ykundesu/SuperNewRoles)<br>
 [Town Of Host-ReEdited](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
+[Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko)<br>
 [Town Of Us](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town-Of-Us-R](https://github.com/eDonnes124/Town-Of-Us-R)<br>
 [Foolers Mod](https://github.com/MengTube/Foolers-Mod)<br>
@@ -120,7 +121,13 @@
 > 
 > - 作者：[Night_瓜](https://gitee.com/xigua_ya)
 > - 7.11及以后版本自定义按钮
-> 
+>
+>### :star: [Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko) :
+>
+> - 作者：[Niko](https://github.com/NikoCat233)
+> - v2.0.3以前的公开想法
+> - 改进TOHEX的职业
+>
 # 制作团队
 
 >> ***开发者：***<BR>
@@ -130,4 +137,4 @@
 >[Zeyan]()- **开发者&英语翻译** -<br>
 >
 >> ***图标绘制：***<BR>
->[小黄117]()- **职业栏图标绘制** -<br>
+>[小黄117]()- **职业栏图标绘制&背景绘制** -<br>

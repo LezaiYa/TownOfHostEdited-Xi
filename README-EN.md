@@ -50,6 +50,7 @@ The Latest Version: v2.0.0
 [Town Of Host : The Other Roles](https://github.com/music-discussion/TownOfHost-TheOtherRoles)<br>
 [Super New Roles](https://github.com/ykundesu/SuperNewRoles)<br>
 [Town Of Host-ReEdited](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
+[Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko)<br>
 [Town Of Us](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town-Of-Us-R](https://github.com/eDonnes124/Town-Of-Us-R)<br>
 [Foolers Mod](https://github.com/MengTube/Foolers-Mod)<br>
@@ -117,7 +118,12 @@ The Latest Version: v2.0.0
 > 
 > - Developer：[Night_瓜](https://gitee.com/xigua_ya)
 > - Reference: Custom Button(After v2023.7.11)
-> 
+>
+>### :star: [Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko) :
+>
+> - Developer: [Niko](https://github.com/NikoCat233)
+> - Reference: Public ideas before v2.0.3
+> - Reference: Improve roles in TOHEX
 # ***Credits***
 
 >> ***Developers：***<BR>
@@ -127,4 +133,4 @@ The Latest Version: v2.0.0
 >[Zeyan]()- **Developer&Translator** -<br>
 >
 >> ***Painters***<br>
->[Jason·Fready]()- **Settings Tag** -<br>
+>[Jason·Fready]()- **Settings Tags&BackGround's picture** -<br>

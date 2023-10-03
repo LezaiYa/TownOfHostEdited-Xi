@@ -16,16 +16,13 @@
 <p align="center">
   -------------------------------------------------------------
 <p align="center">
- <br>
-  <br>
-  相关网址
-  
-<p align="center">
+相关网址
+ <p align="center">
 <a href="https://gitee.com/xigua_ya/tohex/" target="_blank"><img src="https://img.shields.io/badge/Gitee%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 <a href="https://github.com/TOHEX-Official/TownOfHostEdited-Xi" target="_blank"><img src="https://img.shields.io/badge/GitHub%20-%231DA1F2.svg?&style=for-the-badge&logo=github&logoColor=white&color=000000"/></a>
 <a href="https://discord.gg/WKYdzxKhNm" target="_blank"><img src="https://img.shields.io/badge/Discord%20-%231DA1F2.svg?&style=for-the-badge&logo=discord&logoColor=white&color=4169E1"/></a>
-<a href=“http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=p8wYbtOjTOl5nDnEtvq0y1xIVoCHj55u&authKey=R8pD2vAr2s%2BGrA0KqhodgOZ0aScwbsT%2F9dqqz4TF%2FYFtMCaNeOQ4R28Mo476wjzp&noverify=0&group_code=704560281" target="_blank"><img src="https://img.shields.io/badge/QQ%20-%231DA1F2.svg?&style=for-the-badge&logo=TencentQQ&logoColor=black&color=FFFFFF"/></a>
 <a href="https://pd.qq.com/s/1la0nbwal" target="_blank"><img src="https://img.shields.io/badge/QQ频道%20-%231DA1F2.svg?&style=for-the-badge&logo=TencentQQ&logoColor=black&color=FFFFFF"/></a>
+<a href="https://tohex.cc/" target="_blank"><img src="https://img.shields.io/badge/官方网站%20-%231DA1F2.svg?&style=for-the-badge&logo=vuedotjs&logoColor=white&color=3aa675"/></a>
 
 <p align="center">
   
@@ -138,3 +135,7 @@
 >
 >> ***图标绘制：***<BR>
 >[小黄117]()- **职业栏图标绘制&背景绘制** -<br>
+>
+>> ***网站开发：***<BR>
+>[清风]()- **网站制作** -<br>
+>[嘉轩]()- **技术指导** -<br>

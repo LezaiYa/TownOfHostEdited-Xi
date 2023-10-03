@@ -113,7 +113,7 @@ public class ModNewsHistorySCn
                 + "\n- Lots of Bugs fixed"
                          + "\n- We Can PUBLIC Now"
                 + "\n\n## New Roles"
-                     + "\n- Crewmates：Plumber"
+                     + "\n- Crewmates：Plumber",
                 Date = "2023-8-25T00:00:00Z",
             };
             AllModNews.Add(news);

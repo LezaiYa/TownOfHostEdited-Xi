@@ -164,6 +164,11 @@ internal static class CustomRolesHelper
                 CustomRoles.EvilSwapper => CustomRoles.Impostor,
                 CustomRoles.Spiritualists => CustomRoles.Engineer,
                 CustomRoles.AbandonedCrew => CustomRoles.Impostor,
+                CustomRoles.Batter => CustomRoles.Shapeshifter,
+                CustomRoles.BloodSeekers => CustomRoles.Impostor,
+                CustomRoles.SoulSucker => CustomRoles.Shapeshifter,
+                CustomRoles.HangTheDevil => CustomRoles.Impostor,
+                CustomRoles.Plumber => CustomRoles.Engineer,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };;
     }
@@ -235,6 +240,13 @@ internal static class CustomRolesHelper
             CustomRoles.Henry => RoleTypes.Impostor,
             CustomRoles.Loners => RoleTypes.Impostor,
             CustomRoles.Meditator => RoleTypes.Impostor,
+            CustomRoles.Challenger => RoleTypes.Impostor,
+            CustomRoles.Refuser => RoleTypes.Impostor,
+            CustomRoles.ZeyanRefuser => RoleTypes.Impostor,
+            CustomRoles.AnimalRefuser => RoleTypes.Impostor,
+            CustomRoles.UnanimalRefuser => RoleTypes.Impostor,
+            CustomRoles.AttendRefuser => RoleTypes.Impostor,
+            CustomRoles.CrazyRefuser => RoleTypes.Impostor,
             _ => RoleTypes.GuardianAngel
         };
     }
@@ -312,7 +324,13 @@ internal static class CustomRolesHelper
         CustomRoles.Jealousy or//不应该有猫（紫砂）
         CustomRoles.PlaguesGod or//有猫
         CustomRoles.Loners or
-        CustomRoles.Meditator;
+        CustomRoles.Meditator or
+                CustomRoles.Refuser or
+        CustomRoles.ZeyanRefuser or
+        CustomRoles.CrazyRefuser or
+        CustomRoles.UnanimalRefuser or
+        CustomRoles.AnimalRefuser or
+        CustomRoles.AttendRefuser;
     }
     public static bool IsNeutralKilling(this CustomRoles role) //是否邪恶中立（抢夺或单独胜利的中立）
     {
@@ -352,7 +370,8 @@ internal static class CustomRolesHelper
         CustomRoles.Fake or
         CustomRoles.Loners or
             CustomRoles.MrDesperate or
-        CustomRoles.Meditator;
+        CustomRoles.Meditator or
+        CustomRoles.Challenger;
     }
     public static bool IsCK(this CustomRoles role) // 是否带刀船员
     {
@@ -487,7 +506,11 @@ internal static class CustomRolesHelper
         CustomRoles.Forger or
         CustomRoles.EvilSwapper or
         CustomRoles.Blackmailer or
-        CustomRoles.AbandonedCrew;
+        CustomRoles.AbandonedCrew or
+        CustomRoles.Batter or
+        CustomRoles.BloodSeekers or
+        CustomRoles.SoulSucker or
+        CustomRoles.HangTheDevil;
     }
     public static bool IsHotPotato(this CustomRoles role)
     {
@@ -674,7 +697,56 @@ internal static class CustomRolesHelper
         CustomRoles.Chatty or
         CustomRoles.MrDesperate or
         CustomRoles.Loners or
-        CustomRoles.Meditator;
+        CustomRoles.Meditator or
+        CustomRoles.Challenger or
+                 CustomRoles.Refuser or
+        CustomRoles.ZeyanRefuser or
+        CustomRoles.CrazyRefuser or
+        CustomRoles.UnanimalRefuser or
+        CustomRoles.AnimalRefuser or
+        CustomRoles.AttendRefuser;
+    }
+    public static bool IsAnimal(this CustomRoles role) // 是否动物
+    {
+        return role is
+            CustomRoles.Mare or
+            CustomRoles.Vampire or
+            CustomRoles.ShapeMaster or
+            CustomRoles.Zombie or
+            CustomRoles.SchrodingerCat or
+            CustomRoles.Medusa or
+            CustomRoles.Glitch or
+            CustomRoles.DovesOfNeace or
+            CustomRoles.ET or
+            CustomRoles.Tom or
+            CustomRoles.Jackal or
+            CustomRoles.Pelican or
+            CustomRoles.Vulture or
+            CustomRoles.Bull or
+            CustomRoles.Whoops or
+            CustomRoles.Fake;
+
+    }
+    public static bool IsAttend(this CustomRoles role)//whether attend
+    {
+        return role is
+            CustomRoles.Gangster or
+            CustomRoles.Madmate or
+            CustomRoles.Sheriff or
+            CustomRoles.ChiefOfPolice or
+            CustomRoles.Captain or
+            CustomRoles.Solicited or
+            CustomRoles.Mayor or
+            CustomRoles.ElectOfficials or
+            CustomRoles.Succubus or
+            CustomRoles.Charmed or
+            CustomRoles.Jackal or
+            CustomRoles.Sidekick or
+            CustomRoles.Whoops or
+            CustomRoles.PlaguesGod or
+            CustomRoles.SourcePlague or
+            CustomRoles.Revolutionist or
+            CustomRoles.Deputy;
     }
     public static bool CheckAddonConfilct(CustomRoles role, PlayerControl pc)
     {
@@ -754,9 +826,7 @@ internal static class CustomRolesHelper
     {
         CustomRoleTypes type = CustomRoleTypes.Crewmate;
         if (role.IsImpostor()) type = CustomRoleTypes.Impostor;
-        if (role.IsNeutral() && !role.IsNK()) type = CustomRoleTypes.Neutral;
-        if (role.IsNeutral() && !role.IsNK()) type = CustomRoleTypes.NotNK;
-        if (role.IsNK()) type = CustomRoleTypes.NK;
+        if (role.IsNeutral()) type = CustomRoleTypes.Neutral;
         if (role.IsAdditionRole()) type = CustomRoleTypes.Addon;
         return type;
     }
@@ -865,8 +935,6 @@ public enum CustomRoleTypes
     Crewmate,
     Impostor,
     Neutral,
-    NotNK,
-    NK,
     Addon
 }
 public enum CountTypes

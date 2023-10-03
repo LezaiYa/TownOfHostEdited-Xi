@@ -144,6 +144,10 @@ public class PlayerState
             RPC.SendDeathReason(PlayerId, deathReason);
         }
     }
+    public void SetAlice()
+    {
+        IsDead = false;
+    }
     public bool IsSuicide() { return deathReason == DeathReason.Suicide; }
     //public bool IsVote() { return deathReason == DeathReason.Vote; }
     public TaskState GetTaskState() { return taskState; }
@@ -191,6 +195,7 @@ public class PlayerState
         Trialed,
         Depression,
         cry,
+        Soul,
 
 
         etc = -1
@@ -420,7 +425,7 @@ public class TaskState
             //绝望先生
             if (player.Is(CustomRoles.MrDesperate))
             {
-                MrDesperate.KillTime = 0;
+                MrDesperate.KillTime[player.PlayerId] = 0;
                 player.RpcGuardAndKill(player);
             }
             if (player.Is(CustomRoles.MrDesperate) && (CompletedTasksCount + 1) >= AllTasksCount)

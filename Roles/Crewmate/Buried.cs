@@ -46,9 +46,8 @@ namespace TOHE.Roles.Crewmate;
         if(pc == null || !pc.Is(CustomRoles.Buried)) return;
         // 将管道ID添加到字典中，标识为 1
         landmineDict[vent.Id] = 1;
-
-        // 发送RPC消息通知客户端
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(pc.NetId, 34, SendOption.Reliable, pc.GetClientId());
+         // 发送RPC消息通知客户端
+         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(pc.NetId, 34, SendOption.Reliable, pc.GetClientId());
         writer.WritePacked(vent.Id);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
     }

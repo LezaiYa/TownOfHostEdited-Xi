@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using static UnityEngine.GraphicsBuffer;
 using TOHE.Roles.Double;
-using static UnityEngine.ParticleSystem.PlaybackState;
+using TOHE.Modules;
 
 namespace TOHE;
 
@@ -165,6 +165,25 @@ class ExileControllerWrapUpPatch
                    break;
                 }
             }
+            if (!Main.HangTheDevilKiller.Contains(exiled.PlayerId))
+            {
+                foreach (var pc in Main.AllAlivePlayerControls)
+                {
+                    if (pc.Is(CustomRoles.HangTheDevil) && pc.IsAlive() && pc!=null) continue;
+                    if (pc.Is(CustomRoles.HangTheDevil) && !pc.IsAlive() && pc != null)
+                    {
+                        foreach (var player in Main.AllAlivePlayerControls)
+                        {
+                            if (Main.ForHangTheDevil.Contains(player.PlayerId))
+                            {
+                                player.RpcMurderPlayerV3(player);
+                               player.SetRealKiller(pc);
+                                player.RPCPlayCustomSound("Ghost");
+                            }
+                        }
+                    }
+                }
+            }
             //判断内鬼辈出
             if (exiled.GetCustomRole().IsImpostor())
             {
@@ -288,6 +307,7 @@ class ExileControllerWrapUpPatch
         }
         
         Main.DyingTurns += 1;
+ 
         foreach (PlayerControl target in Main.WrongedList)
         {
             if (Main.FirstDied == byte.MaxValue && target.GetCustomRole().IsCrewmate() && !target.CanUseKillButton() && Options.CanWronged.GetBool())

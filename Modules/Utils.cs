@@ -634,6 +634,15 @@ public static class Utils
             case CustomRoles.MrDesperate:
                 ProgressText.Append(MrDesperate.GetMrDesperate(playerId));
                 break;
+            case CustomRoles.AnimalRefuser:
+                ProgressText.Append(ColorString(GetRoleColor(CustomRoles.Refuser), $"({Main.RefuserShields})"));
+                break;
+            case CustomRoles.UnanimalRefuser:
+                ProgressText.Append(ColorString(GetRoleColor(CustomRoles.Refuser), $"({Main.RefuserShields})"));
+                break;
+            case CustomRoles.AttendRefuser:
+                ProgressText.Append(ColorString(GetRoleColor(CustomRoles.Refuser), $"({Main.RefuserShields})"));
+                break;
             default:
                 //タスクテキスト
                 var taskState = Main.PlayerStates?[playerId].GetTaskState();
@@ -749,39 +758,39 @@ public static class Utils
 
         SendMessage(sb.ToString(), PlayerId);
     }
-    public static void CopyCurrentSettings()
-    {
-        var sb = new StringBuilder();
-      if (Options.HideGameSettings.GetBool() && !AmongUsClient.Instance.AmHost)
+        public static void CopyCurrentSettings()
         {
-            ClipboardHelper.PutClipboardString(GetString("Message.HideGameSettings"));
-            return;
+            var sb = new StringBuilder();
+            if (Options.HideGameSettings.GetBool() && !AmongUsClient.Instance.AmHost)
+                {
+                    ClipboardHelper.PutClipboardString(GetString("Message.HideGameSettings"));
+                    return;
+                }
+            sb.Append($"━━━━━━━━━━━━【{GetString("Roles")}】━━━━━━━━━━━━");
+            foreach (var role in Options.CustomRoleCounts)
+            {
+                if (!role.Key.IsEnable()) continue;
+                string mode = role.Key.GetMode() == 1 ? GetString("RoleRateNoColor") : GetString("RoleOnNoColor");
+                sb.Append($"\n【{GetRoleName(role.Key)}:{mode} ×{role.Key.GetCount()}】\n");
+                ShowChildrenSettings(Options.CustomRoleSpawnChances[role.Key], ref sb);
+                var text = sb.ToString();
+                sb.Clear().Append(text.RemoveHtmlTags());
+            }
+            sb.Append($"━━━━━━━━━━━━【{GetString("Settings")}】━━━━━━━━━━━━");
+            foreach (var opt in OptionItem.AllOptions.Where(x => x.GetBool() && x.Parent == null && x.Id >= 80000 && !x.IsHiddenOn(Options.CurrentGameMode)))
+            {
+                if (opt.Name == "KillFlashDuration")
+                    sb.Append($"\n【{opt.GetName(true)}: {opt.GetString()}】\n");
+                else
+                    sb.Append($"\n【{opt.GetName(true)}】\n");
+                ShowChildrenSettings(opt, ref sb);
+                var text = sb.ToString();
+                sb.Clear().Append(text.RemoveHtmlTags());
+            }
+            sb.Append($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            ClipboardHelper.PutClipboardString(sb.ToString());
         }
-        sb.Append($"━━━━━━━━━━━━【{GetString("Roles")}】━━━━━━━━━━━━");
-        foreach (var role in Options.CustomRoleCounts)
-        {
-            if (!role.Key.IsEnable()) continue;
-            string mode = role.Key.GetMode() == 1 ? GetString("RoleRateNoColor") : GetString("RoleOnNoColor");
-            sb.Append($"\n【{GetRoleName(role.Key)}:{mode} ×{role.Key.GetCount()}】\n");
-            ShowChildrenSettings(Options.CustomRoleSpawnChances[role.Key], ref sb);
-            var text = sb.ToString();
-            sb.Clear().Append(text.RemoveHtmlTags());
-        }
-        sb.Append($"━━━━━━━━━━━━【{GetString("Settings")}】━━━━━━━━━━━━");
-        foreach (var opt in OptionItem.AllOptions.Where(x => x.GetBool() && x.Parent == null && x.Id >= 80000 && !x.IsHiddenOn(Options.CurrentGameMode)))
-        {
-            if (opt.Name == "KillFlashDuration")
-                sb.Append($"\n【{opt.GetName(true)}: {opt.GetString()}】\n");
-            else
-                sb.Append($"\n【{opt.GetName(true)}】\n");
-            ShowChildrenSettings(opt, ref sb);
-            var text = sb.ToString();
-            sb.Clear().Append(text.RemoveHtmlTags());
-        }
-        sb.Append($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        ClipboardHelper.PutClipboardString(sb.ToString());
-    }
-    public static void ShowActiveRoles(byte PlayerId = byte.MaxValue)
+        public static void ShowActiveRoles(byte PlayerId = byte.MaxValue)
     {
         if (Options.HideGameSettings.GetBool() && PlayerId != byte.MaxValue)
         {
@@ -1215,6 +1224,10 @@ public static class Utils
             {
                 SelfSuffix.Append(Vulture.GetTargetArrow(seer));
             }
+            if (seer.Is(CustomRoles.BloodSeekers))
+            {
+                SelfSuffix.Append(BloodSeekers.GetTargetArrow(seer));
+            }
             if (seer.Is(CustomRoles.NiceTracker))
             {
                 SelfSuffix.Append(NiceTracker.GetTargetArrow(seer));
@@ -1514,7 +1527,7 @@ public static class Utils
                 }
                 if (seer.Is(CustomRoles.NiceGuesser) || seer.Is(CustomRoles.EvilGuesser))
                 {
-                    if (seer.IsAlive() && target.IsAlive() && isForMeeting)
+                    if (seer.IsAlive() && target.IsAlive())
                     {
                         TargetPlayerName = ColorString(GetRoleColor(seer.Is(CustomRoles.NiceGuesser) ? CustomRoles.NiceGuesser : CustomRoles.EvilGuesser), target.PlayerId.ToString()) + " " + TargetPlayerName;
                     }
@@ -1528,7 +1541,7 @@ public static class Utils
                 }
                 if (seer.Is(CustomRoles.NiceSwapper))
                 {
-                    if (seer.IsAlive() && target.IsAlive() && isForMeeting)
+                    if (seer.IsAlive() && target.IsAlive())
                     {
                         TargetPlayerName = ColorString(GetRoleColor(CustomRoles.NiceSwapper), target.PlayerId.ToString()) + " " + TargetPlayerName;
                     }

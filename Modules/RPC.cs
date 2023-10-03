@@ -90,6 +90,8 @@ enum CustomRPC
     SetCursedWolfSpellCount,
     SetCollectorVotes,
     SetNiceSwapperVotes,
+    Challenger,
+    KillTime,
     SetEvilSwapperVotes,
     SetQuickShooterShotLimit,
     SetEraseLimit,
@@ -128,6 +130,7 @@ enum CustomRPC
 
     //喜叫我加的
     SetVultureArrow,
+    SetBloodSeekersArrow,
 }
 public enum Sounds
 {
@@ -453,6 +456,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetNiceSwapperVotes:
                 NiceSwapper.ReceiveRPC(reader, __instance);
                 break;
+            case CustomRPC.Challenger:
+                Challenger.ReceiveRPC(reader, __instance);
+                break;
             case CustomRPC.SetEvilSwapperVotes:
                 EvilSwapper.ReceiveRPC(reader, __instance);
                 break;
@@ -514,6 +520,12 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetVultureArrow:
                 Vulture.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetBloodSeekersArrow:
+                BloodSeekers.ReceiveRPC(reader);
+                break;
+            case CustomRPC.KillTime:
+                MrDesperate.ReceiveRPC(reader);
                 break;
             case CustomRPC.SyncNameNotify:
                 NameNotifyManager.ReceiveRPC(reader);
@@ -989,6 +1001,12 @@ internal static class RPC
                 break;
             case CustomRoles.Copycat:
                 Copycat.Add(targetId);
+                break;
+            case CustomRoles.Challenger:
+                Challenger.Add(targetId);
+                break;
+            case CustomRoles.BloodSeekers:
+                BloodSeekers.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);

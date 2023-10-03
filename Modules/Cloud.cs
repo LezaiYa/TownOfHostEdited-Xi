@@ -80,10 +80,10 @@ internal class Cloud
         new LateTask(() =>
         {
             if (!AmongUsClient.Instance.AmHost || !GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame)
-            {
-                connecting = false;
-                return;
-            }
+                {
+                    connecting = false;
+                    return;
+                }
             try
             {
                 if (IP == null || EAC_PORT == 0) throw new("Has no ip or port");

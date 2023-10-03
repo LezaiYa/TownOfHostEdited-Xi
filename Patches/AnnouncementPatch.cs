@@ -70,11 +70,94 @@ public class ModNewsHistorySCn
         {
             var news = new ModNewsSCn
             {
-                Number = 100000,
+                Number = 100002,
+                Title = "TownOfHostEdited-Xi v2.0.3",
+                SubTitle = "★★★★公开回归！★★★★",
+                ShortTitle = "★TOHEX v2.0.3★\n<size=75%>简体中文</size>",
+                Text =
+                "简体中文"
+                + "\n-----------------------------"
+                + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
+                + "\n-----------------------------"
+                + "\n再次公开!"
+                + "\n\n\n## 对应官方版本"
+                + "\n- 基于TOH版本 v4.1.2"
+                + "\n- 基于TOHE版本 v2.3.55"
+                + "\n- 适配Among Us版本 v2023.7.11及以上版本"
+                + "\n\n## 修复"
+                + "\n- 修复大量bug"
+                         + "\n- 可以公开"
+                + "\n\n## 新增职业"
+                     + "\n- 船员阵营：管道工"
+                + "\n\n## 写在最后"
+                + "\n芜湖"
+                + "\n                                                       ——喜",
+                Date = "2023-8-25T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100002,
+                Title = "TownOfHostEdited-Xi v2.0.3",
+                SubTitle = "★★★★Public Again!★★★★",
+                ShortTitle = "★TOHEX v2.0.3★\n<size=75%>English</size>",
+                Text =
+                "English"
+                + "\n-----------------------------"
+                 + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
+                + "\n-----------------------------"
+                + "\nLet's Play Public Games!"
+               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.7.11 And Above"                + "\n\n## Bugs Fix"
+                + "\n- Lots of Bugs fixed"
+                         + "\n- We Can PUBLIC Now"
+                + "\n\n## New Roles"
+                     + "\n- Crewmates：Plumber",
+                Date = "2023-8-25T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100002,
+                Title = "TownOfHostEdited-Xi v2.0.2",
+                SubTitle = "★★★★全新的TOHEX！★★★★",
+                ShortTitle = "★TOHEX v2.0.2★\n<size=75%>简体中文</size>",
+                Text = 
+                "简体中文"
+                + "\n-----------------------------"
+                + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
+                + "\n-----------------------------"
+                + "\n全新的TOHEX!"
+                + "\n\n\n## 对应官方版本"
+                + "\n- 基于TOH版本 v4.1.2"
+                + "\n- 基于TOHE版本 v2.3.55"
+                + "\n- 适配Among Us版本 v2023.7.11及以上版本"
+                + "\n\n## 修复"
+                + "\n- 修复亨利等名字提示无法显示问题"
+                + "\n\n## 新增、回归职业"
+                     + "\n- 中立阵营：抗拒者"
+                          + "\n- 内鬼阵营：击球手"
+                               + "\n- 内鬼阵营：寻血者"
+                                    + "\n- 内鬼阵营：吸魂者"
+                                     + "\n- 内鬼阵营：吊死鬼"
+                + "\n\n## 写在最后"
+                + "\n快国庆了，但是树懒也快换引擎了，不想做了"
+                + "\n                                                       ——喜",
+                Date = "2023-8-25T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100001,
                 Title = "TownOfHostEdited-Xi v2.0.0",
                 SubTitle = "★★★★全新的TOHEX！★★★★",
                 ShortTitle = "★TOHEX v2.0.0★\n<size=75%>简体中文</size>",
-                Text = 
+                Text =
                 "简体中文"
                 + "\n-----------------------------"
                 + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
@@ -96,7 +179,7 @@ public class ModNewsHistorySCn
                 + "\n- 修复了游戏开始黑屏的问题"
                 + "\n- 修复了非中文设置界面崩溃的问题"
                 + "\n\n## 新增、回归职业"
-              //  + "\n- 内鬼阵营：模仿者(杀手)(来自TOH-TOR)"
+                //  + "\n- 内鬼阵营：模仿者(杀手)(来自TOH-TOR)"
                 //+ "\n- 内鬼阵营：模仿者(助手)"
                 + "\n- 内鬼阵营：分散者(来自TOH-RE)"
                 + "\n- 内鬼阵营：套皮者"
@@ -145,7 +228,7 @@ public class ModNewsHistorySCn
                 + "\n- 全新的开场动画阵营文字"
                 + "\n- 增加开场动画补充文字"
                 + "\n- 补充部分职业技能图标"
-                
+
                 + "\n- 开场动画背景颜色跟随职业颜色"
                 + "\n- 全新的胜利文本(简体中文)"
                 + "\n\n## 写在最后"
@@ -163,7 +246,7 @@ public class ModNewsHistorySCn
         {
             var news = new ModNewsSCn
             {
-                Number = 100001,
+                Number = 100000,
                 Title = "TownOfHostEdited-Xi v2.0.0",
                 SubTitle = "★★★★NEW TOHEX!★★★★",
                 ShortTitle = "★TOHEX v2.0.0★\n<size=75%>English</size>",

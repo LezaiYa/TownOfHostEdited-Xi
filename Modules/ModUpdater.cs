@@ -18,7 +18,7 @@ namespace TOHE;
 public class ModUpdater
 {
     private static readonly string URL_2018k = "http://api.2018k.cn";
-    private static readonly string URL_Github = "https://api.github.com/repos/TOHEXGF/TownOfHostEditedXI";
+    private static readonly string URL_Github = "https://api.github.com/repos/TOHEX-Official/TownOfHostEdited-Xi";
     public static bool hasUpdate = false;
     public static bool forceUpdate = true;
     public static bool isBroken = false;
@@ -71,8 +71,7 @@ public class ModUpdater
         //)));
     }
 
-    public static string UrlSetId(string url) => url + "?id=C79D600F1123469B8BECDC631CB3AF09";
-    //public static string UrlSetId(string url) => url + "?id=8F249256BAFA41FB97E6FDE8F899ED57";
+    public static string UrlSetId(string url) => url + "?id=8F249256BAFA41FB97E6FDE8F899ED57";
     public static string UrlSetCheck(string url) => url + "/checkVersion";
     public static string UrlSetInfo(string url) => url + "/getExample";
     public static string UrlSetToday(string url) => url + "/today";
@@ -269,25 +268,11 @@ public class ModUpdater
         try
         {
             var fileName = Assembly.GetExecutingAssembly().Location;
-            if (Directory.Exists("TOHE_DATA") && File.Exists(@"./TOHEX_Data/BanWords.txt"))
+            if (Directory.Exists("TOH_DATA") && File.Exists(@"./TOHE_DATA/BanWords.txt"))
             {
-                DirectoryInfo di = new("TOHE_DATA");
+                DirectoryInfo di = new("TOH_DATA");
                 di.Delete(true);
-                Logger.Warn("删除：TOHE_DATA", "NewVersionCheck");
-            }
-            fileName = Assembly.GetExecutingAssembly().Location;
-            if (Directory.Exists("To N Xi_Data") && File.Exists(@"./TOHEX_Data/BanWords.txt"))
-            {
-                DirectoryInfo di = new("To N Xi_Data");
-                di.Delete(true);
-                Logger.Warn("删除：To N Xi_Data", "NewVersionCheck");
-            }
-            fileName = Assembly.GetExecutingAssembly().Location;
-            if (Directory.Exists("TONX_Data") && File.Exists(@"./TOHEX_Data/BanWords.txt"))
-            {
-                DirectoryInfo di = new("TONX_Data");
-                di.Delete(true);
-                Logger.Warn("删除：TONX_Data", "NewVersionCheck");
+                Logger.Warn("删除旧数据：TOH_DATA", "NewVersionCheck");
             }
         }
         catch (Exception ex)
@@ -295,7 +280,6 @@ public class ModUpdater
             Logger.Exception(ex, "NewVersionCheck");
             return false;
         }
-
         return true;
     }
     public static bool BackOldDLL()
@@ -354,7 +338,7 @@ public class ModUpdater
             File.Move(fileName, fileName + ".bak");
             File.Move("BepInEx/plugins/TOHE.dll.temp", fileName);
             ShowPopup(GetString("updateRestart"), StringNames.ExitGame, true, true);
-            
+
         }
         catch (Exception ex)
         {

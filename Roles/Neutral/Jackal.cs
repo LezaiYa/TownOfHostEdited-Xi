@@ -1,4 +1,5 @@
 using AmongUs.GameOptions;
+using AmongUs.Data.Player;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using UnityEngine;
 using static TOHE.Options;
 using static TOHE.Translator;
 using TOHE.Roles.Double;
+using MonoMod.Cil;
 
 namespace TOHE.Roles.Neutral;
 
@@ -111,6 +113,8 @@ public static class Jackal
     public static bool OnCheckMurder(PlayerControl killer, PlayerControl target)
     {
         if (!JackalCanAttendant.GetBool() || AttendantLimit[killer.PlayerId] < 1) return false;
+        PlayerControl player = new();
+        
         if (JackalCanAttendant.GetBool() && CanBeAttendant(target) && Mini.Age == 18|| JackalCanAttendant.GetBool() && CanBeAttendant(target) && Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini)))
         {
             AttendantLimit[killer.PlayerId]--;
@@ -123,7 +127,25 @@ public static class Jackal
             {
                 if (!target.CanUseKillButton() && (!target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini))))
                 {
-                    target.RpcSetCustomRole(CustomRoles.Whoops);
+                    var ghostRoles = new Dictionary<PlayerControl, RoleTypes>();
+                    foreach (var seer in Main.AllPlayerControls)
+                    {
+                        ghostRoles[seer] = RoleTypes.Impostor;
+
+                       
+                            foreach ((var seers, var role) in ghostRoles)
+                            {
+                                target.RpcSetRoleDesync(role, seers.GetClientId());
+                            }
+
+                        target.Data.RoleType = RoleTypes.Impostor;
+                        target.SetRole(RoleTypes.Impostor);
+                        target.RpcSetRole(RoleTypes.Impostor);
+                        target.RpcSetCustomRole(CustomRoles.Sidekick);
+                        Jackal.Add(target.PlayerId);
+                        target.RpcGuardAndKill(target);
+                    }
+                    
                 }
                 if (target.CanUseKillButton() && (!target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini))))
                 {

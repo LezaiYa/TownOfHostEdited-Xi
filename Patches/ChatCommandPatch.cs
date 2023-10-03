@@ -48,7 +48,7 @@ internal class ChatCommands
         Logger.Info(text, "SendChat");
         if ((Options.NewHideMsg.GetBool() || Blackmailer.ForBlackmailer.Contains(PlayerControl.LocalPlayer.PlayerId)) && PlayerControl.LocalPlayer.IsAlive())
         {
-            ChatManager.SendMessage(PlayerControl.LocalPlayer, text);
+            ChatManager.GetMessage(PlayerControl.LocalPlayer, text);
         }
         if (GuessManager.GuesserMsg(PlayerControl.LocalPlayer, text))
         {
@@ -63,6 +63,10 @@ internal class ChatCommands
             ChatManager.cancel = false; goto Canceled;
         }
         if (NiceSwapper.SwapMsg(PlayerControl.LocalPlayer, text))
+        {
+            ChatManager.cancel = false; goto Canceled;
+        }
+        if (Challenger.ChallengerMsg(PlayerControl.LocalPlayer, text))
         {
             ChatManager.cancel = false; goto Canceled;
         }
@@ -707,12 +711,11 @@ internal class ChatCommands
             var txt = sb.ToString();
             sb.Clear().Append(txt.RemoveHtmlTags());
         }
-
         bool canSpecify = false;
         if ((isDev || isUp) && GameStates.IsLobby)
         {
             canSpecify = true;
-            if (role.IsAdditionRole() || role.IsVanilla() || role is CustomRoles.GM or CustomRoles.NotAssigned or CustomRoles.KB_Normal or CustomRoles.Hotpotato or CustomRoles.Coldpotato|| !Options.CustomRoleSpawnChances.ContainsKey(role)) canSpecify = false;
+            if (role.IsAdditionRole() || role.IsVanilla() || role is CustomRoles.GM or CustomRoles.NotAssigned or CustomRoles.KB_Normal or CustomRoles.Hotpotato or CustomRoles.Coldpotato || !Options.CustomRoleSpawnChances.ContainsKey(role)) canSpecify = false;
             if (role.GetCount() < 1 || role.GetMode() == 0) canSpecify = false;
             if (canSpecify)
             {
@@ -737,13 +740,15 @@ internal class ChatCommands
         if (!AmongUsClient.Instance.AmHost) return;
         if ((Options.NewHideMsg.GetBool() || Blackmailer.ForBlackmailer.Contains(player.PlayerId)) && PlayerControl.LocalPlayer.IsAlive() && player.PlayerId != 0)
         {
-            ChatManager.SendMessage(player, text);
+            ChatManager.GetMessage(player, text);
         }
         if (GuessManager.GuesserMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if (Judge.TrialMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if (Copycat.CopycatMsg(player, text)){ canceled = true; ChatManager.cancel = false; return; }
         if (NiceSwapper.SwapMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if (EvilSwapper.SwapMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
+        if (Challenger.ChallengerMsg(player, text)) { canceled = true; ChatManager.cancel = false; return; }
+        
         if (GuessManager.ID(player, text)) { canceled = true; ChatManager.cancel = false; return; }
         if ((Options.NewHideMsg.GetBool() && ChatManager.cancel == true || Blackmailer.ForBlackmailer.Contains(PlayerControl.LocalPlayer.PlayerId)) && PlayerControl.LocalPlayer.IsAlive() && player.PlayerId != 0)
         {

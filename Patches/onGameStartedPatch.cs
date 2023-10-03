@@ -106,6 +106,7 @@ internal class ChangeRoleSettings
             Main.GuideMax = new();
             Main.ForYandere = new();
             Main.NeedKillYandere = new();
+            Main.ForRudepeople = new();
 
             Main.AfterMeetingDeathPlayers = new();
             Main.ResetCamPlayerList = new();
@@ -175,6 +176,10 @@ internal class ChangeRoleSettings
             Main.TasksSqueezers = new();
             Main.KillForCorpse = new();
             Main.PGuesserMax = new();
+            Main.HangTheDevilKiller = new();
+            Main.ForHangTheDevil = new();
+
+            Main.RefuserShields = 0;
 
             Options.UsedButtonCount = 0;
 
@@ -223,7 +228,7 @@ internal class ChangeRoleSettings
                 var colorId = pc.Data.DefaultOutfit.ColorId;
                 if (AmongUsClient.Instance.AmHost && Options.FormatNameMode.GetInt() == 1) pc.RpcSetName(Palette.GetColorName(colorId));
                 Main.PlayerStates[pc.PlayerId] = new(pc.PlayerId);
-                //Main.AllPlayerNames[pc.PlayerId] = pc?.Data?.PlayerName;
+                Main.AllPlayerNames[pc.PlayerId] = pc?.Data?.PlayerName;
 
                 Main.PlayerColors[pc.PlayerId] = Palette.PlayerColors[colorId];
                 Main.AllPlayerSpeed[pc.PlayerId] = Main.RealOptionsData.GetFloat(FloatOptionNames.PlayerSpeedMod); //移動速度をデフォルトの移動速度に変更
@@ -329,6 +334,9 @@ internal class ChangeRoleSettings
             Loners.Init();
             MrDesperate.Init();
             Meditator.Init();
+            Challenger.Init();
+            BloodSeekers.Init();
+            SoulSucker.Init();
                 SoloKombatManager.Init();
             HotPotatoManager.Init();
             CustomWinnerHolder.Reset();
@@ -869,6 +877,15 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Meditator:
                         Meditator.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Challenger:
+                        Challenger.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.BloodSeekers:
+                        BloodSeekers.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.SoulSucker:
+                        SoulSucker.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())

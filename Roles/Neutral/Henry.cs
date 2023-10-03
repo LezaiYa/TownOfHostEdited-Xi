@@ -49,7 +49,7 @@ public static class Henry
     {
         playerIdList.Add(playerId);
         var Dy = IRandom.Instance;
-        int rndNum = Dy.Next(0, 4);
+        int rndNum = Dy.Next(0, 3);
         Choose = rndNum;
         ChooseMax.TryAdd(playerId, NeedChoose.GetInt());
 

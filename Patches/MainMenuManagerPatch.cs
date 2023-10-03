@@ -1,153 +1,232 @@
-using AmongUs.Data;
-using AmongUs.Data.Player;
-using Assets.InnerNet;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
-using HarmonyLib;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using TMPro;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using TOHE.Modules;
+using HarmonyLib;
 using UnityEngine;
-using static UnityEngine.UI.Button;
+using System.Linq;
+using UnityEngine.UI;
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
-using AmongUs.GameOptions;
-using static TOHE.Options;
 using static TOHE.Translator;
+using static TOHE.Credentials;
 
 namespace TOHE;
 
-[HarmonyPatch]
-public class MainMenuManagerPatch
+[HarmonyPatch(typeof(MainMenuManager))]
+public static class MainMenuManagerPatch
 {
-    public static GameObject template;
-    public static GameObject qqButton;
-   // public static GameObject discordButton;
-    public static GameObject updateButton;
+    private static PassiveButton template;
+    private static PassiveButton gitHubButton;
+    private static PassiveButton discordButton;
+    private static PassiveButton websiteButton;
+    //private static PassiveButton patreonButton;
 
-  //  [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
-   // public static void Postfix(MainMenuManager __instance)
-  //  {
-        //if (!Main.FastBoot.Value) return;
-        //GameObject.Find("ModStamp")?.SetActive(false);
-  //     TitleLogoPatch.PlayLocalButton?.transform?.SetLocalY(Options.IsLoaded ? -2.1f : 100f);
-  //      TitleLogoPatch.PlayOnlineButton?.transform?.SetLocalY(Options.IsLoaded ? -2.1f : 100f);
-  //      TitleLogoPatch.HowToPlayButton?.transform?.SetLocalY(Options.IsLoaded ? -2f : 100f);
- //       TitleLogoPatch.FreePlayButton?.transform?.SetLocalY(Options.IsLoaded ? -2f : 100f);
-  //      TitleLogoPatch.LoadingHint?.SetActive(!Options.IsLoaded);
- //   }
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPrefix]
-    public static void Start_Prefix(MainMenuManager __instance)
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
+    public static void Postfix(MainMenuManager __instance)
     {
-        if (template == null) template = GameObject.Find("/MainUI/ExitGameButton");
+        if (__instance == null) return;
+        __instance.playButton.transform.gameObject.SetActive(Options.IsLoaded);
+        if (TitleLogoPatch.LoadingHint != null)
+            TitleLogoPatch.LoadingHint.SetActive(!Options.IsLoaded);
+    }
+
+    [HarmonyPatch(nameof(MainMenuManager.Start)), HarmonyPostfix, HarmonyPriority(Priority.Normal)]
+    public static void StartPostfix(MainMenuManager __instance)
+    {
+        if (template == null) template = __instance.quitButton;
+
+        // FPS
+        Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
+
+        __instance.screenTint.gameObject.transform.localPosition += new Vector3(1000f, 0f);
+        __instance.screenTint.enabled = false;
+        __instance.rightPanelMask.SetActive(true);
+        // The background texture (large sprite asset)
+        __instance.mainMenuUI.FindChild<SpriteRenderer>("BackgroundTexture").transform.gameObject.SetActive(false);
+        // The glint on the Among Us Menu
+        __instance.mainMenuUI.FindChild<SpriteRenderer>("WindowShine").transform.gameObject.SetActive(false);
+        __instance.mainMenuUI.FindChild<Transform>("ScreenCover").gameObject.SetActive(false);
+
+        GameObject leftPanel = __instance.mainMenuUI.FindChild<Transform>("LeftPanel").gameObject;
+        GameObject rightPanel = __instance.mainMenuUI.FindChild<Transform>("RightPanel").gameObject;
+        rightPanel.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        GameObject maskedBlackScreen = rightPanel.FindChild<Transform>("MaskedBlackScreen").gameObject;
+        maskedBlackScreen.GetComponent<SpriteRenderer>().enabled = false;
+        //maskedBlackScreen.transform.localPosition = new Vector3(-3.345f, -2.05f); //= new Vector3(0f, 0f);
+        maskedBlackScreen.transform.localScale = new Vector3(7.35f, 4.5f, 4f);
+
+        __instance.mainMenuUI.gameObject.transform.position += new Vector3(-0.2f, 0f);
+
+        leftPanel.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        leftPanel.gameObject.FindChild<SpriteRenderer>("Divider").enabled = false;
+        leftPanel.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.name == "Shine").ForEach(r => r.enabled = false);
+
+        GameObject splashArt = new("SplashArt");
+        splashArt.transform.position = new Vector3(0, 0f, 600f); //= new Vector3(0, 0.40f, 600f);
+        var spriteRenderer = splashArt.AddComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Utils.LoadSprite($"TOHE.Resources.Images.TOHEXI-BG.jpg", 89f);
+
+
+        //__instance.playLocalButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.1647f, 0f, 0.7765f);
+        //__instance.PlayOnlineButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.1647f, 0f, 0.7765f);
+        //__instance.playLocalButton.transform.position = new Vector3(2.095f, -0.25f, 520f);
+        //__instance.PlayOnlineButton.transform.position = new Vector3(0f, -0.25f, 0f);
+
+
+        /*    __instance.playButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.35f);
+            __instance.playButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(0.929f, 0.255f, 0.773f);
+            Color originalColorPlayButton = __instance.playButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.playButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorPlayButton * 0.5f;
+            __instance.playButton.activeTextColor = Color.white;
+            __instance.playButton.inactiveTextColor = Color.white;
+            __instance.playButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.35f);
+
+            __instance.inventoryButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.35f);
+            __instance.inventoryButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(0.929f, 0.255f, 0.773f);
+            Color originalColorInventoryButton = __instance.inventoryButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.inventoryButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorInventoryButton * 0.5f;
+            __instance.inventoryButton.activeTextColor = Color.white;
+            __instance.inventoryButton.inactiveTextColor = Color.white;
+            __instance.inventoryButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.35f);
+
+            __instance.shopButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.35f);
+            __instance.shopButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(0.929f, 0.255f, 0.773f);
+            Color originalColorShopButton = __instance.shopButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.shopButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorShopButton * 0.5f;
+            __instance.shopButton.activeTextColor = Color.white;
+            __instance.shopButton.inactiveTextColor = Color.white;
+            __instance.shopButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.35f);
+
+
+
+            __instance.newsButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.95f, 0f, 1f);
+            __instance.newsButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.85f);
+            Color originalColorNewsButton = __instance.newsButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.newsButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorNewsButton * 0.6f;
+            __instance.newsButton.activeTextColor = Color.white;
+            __instance.newsButton.inactiveTextColor = Color.white;
+
+            __instance.myAccountButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.95f, 0f, 1f);
+            __instance.myAccountButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.85f);
+            Color originalColorMyAccount = __instance.myAccountButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.myAccountButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorMyAccount * 0.6f;
+            __instance.myAccountButton.activeTextColor = Color.white;
+            __instance.myAccountButton.inactiveTextColor = Color.white;
+            __instance.accountButtons.transform.position += new Vector3(0f, 0f, -1f);
+
+            __instance.settingsButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.95f, 0f, 1f);
+            __instance.settingsButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.85f);
+            Color originalColorSettingsButton = __instance.settingsButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.settingsButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorSettingsButton * 0.6f;
+            __instance.settingsButton.activeTextColor = Color.white;
+            __instance.settingsButton.inactiveTextColor = Color.white;
+
+
+
+            //__instance.creditsButton.gameObject.SetActive(false);
+            //__instance.quitButton.gameObject.SetActive(false);
+
+            __instance.quitButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.95f, 0f, 1f);
+            __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.85f);
+            Color originalColorQuitButton = __instance.quitButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.quitButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorQuitButton * 0.6f;
+            __instance.quitButton.activeTextColor = Color.white;
+            __instance.quitButton.inactiveTextColor = Color.white;
+
+            __instance.creditsButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.95f, 0f, 1f);
+            __instance.creditsButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.85f);
+            Color originalColorCreditsButton = __instance.creditsButton.inactiveSprites.GetComponent<SpriteRenderer>().color;
+            __instance.creditsButton.inactiveSprites.GetComponent<SpriteRenderer>().color = originalColorCreditsButton * 0.6f;
+            __instance.creditsButton.activeTextColor = Color.white;
+            __instance.creditsButton.inactiveTextColor = Color.white; */
+
+
+
         if (template == null) return;
 
-        if (CultureInfo.CurrentCulture.Name == "zh-CN")
-        {
-            //生成QQ群按钮
-            if (qqButton == null) qqButton = Object.Instantiate(template, template.transform.parent);
-            qqButton.name = "qqButton";
-            qqButton.transform.position = Vector3.Reflect(template.transform.position, Vector3.left);
+    }
 
-            var qqText = qqButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
-            Color qqColor = new Color32(0, 164, 255, byte.MaxValue);
-            PassiveButton qqPassiveButton = qqButton.GetComponent<PassiveButton>();
-            SpriteRenderer qqButtonSprite = qqButton.GetComponent<SpriteRenderer>();
-            qqPassiveButton.OnClick = new();
-            qqPassiveButton.OnClick.AddListener((Action)(() => Application.OpenURL("http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=h2RuFAXYtGvvNcn6f4ughVCUmuIjXmWD&authKey=BXpmwxjjtM4mNifJbAUewJuwYEp%2FyqvJJcBVIIo%2FSuvHs93twIzGOSbs9MYXtBzI&noverify=0&group_code=680951911")));
-            qqPassiveButton.OnMouseOut.AddListener((Action)(() => qqButtonSprite.color = qqText.color = qqColor));
-            __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) => qqText.SetText("QQ群"))));
-            qqButtonSprite.color = qqText.color = qqColor;
-            qqButton.gameObject.SetActive(!Main.IsAprilFools);
+    private static PassiveButton CreateButton(string name, Vector3 localPosition, Color32 normalColor, Color32 hoverColor, Action action, string label, Vector2? scale = null)
+    {
+        var button = Object.Instantiate(template, Credentials.ToheLogo.transform);
+        button.name = name;
+        Object.Destroy(button.GetComponent<AspectPosition>());
+        button.transform.localPosition = localPosition;
+
+        button.OnClick = new();
+        button.OnClick.AddListener(action);
+
+        var buttonText = button.transform.Find("FontPlacer/Text_TMP").GetComponent<TMP_Text>();
+        buttonText.DestroyTranslator();
+        buttonText.fontSize = buttonText.fontSizeMax = buttonText.fontSizeMin = 3.5f;
+        buttonText.enableWordWrapping = false;
+        buttonText.text = label;
+        var normalSprite = button.inactiveSprites.GetComponent<SpriteRenderer>();
+        var hoverSprite = button.activeSprites.GetComponent<SpriteRenderer>();
+        normalSprite.color = normalColor;
+        hoverSprite.color = hoverColor;
+
+        var container = buttonText.transform.parent;
+        Object.Destroy(container.GetComponent<AspectPosition>());
+        Object.Destroy(buttonText.GetComponent<AspectPosition>());
+        container.SetLocalX(0f);
+        buttonText.transform.SetLocalX(0f);
+        buttonText.horizontalAlignment = HorizontalAlignmentOptions.Center;
+
+        var buttonCollider = button.GetComponent<BoxCollider2D>();
+        if (scale.HasValue)
+        {
+            normalSprite.size = hoverSprite.size = buttonCollider.size = scale.Value;
         }
 
-        //Updateボタンを生成
-        if (updateButton == null) updateButton = Object.Instantiate(template, template.transform.parent);
-        updateButton.name = "UpdateButton";
-        updateButton.transform.position = template.transform.position + new Vector3(0.25f, 0.75f);
-        updateButton.transform.GetChild(0).GetComponent<RectTransform>().localScale *= 1.5f;
+        buttonCollider.offset = new(0f, 0f);
 
-        var updateText = updateButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
-        Color updateColor = new Color32(247, 56, 23, byte.MaxValue);
-        PassiveButton updatePassiveButton = updateButton.GetComponent<PassiveButton>();
-        SpriteRenderer updateButtonSprite = updateButton.GetComponent<SpriteRenderer>();
-        updatePassiveButton.OnClick = new();
-        updatePassiveButton.OnClick.AddListener((Action)(() =>
-        {
-            updateButton.SetActive(false);
-            ModUpdater.StartUpdate(ModUpdater.downloadUrl);
-        }));
-        updatePassiveButton.OnMouseOut.AddListener((Action)(() => updateButtonSprite.color = updateText.color = updateColor));
-        updateButtonSprite.color = updateText.color = updateColor;
-        updateButtonSprite.size *= 1.5f;
-        updateButton.SetActive(false);
+        return button;
+    }
+    public static void Modify(this PassiveButton passiveButton, Action action)
+    {
+        if (passiveButton == null) return;
+        passiveButton.OnClick = new Button.ButtonClickedEvent();
+        passiveButton.OnClick.AddListener(action);
+    }
+    public static T FindChild<T>(this MonoBehaviour obj, string name) where T : Object
+    {
+        string name2 = name;
+        return obj.GetComponentsInChildren<T>().First((T c) => c.name == name2);
+    }
+    public static T FindChild<T>(this GameObject obj, string name) where T : Object
+    {
+        string name2 = name;
+        return obj.GetComponentsInChildren<T>().First((T c) => c.name == name2);
+    }
+    public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
+    {
+        //if (source == null) throw new ArgumentNullException("source");
+        if (source == null) throw new ArgumentNullException(nameof(source));
 
-#if RELEASE
-        //フリープレイの無効化
-        var freeplayButton = GameObject.Find("/MainUI/HowToPlayButton");
-        if (freeplayButton != null)
+        IEnumerator<TSource> enumerator = source.GetEnumerator();
+        while (enumerator.MoveNext())
         {
-            freeplayButton.GetComponent<PassiveButton>().OnClick = new();
-            freeplayButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() => Application.OpenURL("https://pd.qq.com/s/2nmc4odyb")));
-            __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) => freeplayButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().SetText("N频道"))));
+            action(enumerator.Current);
         }
-        //フリープレイの無効化
-        var howtoplayplayButton = GameObject.Find("/MainUI/FreePlayButton");
-        if (howtoplayplayButton != null)
-        {
-            howtoplayplayButton.GetComponent<PassiveButton>().OnClick = new();
-            howtoplayplayButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() => Application.OpenURL(GetString("giteeurl"))));
-            __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) => howtoplayplayButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().SetText(GetString("gitee")))));
-        }
-#endif
 
-        if (Main.IsAprilFools) return;
+        enumerator.Dispose();
+    }
 
-        var bottomTemplate = GameObject.Find("InventoryButton");
-        if (bottomTemplate == null) return;
-
-        var HorseButton = Object.Instantiate(bottomTemplate, bottomTemplate.transform.parent);
-        var passiveHorseButton = HorseButton.GetComponent<PassiveButton>();
-        var spriteHorseButton = HorseButton.GetComponent<SpriteRenderer>();
-        if (HorseModePatch.isHorseMode) spriteHorseButton.transform.localScale *= -1;
-
-        spriteHorseButton.sprite = Utils.LoadSprite($"TOHE.Resources.Images.HorseButton.png", 75f);
-        passiveHorseButton.OnClick = new ButtonClickedEvent();
-        passiveHorseButton.OnClick.AddListener((Action)(() =>
-        {
-            RunLoginPatch.ClickCount++;
-            if (RunLoginPatch.ClickCount == 10) PlayerControl.LocalPlayer.RPCPlayCustomSound("Gunload", true);
-            if (RunLoginPatch.ClickCount == 20) PlayerControl.LocalPlayer.RPCPlayCustomSound("AWP", true);
-
-            spriteHorseButton.transform.localScale *= -1;
-            HorseModePatch.isHorseMode = !HorseModePatch.isHorseMode;
-            var particles = Object.FindObjectOfType<PlayerParticles>();
-            if (particles != null)
-            {
-                particles.pool.ReclaimAll();
-                particles.Start();
-            }
-        }));
-
-        var CreditsButton = Object.Instantiate(bottomTemplate, bottomTemplate.transform.parent);
-        var passiveCreditsButton = CreditsButton.GetComponent<PassiveButton>();
-        var spriteCreditsButton = CreditsButton.GetComponent<SpriteRenderer>();
-
-        spriteCreditsButton.sprite = Utils.LoadSprite($"TOHE.Resources.Images.CreditsButton.png", 75f);
-        passiveCreditsButton.OnClick = new ButtonClickedEvent();
-        passiveCreditsButton.OnClick.AddListener((Action)(() =>
-        {
-            CredentialsPatch.LogoPatch.CreditsPopup?.SetActive(true);
-        }));
-
-        Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
+    [HarmonyPatch(nameof(MainMenuManager.OpenGameModeMenu))]
+    [HarmonyPatch(nameof(MainMenuManager.OpenAccountMenu))]
+    [HarmonyPatch(nameof(MainMenuManager.OpenCredits))]
+    [HarmonyPostfix]
+    public static void OpenMenuPostfix()
+    {
+        if (Credentials.ToheLogo != null) Credentials.ToheLogo.gameObject.SetActive(false);
+    }
+    [HarmonyPatch(nameof(MainMenuManager.ResetScreen)), HarmonyPostfix]
+    public static void ResetScreenPostfix()
+    {
+        if (Credentials.ToheLogo != null) Credentials.ToheLogo.gameObject.SetActive(true);
     }
 }
+
 // 来源：https://github.com/ykundesu/SuperNewRoles/blob/master/SuperNewRoles/Patches/HorseModePatch.cs
 [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
 public static class HorseModePatch

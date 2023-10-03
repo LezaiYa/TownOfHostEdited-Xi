@@ -56,9 +56,9 @@ namespace TOHE.Modules.ChatManager
             return false;
         }
 
-        public static void SendMessage(PlayerControl player, string message)
+        public static void GetMessage(PlayerControl player, string message)
         {
-            int operate = 0; // 1:ID 2:猜测
+            int operate; // 1:ID 2:猜测
             string msg = message;
             string playername = player.GetNameWithRole();
             message = message.ToLower().TrimStart().TrimEnd();
@@ -106,27 +106,12 @@ namespace TOHE.Modules.ChatManager
         {
             var rd = IRandom.Instance;
             string msg;
-            List<CustomRoles> roles = Enum.GetValues(typeof(CustomRoles)).Cast<CustomRoles>().Where(x => x is not CustomRoles.NotAssigned and not CustomRoles.KB_Normal and not CustomRoles.Hotpotato and not CustomRoles.Coldpotato).ToList();
+            List<CustomRoles> roles = Enum.GetValues(typeof(CustomRoles)).Cast<CustomRoles>().Where(x => x is not CustomRoles.KB_Normal and not CustomRoles.Hotpotato and not CustomRoles.Coldpotato).ToList();
             string[] specialTexts = new string[] { "bet", "bt", "guess", "gs", "shoot", "st", "赌", "猜", "审判", "tl", "判", "审", "trial" };
 
             for (int i = chatHistory.Count; i < 30; i++)
             {
-                msg = "/";
-                if (rd.Next(1, 100) < 20)
-                {
-                    msg += "id";
-                }
-                else
-                {
-                    msg += specialTexts[rd.Next(0, specialTexts.Length - 1)];
-                    msg += rd.Next(1, 100) < 50 ? string.Empty : " ";
-                    msg += rd.Next(0, 15).ToString();
-                    msg += rd.Next(1, 100) < 50 ? string.Empty : " ";
-                    CustomRoles role = roles[rd.Next(0, roles.Count())];
-                    msg += rd.Next(1, 100) < 50 ? string.Empty : " ";
-                    msg += Utils.GetRoleName(role);
-                }
-
+                msg = $"{Translator.GetString("HideMessage")}";
                 var player = Main.AllAlivePlayerControls.ToArray()[rd.Next(0, Main.AllAlivePlayerControls.Count())];
                 DestroyableSingleton<HudManager>.Instance.Chat.AddChat(player, msg);
                 var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
@@ -149,6 +134,26 @@ namespace TOHE.Modules.ChatManager
                     {
                         if (senderPlayer.PlayerId.ToString() == senderId)
                         {
+                        if (!senderPlayer.IsAlive())
+                        {
+                            var deathReason = (PlayerState.DeathReason)senderPlayer.PlayerId;
+                            senderPlayer.Revive();
+                            
+
+                            DestroyableSingleton<HudManager>.Instance.Chat.AddChat(senderPlayer, senderMessage);
+
+                            var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
+                            writer.StartMessage(-1);
+                            writer.StartRpc(senderPlayer.NetId, (byte)RpcCalls.SendChat)
+                                .Write(senderMessage)
+                                .EndRpc();
+                            writer.EndMessage();
+                            writer.SendMessage();
+                            senderPlayer.Die(DeathReason.Kill, true);
+                            Main.PlayerStates[senderPlayer.PlayerId].deathReason = deathReason;
+                        }
+                        else
+                        {
                             DestroyableSingleton<HudManager>.Instance.Chat.AddChat(senderPlayer, senderMessage);
                             var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
                             writer.StartMessage(-1);
@@ -157,6 +162,7 @@ namespace TOHE.Modules.ChatManager
                                 .EndRpc();
                             writer.EndMessage();
                             writer.SendMessage();
+                        }
 
                         }
                     }

@@ -78,65 +78,94 @@ public static class Credentials
         }
     }
     [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
-    class VersionShowerStartPatch
+    internal class VersionShowerStartPatch
     {
-        static TextMeshPro SpecialEventText;
+        public static GameObject OVersionShower;
+        private static TextMeshPro SpecialEventText;
+        private static TextMeshPro VisitText;
+
         private static void Postfix(VersionShower __instance)
         {
+
             Main.credentialsText = $"\r\n<color={Main.ModColor}>{Main.ModName}</color> v{Main.PluginDisplayVersion}";
+            if (Main.IsAprilFools) Main.credentialsText = $"\r\n<color=#00bfff>Town Of Host</color> v11.45.14";
+            else if (Main.IsTOHEInitialRelease) Main.credentialsText = $"\r\n<color=#ffc0cb>Town Of Host Edited</color> v4.0.23";
+            else if (Main.IsInitialRelease) Main.credentialsText += $"\r\n<color={Main.ModColor}>{Main.ModName}</color> v{Main.PluginDisplayVersion}\r\n<color=#ffc0cb>Town Of Host Edited</color> v2.3.6";
 
 #if RELEASE
-            //  Main.credentialsText += $"\r\n<color=#a54aff>Modified by </color><color=#ff3b6f>Loonie</color>";
-            Main.credentialsText += $"\r\n<color=#a54aff>By <color=#ffc0cb>KARPED1EM</color> & </color><color=#f34c50>Loonie</color>";
-            Main.credentialsText += $"\r\n<color=#a54aff>Modified by NikoCat233</color>" + (Main.HostPublic.Value ? $" Public公开" : $" Not Public非公开");
+            Main.credentialsText += $"\r\n<size=2.3><color=#ffc0cb>TOHE</color> <color=#8035DF>By <color=#ffc0cb>KARPED1EM</color></size>\r\n<size=2.3><color=#fffcbe>TOHEX</color> <color=#35dfca>By <color=#fffcbe>{Translator.GetString("xiawa")}</color></size>";
+#endif
+#if CANARY
+        Main.credentialsText += $"\r\n<color=#fffe1e>Canary({ThisAssembly.Git.Commit})</color>";
 #endif
 
 #if DEBUG
-         /* string additionalCredentials = GetString("TextBelowVersionText");
+        Main.credentialsText += $"\r\n<color={Main.ModColor}>{ThisAssembly.Git.Branch}({ThisAssembly.Git.Commit})</color>";
+#endif
+
+#if RELEASE || CANARY
+            string additionalCredentials = GetString("TextBelowVersionText");
             if (additionalCredentials != null && additionalCredentials != "*TextBelowVersionText")
             {
                 Main.credentialsText += $"\n{additionalCredentials}";
-            } */
-
-            Main.credentialsText += $"\r\n<color=#a54aff>By <color=#ffc0cb>KARPED1EM</color> & </color><color=#fffcbe>喜awa</color>";
+            }
 #endif
-
-            if (Main.IsAprilFools)
-                Main.credentialsText = $"\r\n<color=#00bfff>Town Of Host</color> v11.45.14";
-
             var credentials = Object.Instantiate(__instance.text);
             credentials.text = Main.credentialsText;
-            credentials.alignment = TextAlignmentOptions.Right;
-            credentials.transform.position = new Vector3(1f, 2.79f, -2f);
-            credentials.fontSize = credentials.fontSizeMax = credentials.fontSizeMin = 2f;
+            credentials.alignment = TMPro.TextAlignmentOptions.TopRight;
+            credentials.transform.position = new Vector3(4.6f, 3.2f, 0);
 
             ErrorText.Create(__instance.text);
             if (Main.hasArgumentException && ErrorText.Instance != null)
-            {
                 ErrorText.Instance.AddError(ErrorCode.Main_DictionaryError);
-            }
 
-
-            if (SpecialEventText == null && ToheLogo != null)
+            if (SpecialEventText == null)
             {
-                SpecialEventText = Object.Instantiate(__instance.text, ToheLogo.transform);
-                SpecialEventText.name = "SpecialEventText";
+                SpecialEventText = Object.Instantiate(__instance.text);
                 SpecialEventText.text = "";
-                SpecialEventText.color = Color.white;
-                SpecialEventText.fontSizeMin = 3f;
-                SpecialEventText.alignment = TextAlignmentOptions.Center;
-                SpecialEventText.transform.localPosition = new Vector3(0f, 0.8f, 0f);
+                SpecialEventText.color = UnityEngine.Color.white;
+                SpecialEventText.fontSize += 2.5f;
+                SpecialEventText.alignment = TextAlignmentOptions.Top;
+                SpecialEventText.transform.position = new Vector3(0, 0.5f, 0);
             }
-            if (SpecialEventText != null)
-            {
-                SpecialEventText.enabled = TitleLogoPatch.amongUsLogo != null;
-            }
+            SpecialEventText.enabled = TitleLogoPatch.amongUsLogo != null;
             if (Main.IsInitialRelease)
             {
-                SpecialEventText.text = $"Happy Birthday to {Main.ModName}!";
-                if (ColorUtility.TryParseHtmlString(Main.ModColor, out var col))
+                SpecialEventText.text = $"Happy Birthday to {Main.ModName}!{GetString("ThanksKap")}";
+                ColorUtility.TryParseHtmlString(Main.ModColor, out var col);
+                SpecialEventText.color = col;
+            }
+            else if (Main.IsTOHEInitialRelease)
+            {
+                SpecialEventText.text = $"Happy Birthday to Town Of Host Edited!\n Wish Karpe Can Happy Every Day";
+                ColorUtility.TryParseHtmlString("#ffc0cb", out var col);
+                SpecialEventText.color = col;
+            }
+            else if (!Main.IsAprilFools)
+            {
+                SpecialEventText.text = $"{Main.MainMenuText}";
+                SpecialEventText.fontSize = 0.9f;
+                SpecialEventText.color = UnityEngine.Color.white;
+                SpecialEventText.alignment = TextAlignmentOptions.TopRight;
+                SpecialEventText.transform.position = new Vector3(4.6f, 2.725f, 0);
+            }
+
+            if ((OVersionShower = GameObject.Find("VersionShower")) != null && !Main.IsAprilFools)
+            {
+                OVersionShower.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+                OVersionShower.transform.position = new Vector3(-5.3f, 2.9f, 0f);
+                if (TitleLogoPatch.amongUsLogo != null)
                 {
-                    SpecialEventText.color = col;
+                    if (VisitText == null && ModUpdater.visit > 0)
+                    {
+                        VisitText = Object.Instantiate(__instance.text);
+                        VisitText.text = string.Format(GetString("TOHEVisitorCount"), Main.ModColor, ModUpdater.visit);
+                        VisitText.color = UnityEngine.Color.white;
+                        VisitText.fontSize = 1.2f;
+                        //VisitText.alignment = TMPro.TextAlignmentOptions.Top;
+                        OVersionShower.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+                        VisitText.transform.position = new Vector3(-5.3f, 2.75f, 0f);
+                    }
                 }
             }
         }

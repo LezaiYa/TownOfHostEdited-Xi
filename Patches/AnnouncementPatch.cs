@@ -70,7 +70,7 @@ public class ModNewsHistorySCn
         {
             var news = new ModNewsSCn
             {
-                Number = 100002,
+                Number = 100004,
                 Title = "TownOfHostEdited-Xi v2.0.3",
                 SubTitle = "★★★★公开回归！★★★★",
                 ShortTitle = "★TOHEX v2.0.3★\n<size=75%>简体中文</size>",
@@ -88,7 +88,7 @@ public class ModNewsHistorySCn
                 + "\n- 修复大量bug"
                          + "\n- 可以公开"
                 + "\n\n## 新增职业"
-                     + "\n- 船员阵营：管道工"
+                + "\n- 船员阵营：管道工"
                 + "\n\n## 写在最后"
                 + "\n芜湖"
                 + "\n                                                       ——喜",
@@ -99,7 +99,7 @@ public class ModNewsHistorySCn
         {
             var news = new ModNewsSCn
             {
-                Number = 100002,
+                Number = 100003,
                 Title = "TownOfHostEdited-Xi v2.0.3",
                 SubTitle = "★★★★Public Again!★★★★",
                 ShortTitle = "★TOHEX v2.0.3★\n<size=75%>English</size>",

@@ -32,7 +32,7 @@ Regardin WebSite
 ### The Latest Version：
 support AmongUs v2023.7.11 and above
 
-The Latest Version: v2.0.0
+The Latest Version: v2.0.3
 
 <a href="https://gitee.com/xigua_ya/tohex/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Gitee Releases%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 

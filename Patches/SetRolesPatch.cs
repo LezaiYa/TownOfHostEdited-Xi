@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+﻿/*using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
 using MS.Internal.Xml.XPath;
@@ -16,7 +16,7 @@ using TOHE.Roles.Neutral;
 using static TOHE.Modules.CustomRoleSelector;
 using static TOHE.Translator;
 using static UnityEngine.GraphicsBuffer;
-/*
+
 namespace TOHE;
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnWaitForHost))]
 internal class Wait
@@ -157,6 +157,6 @@ internal class Wait
             pc.SetRole(RoleTypes.Impostor);
         }
     }
-}
-*/
+}*/
+
 

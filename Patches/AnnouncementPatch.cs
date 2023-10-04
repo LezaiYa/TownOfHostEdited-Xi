@@ -21,8 +21,8 @@ public class ModNewsSCn
     public string ShortTitle;
     public string Text;
     public string Date;
-
-    public Announcement ToAnnouncement()
+    public uint Language;
+   public Announcement ToAnnouncement()
     {
         var result = new Announcement
         {
@@ -67,6 +67,54 @@ public class ModNewsHistorySCn
         }
         *别忘了标点！！！！！
         */
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100006,
+                Title = "TownOfHostEdited-Xi v2.0.4",
+                SubTitle = "★★★★公开回归！★★★★",
+                ShortTitle = "★TOHEX v2.0.4★\n<size=75%>简体中文</size>",
+                Text =
+                "简体中文"
+                + "\n-----------------------------"
+                + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
+                + "\n-----------------------------"
+                + "\n再次公开!"
+                + "\n\n\n## 对应官方版本"
+                + "\n- 基于TOH版本 v4.1.2"
+                + "\n- 基于TOHE版本 v2.3.55"
+                + "\n- 适配Among Us版本 v2023.7.11及以上版本"
+                + "\n\n## 修复"
+                + "\n- 修复了猎人可以击杀的问题"
+                + "\n- 修复了魅魔无法选择备胎的问题"
+                + "\n\n## 新增职业"
+           
+                + "\n\n## 写在最后",
+                Date = "2023-10-2T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100005,
+                Title = "TownOfHostEdited-Xi v2.0.4",
+                SubTitle = "★★★★Public Again!★★★★",
+                ShortTitle = "★TOHEX v2.0.4★\n<size=75%>English</size>",
+                Text =
+                "English"
+                + "\n-----------------------------"
+                 + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
+                + "\n-----------------------------"
+                + "\nLet's Play Public Games!"
+               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.7.11 And Above"                + "\n\n## Bugs Fix"
+                + "\n- Hunter Can Kill Bug Fix"
+                + "\n- Akujo Can't Keep Bug Fix"
+                + "\n\n## New Roles",
+                Date = "2023-10-2T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
         {
             var news = new ModNewsSCn
             {

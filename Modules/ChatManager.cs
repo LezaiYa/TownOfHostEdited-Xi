@@ -3,6 +3,9 @@ using System.Linq;
 using Hazel;
 using System;
 using TOHE.Roles.Impostor;
+using TOHE.Roles.Neutral;
+using TOHE.Roles.Crewmate;
+using static TOHE.Translator;
 
 namespace TOHE.Modules.ChatManager
 {
@@ -11,6 +14,7 @@ namespace TOHE.Modules.ChatManager
         public static bool cancel = false;
         private static List<string> chatHistory = new();
         private const int maxHistorySize = 20;
+        #region 检查
         public static bool CheckCommond(ref string msg, string command, bool exact = true)
         {
             var comList = command.Split('|');
@@ -55,53 +59,96 @@ namespace TOHE.Modules.ChatManager
             }
             return false;
         }
-
+        public static string GetFormatString()
+        {
+            string text = GetString("PlayerIdList");
+            foreach (var pc in Main.AllAlivePlayerControls)
+            {
+                string id = pc.PlayerId.ToString();
+                string name = pc.GetRealName();
+                text += $"\n{id} → {name}";
+            }
+            return text;
+        }
+        #endregion
         public static void GetMessage(PlayerControl player, string message)
         {
-            int operate; // 1:ID 2:猜测
+            if (!player.IsAlive() || !AmongUsClient.Instance.AmHost) return;
+            int operate;
             string msg = message;
             string playername = player.GetNameWithRole();
-            message = message.ToLower().TrimStart().TrimEnd();
-            if (!player.IsAlive() || !AmongUsClient.Instance.AmHost) return;
-            if (!GameStates.IsInGame) operate = 3;
-            else if (CheckCommond(ref message, "id|guesslist|gl编号|玩家编号|玩家id|id列表|玩家列表|列表|所有id|全部id|shoot|guess|bet|st|gs|bt|猜|赌|sp|jj|tl|trial|审判|判|审|xp|效颦|效|颦|sw|换票|换|swap", false) || CheckName(ref playername, "系统消息", false)) operate = 1;
-            else if (CheckCommond(ref message, "up", false)) operate = 2;
-            else if (CheckCommond(ref message, "r|role|m|myrole|n|now")) operate = 4;
-            else operate = 3;
-            if ((operate == 1 || Blackmailer.ForBlackmailer.Contains(player.PlayerId)) && player.IsAlive())
+
+            if ((
+                GuessManager.GuesserMsg(player, msg) ||
+                Judge.TrialMsg(player, msg) ||
+                Copycat.CopycatMsg(player, msg) ||
+                NiceSwapper.SwapMsg(player, msg) ||
+                EvilSwapper.SwapMsg(player, msg) ||
+                Challenger.ChallengerMsg(player, msg) ||
+                ID(player, msg)
+                ) && Options.NewHideMsg.GetBool())
             {
-                Logger.Info($"包含特殊信息，不记录", "ChatManager");
-                message = msg;
                 cancel = true;
             }
-            else if (operate == 2)
+            else if (Blackmailer.ForBlackmailer.Contains(player.PlayerId))
             {
-                Logger.Info($"指令{msg}，不记录", "ChatManager");
-                message = msg;
-                cancel = false;
-            }
-            else if (operate == 4)
-            {
-                Logger.Info($"指令{msg}，不记录", "ChatManager");
-                message = msg;
                 SendPreviousMessagesToAll();
+                cancel = true;
             }
-            else if (operate == 3)
+            else
             {
-                message = msg;
-                string chatEntry = $"{player.PlayerId}: {message}";
-                chatHistory.Add(chatEntry);
-
-                if (chatHistory.Count > maxHistorySize)
+                message = message.ToLower().TrimStart().TrimEnd();
+                if (!GameStates.IsInGame) operate = 1;
+                else if (CheckCommond(ref message, "shoot|guess|bet|st|gs|bt|猜|赌|sp|jj|tl|trial|审判|判|审|xp|效颦|效|颦|sw|换票|换|swap", false) || CheckName(ref playername, "系统消息", false)) operate = 2;
+                else if (CheckCommond(ref message, "up", false)) operate = 3;
+                else if (CheckCommond(ref message, "r|role|m|myrole|n|now")) operate = 4;
+                else operate = 1;
+                if (operate == 1 && Options.NewHideMsg.GetBool())
                 {
-                    chatHistory.RemoveAt(0);
+                    message = msg;
+                    string chatEntry = $"{player.PlayerId}: {message}";
+                    chatHistory.Add(chatEntry);
+                    if (chatHistory.Count > maxHistorySize)
+                    {
+                        chatHistory.RemoveAt(0);
+                    }
+                    cancel = false;
                 }
-                cancel = false;
-            }
-            
-          
-        }
+                else if (operate == 2 && Options.NewHideMsg.GetBool())
+                {
+                    Logger.Info($"包含特殊信息，不记录", "ChatManager");
+                    message = msg;
+                    cancel = true;
+                }
+                else if (operate == 3)
+                {
+                    Logger.Info($"指令{msg}，不记录", "ChatManager");
+                    message = msg;
+                    cancel = false;
+                }
+                else if (operate == 4 && Options.NewHideMsg.GetBool())
+                {
+                    Logger.Info($"指令{msg}，不记录", "ChatManager");
+                    message = msg;
+                    SendPreviousMessagesToAll();
+                    cancel = false;
+                }
 
+            }
+
+        }
+        public static bool ID(PlayerControl pc, string msg, bool isUI = true)
+        {
+            if (!AmongUsClient.Instance.AmHost) return false;
+            if (pc == null) return false;
+            msg = msg.ToLower().TrimStart().TrimEnd();
+            if (CheckCommond(ref msg, "id|guesslist|gl编号|玩家编号|玩家id|id列表|玩家列表|列表|所有id|全部id"))
+            {
+                Utils.SendMessage(GetFormatString(), pc.PlayerId);
+                return true;
+            }
+            else return false;
+        }
         public static void SendPreviousMessagesToAll()
         {
             var rd = IRandom.Instance;
@@ -122,26 +169,23 @@ namespace TOHE.Modules.ChatManager
                 writer.EndMessage();
                 writer.SendMessage();
             }
+            foreach (var entry in chatHistory)
+            {
+                var entryParts = entry.Split(':');
+                var senderId = entryParts[0].Trim();
+                var senderMessage = entryParts[1].Trim();
 
-            
-                foreach (var entry in chatHistory)
+                foreach (var senderPlayer in Main.AllPlayerControls)
                 {
-                    var entryParts = entry.Split(':');
-                    var senderId = entryParts[0].Trim();
-                    var senderMessage = entryParts[1].Trim();
-
-                    foreach (var senderPlayer in Main.AllPlayerControls)
+                    if (senderPlayer.PlayerId.ToString() == senderId)
                     {
-                        if (senderPlayer.PlayerId.ToString() == senderId)
-                        {
                         if (!senderPlayer.IsAlive())
                         {
                             var deathReason = (PlayerState.DeathReason)senderPlayer.PlayerId;
+                            var realkiller = senderPlayer.GetRealKiller();
                             senderPlayer.Revive();
-                            
-
+                            senderPlayer.Data.IsDead = false;
                             DestroyableSingleton<HudManager>.Instance.Chat.AddChat(senderPlayer, senderMessage);
-
                             var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
                             writer.StartMessage(-1);
                             writer.StartRpc(senderPlayer.NetId, (byte)RpcCalls.SendChat)
@@ -149,7 +193,10 @@ namespace TOHE.Modules.ChatManager
                                 .EndRpc();
                             writer.EndMessage();
                             writer.SendMessage();
+                            senderPlayer.RpcExileV2();
                             senderPlayer.Die(DeathReason.Kill, true);
+                            senderPlayer.SetRealKiller(realkiller);
+                            senderPlayer.Data.IsDead = true;
                             Main.PlayerStates[senderPlayer.PlayerId].deathReason = deathReason;
                         }
                         else
@@ -164,9 +211,9 @@ namespace TOHE.Modules.ChatManager
                             writer.SendMessage();
                         }
 
-                        }
                     }
-                
+                }
+
             }
         }
 

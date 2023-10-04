@@ -983,6 +983,7 @@ class CheckMurderPatch
             }
             else if (Main.HunterTarget.Contains(target))
             {
+                Main.HunterMax[killer.PlayerId]--;
                 killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Hunter), GetString("InList")));
                 return false;
             }
@@ -1143,7 +1144,7 @@ class CheckMurderPatch
                 RPC.SyncAkujoLoversPlayers();
                 return false;
             }
-            else if (Main.AkujoMax[killer.PlayerId] > 1 && (Options.AkujoLimit.GetInt() + 1) <= Options.AkujoLimit.GetInt() && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Believer) && !target.Is(CustomRoles.Honmei) && !target.Is(CustomRoles.Backup) && !target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.CrushLovers) && !target.Is(CustomRoles.Crush) && !target.Is(CustomRoles.Ntr) && !target.Is(CustomRoles.God))
+            else if (Main.AkujoMax[killer.PlayerId] > 1 && (Main.AkujoMax[killer.PlayerId] <= Options.AkujoLimit.GetInt()) && !target.Is(CustomRoles.Captain) && !target.Is(CustomRoles.Believer) && !target.Is(CustomRoles.Honmei) && !target.Is(CustomRoles.Backup) && !target.Is(CustomRoles.Lovers) && !target.Is(CustomRoles.CrushLovers) && !target.Is(CustomRoles.Crush) && !target.Is(CustomRoles.Ntr) && !target.Is(CustomRoles.God))
             {
                 killer.ResetKillCooldown();
                 killer.SetKillCooldown();
@@ -3292,7 +3293,7 @@ class CheckMurderPatch
                                 player.SetRealKiller(__instance);
                                 Utils.TP(player.NetTransform, Pelican.GetBlackRoomPS());
                                 player.RpcMurderPlayerV3(player);
-                                NameNotifyManager.Notify(player, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Scavenger), GetString("KilledByScavenger")));
+                                NameNotifyManager.Notify(player, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Scavenger), GetString("KilledByBatter")));
                                 Medic.IsDead(player);
                             }
                         }
@@ -3343,8 +3344,17 @@ class ReportDeadBodyPatch
             var pc = Utils.GetPlayerById(kvp.Key);
             kvp.Value.LastRoom = pc.GetPlainShipRoom();
         }
-
-        if (!AmongUsClient.Instance.AmHost) return true;
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            foreach (var mimickiller in Main.AllAlivePlayerControls)
+            {
+                if (mimickiller.Is(CustomRoles.MimicKiller))
+                {
+                    Mimics.revert();
+                }
+                return true;
+            }
+        }
 
         try
             {
@@ -3556,6 +3566,15 @@ class ReportDeadBodyPatch
             Logger.SendInGame("Error: " + e.ToString());
         }
 
+        foreach (var mimickiller in Main.AllAlivePlayerControls)
+        {
+            if (mimickiller.Is(CustomRoles.MimicKiller))
+            {
+                Mimics.revert();
+            }
+            
+     
+        }
         return true;
     }
     public static void AfterReportTasks(PlayerControl player, GameData.PlayerInfo target)
@@ -4360,6 +4379,7 @@ class ReportDeadBodyPatch
                 Yandere.OnFixedUpdate(player);
                 PlagueDoctor.OnFixedUpdate(player);
                 Chameleon.OnFixedUpdate(player);
+
                 //Kidnapper.OnFixedUpdate(player);
 
                 if (GameStates.IsInTask && player.IsAlive() && Options.LadderDeath.GetBool()) FallFromLadder.FixedUpdate(player);
@@ -4711,7 +4731,11 @@ class ReportDeadBodyPatch
                 //矢印オプションありならタスクが終わったスニッチはインポスター/キル可能なニュートラルの方角がわかる
                 Suffix.Append(Snitch.GetSnitchArrow(seer, target));
 
-                    Suffix.Append(BountyHunter.GetTargetArrow(seer, target));
+                Suffix.Append(Mimics.GetTargetArrow(seer, target)); 
+
+                     Suffix.Append(Mimics.GetKillArrow(seer, target));
+
+                Suffix.Append(BountyHunter.GetTargetArrow(seer, target));
 
                     Suffix.Append(Mortician.GetTargetArrow(seer, target));
 
@@ -4939,11 +4963,10 @@ class ReportDeadBodyPatch
         {
             foreach (var player in Main.AllPlayerControls)
             {
-                if (!player.IsAlive() || player.Is(CustomRoles.Hunter))
+                if (!player.IsAlive() && player.Is(CustomRoles.Hunter))
                 {
                     foreach (var partnerPlayer in Main.HunterTarget)
                     {
-
                         if (partnerPlayer.IsAlive())
                         {
 

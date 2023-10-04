@@ -784,7 +784,7 @@ public static class Options
         SetupRoleOptions(345679, TabGroup.ImpostorRoles, CustomRoles.Strikers);
         StrikersShields = IntegerOptionItem.Create(345689, "StrikersShields", new(1, 3, 1), 1, TabGroup.ImpostorRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Strikers]);
         Corpse.SetupCustomOption();
-        //Mimics.SetupCustomOption();
+        Mimics.SetupCustomOption();
         SetupRoleOptions(12198745, TabGroup.ImpostorRoles, CustomRoles.AbandonedCrew); 
 
         TextOptionItem.Create(909100, "ImpFK", TabGroup.ImpostorRoles)//远程击杀型
@@ -880,7 +880,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Seconds);
         Disperser.SetupCustomOption();
         
-            SetupRoleOptions(156478, TabGroup.ImpostorRoles, CustomRoles.Sleeve);
+            SetupRoleOptions(1564780, TabGroup.ImpostorRoles, CustomRoles.Sleeve);
         SleeveCooldown = FloatOptionItem.Create(126944, "SleeveCooldown", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Sleeve])
             .SetValueFormat(OptionFormat.Seconds);
         SleeveshifterMax = FloatOptionItem.Create(1156489, "ShapeshiftDuration", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Sleeve])
@@ -1407,9 +1407,9 @@ public static class Options
         SetupRoleOptions(8799135, TabGroup.OtherRoles, CustomRoles.Batter);
         BatterRadius = FloatOptionItem.Create(9189137, "BatterRadius", new(0.5f, 5f, 0.5f), 2f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
     .SetValueFormat(OptionFormat.Multiplier);
-        BatterKillCooldown = FloatOptionItem.Create(198954541, "BomberKillCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
+        BatterKillCooldown = FloatOptionItem.Create(198954541, "BatterKillCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
             .SetValueFormat(OptionFormat.Seconds);
-        BatterCooldown = FloatOptionItem.Create(3196541, "BomberCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
+        BatterCooldown = FloatOptionItem.Create(3196541, "BatterCooldown", new(5f, 999f, 2.5f), 20f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Batter])
             .SetValueFormat(OptionFormat.Seconds);
 
         // 船员
@@ -1450,7 +1450,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Seconds);
         SetupRoleOptions(5051412, TabGroup.OtherRoles, CustomRoles.Provocateur);
         Challenger.SetupCustomOption();
-        SetupRoleOptions(50300, TabGroup.OtherRoles, CustomRoles.Refuser);
+        SetupRoleOptions(503009, TabGroup.OtherRoles, CustomRoles.Refuser);
       
         RefuserKillCooldown = FloatOptionItem.Create(50320, "RefuserKillCooldown", new(15, 60, 5), 20, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Refuser]);
         ZeyanRefuserVote = IntegerOptionItem.Create(50330, "ZeyanRefuserVote", new(2, 5, 1), 3, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Refuser]);

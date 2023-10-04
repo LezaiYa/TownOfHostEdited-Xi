@@ -34,7 +34,7 @@ public static class Yandere
         SetupRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.Yandere);
         KnowTargetRole = BooleanOptionItem.Create(Id + 14, "KnowTargetRole", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere]);
         TargetKnowsYandere = BooleanOptionItem.Create(Id + 15, "TargetKnowsYandere", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere]);
-        SkillCooldown = FloatOptionItem.Create(Id + 15, "KillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere])
+        SkillCooldown = FloatOptionItem.Create(Id + 150, "KillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere])
             .SetValueFormat(OptionFormat.Seconds);
     }
     public static void Init()

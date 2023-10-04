@@ -23,7 +23,7 @@ Regardin WebSite
 <p align="center">
 <a href="https://gitee.com/xigua_ya/tohex/" target="_blank"><img src="https://img.shields.io/badge/Gitee%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 <a href="https://github.com/TOHEX-Official/TownOfHostEdited-Xi" target="_blank"><img src="https://img.shields.io/badge/GitHub%20-%231DA1F2.svg?&style=for-the-badge&logo=github&logoColor=white&color=000000"/></a>
-<a href="https://discord.gg/WKYdzxKhNm" target="_blank"><img src="https://img.shields.io/badge/Discord%20-%231DA1F2.svg?&style=for-the-badge&logo=discord&logoColor=white&color=4169E1"/></a>
+<a href="https://discord.gg/jQbX7aZSKb" target="_blank"><img src="https://img.shields.io/badge/Discord%20-%231DA1F2.svg?&style=for-the-badge&logo=discord&logoColor=white&color=4169E1"/></a>
 <a href="https://pd.qq.com/s/1la0nbwal" target="_blank"><img src="https://img.shields.io/badge/QQ Channel%20-%231DA1F2.svg?&style=for-the-badge&logo=TencentQQ&logoColor=black&color=FFFFFF"/></a>
 <a href="https://tohex.cc/" target="_blank"><img src="https://img.shields.io/badge/Website%20-%231DA1F2.svg?&style=for-the-badge&logo=vuedotjs&logoColor=white&color=3aa675"/></a>
   

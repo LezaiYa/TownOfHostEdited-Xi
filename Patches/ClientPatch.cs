@@ -124,7 +124,7 @@ internal class SetResolutionManager
         //if (MainMenuManagerPatch.discordButton != null)
         //    MainMenuManagerPatch.discordButton.transform.localPosition = Vector3.Reflect(MainMenuManagerPatch.template.transform.localPosition, Vector3.left);
         //if (MainMenuManagerPatch.updateButton != null)
-        //    MainMenuManagerPatch.updateButton.transform.localPosition = MainMenuManagerPatch.template.transform.localPosition + new Vector3(0.25f, 0.75f);
+          //  MainMenuManagerPatch.updateButton.transform.localPosition = MainMenuManagerPatch.template.transform.localPosition + new Vector3(0.25f, 0.75f);
     }
 }
 

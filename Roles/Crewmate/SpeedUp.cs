@@ -18,7 +18,7 @@ public static class SpeedUp
         SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.SpeedUp);
         SkillCooldown = FloatOptionItem.Create(Id + 10, "SpeedUpSkillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SpeedUp])
             .SetValueFormat(OptionFormat.Seconds);
-        ForSpeed = FloatOptionItem.Create(Id + 10, "ForSpeed", new(0.5f, 3.0f, 0.5f), 0.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SpeedUp])
+        ForSpeed = FloatOptionItem.Create(Id + 11, "ForSpeed", new(0.5f, 3.0f, 0.5f), 0.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SpeedUp])
             .SetValueFormat(OptionFormat.Seconds);
     }
     public static void Init()

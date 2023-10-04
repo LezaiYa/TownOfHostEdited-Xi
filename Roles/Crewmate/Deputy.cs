@@ -7,7 +7,7 @@ namespace TOHE.Roles.Crewmate;
 
 public static class Deputy
 {
-    private static readonly int Id = 1238574;
+    private static readonly int Id = 123857744;
     private static List<byte> playerIdList = new();
    public static Dictionary<byte, int> DeputyLimit = new();
     public static OptionItem SkillLimitOpt;
@@ -19,13 +19,7 @@ public static class Deputy
     public static void SetupCustomOption()
     {
         Options.SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Deputy);
-        Deputy.SkillCooldown = FloatOptionItem.Create(Id + 42, "DeputySkillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.CrewmateRoles, false).SetParent(Sheriff.HasDeputy)
-            .SetValueFormat(OptionFormat.Seconds);
-        Deputy.SkillLimitOpt = IntegerOptionItem.Create(Id + 44, "DeputySkillLimit", new(1, 990, 1), 3, TabGroup.CrewmateRoles, false).SetParent(Sheriff.HasDeputy)
-            .SetValueFormat(OptionFormat.Times);
-        Deputy.DeputyCanBeSheriff = BooleanOptionItem.Create(Id + 46, "DCBS", false, TabGroup.CrewmateRoles, false).SetParent(Sheriff.HasDeputy);
-        Deputy.DeputyKnowWhosSheriff = BooleanOptionItem.Create(Id + 48, "DeputyKnowWhosSheriff", true, TabGroup.CrewmateRoles, false).SetParent(Deputy.DeputyCanBeSheriff);
-        Deputy.SheriffKnowWhosDeputy = BooleanOptionItem.Create(Id + 50, "SheriffKnowWhosDeputy", true, TabGroup.CrewmateRoles, false).SetParent(Deputy.DeputyCanBeSheriff);
+
     }
     public static void Init()
     {

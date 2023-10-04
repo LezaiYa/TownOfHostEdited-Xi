@@ -27,6 +27,7 @@ enum CustomRPC
     PlaySound,
     SetCustomRole,
     SetBountyTarget,
+    Mimics,
     SetKillOrSpell,
     SetSheriffShotLimit,
     SetDousedPlayer,
@@ -299,6 +300,7 @@ internal class RPCHandlerPatch
             case CustomRPC.SetBountyTarget:
                 BountyHunter.ReceiveRPC(reader);
                 break;
+         
             case CustomRPC.SetKillOrSpell:
                 Witch.ReceiveRPC(reader, false);
                 break;

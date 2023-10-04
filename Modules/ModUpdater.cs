@@ -60,18 +60,18 @@ public class ModUpdater
             Logger.Info("latestVersionl: " + latestVersion, "CheckRelease");
         }
 
-        //MainMenuManagerPatch.updateButton.SetActive(hasUpdate);
-        //MainMenuManagerPatch.updateButton.transform.position = MainMenuManagerPatch.template.transform.position + new Vector3(0.25f, 0.75f);
-        //__instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) =>
-        //{
-        //    MainMenuManagerPatch.updateButton.transform
-        //        .GetChild(0).GetComponent<TMPro.TMP_Text>()
-        //        .SetText($"{GetString("updateButton")}\n{latestTitle}");
-        //}
-        //)));
+        /*MainMenuManagerPatch.updateButton.SetActive(hasUpdate);
+        MainMenuManagerPatch.updateButton.transform.position = MainMenuManagerPatch.template.transform.position + new Vector3(0.25f, 0.75f);
+        __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) =>
+        {
+            MainMenuManagerPatch.updateButton.transform
+                .GetChild(0).GetComponent<TMPro.TMP_Text>()
+                .SetText($"{GetString("updateButton")}\n{latestTitle}");
+        }
+        )));//*/
     }
 
-    public static string UrlSetId(string url) => url + "?id=8F249256BAFA41FB97E6FDE8F899ED57";
+    public static string UrlSetId(string url) => url + "?id=282EDCBDE9734F88849F8B255A6B8D6E";
     public static string UrlSetCheck(string url) => url + "/checkVersion";
     public static string UrlSetInfo(string url) => url + "/getExample";
     public static string UrlSetToday(string url) => url + "/today";

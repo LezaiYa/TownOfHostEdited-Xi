@@ -1210,7 +1210,14 @@ public static class Utils
             SelfMark.Append(Sniper.GetShotNotify(seer.PlayerId));
             //Markとは違い、改行してから追記されます。
             SelfSuffix.Clear();
-
+            if (seer.Is(CustomRoles.MimicKiller))
+            {
+                SelfSuffix.Append(Mimics.GetTargetArrow(seer));
+            }
+            if (seer.Is(CustomRoles.MimicAss))
+            {
+                SelfSuffix.Append(Mimics.GetKillArrow(seer));
+            }
             if (seer.Is(CustomRoles.BountyHunter))
             {
                 SelfSuffix.Append(BountyHunter.GetTargetText(seer, false));

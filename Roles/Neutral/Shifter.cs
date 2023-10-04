@@ -22,7 +22,7 @@ public class Shifter
         Options.SetupRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.Shifter);
         ShifterTQkiller = BooleanOptionItem.Create(Id + 15, "ShifterTQkiller", true, TabGroup.NeutralRoles, true).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Shifter]);
         ShifterCGTQkiller = BooleanOptionItem.Create(Id + 15 + 15, "ShifterCGTQkiller", false, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Shifter]);
-        KillCooldown = FloatOptionItem.Create(51923 + 10, "JHSKillCooldown", new(5f, 15f, 2.5f), 5f, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Shifter])
+        KillCooldown = FloatOptionItem.Create(51923 + 100, "JHSKillCooldown", new(5f, 15f, 2.5f), 5f, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Shifter])
             .SetValueFormat(OptionFormat.Seconds);
     }
     public static void Init()

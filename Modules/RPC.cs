@@ -986,6 +986,9 @@ internal static class RPC
             case CustomRoles.MimicKiller:
                 Mimics.Add(targetId);
                 break;
+            case CustomRoles.ShapeShifters:
+                ShapeShifters.Add(targetId);
+                break;
             case CustomRoles.MimicAss:
                 Mimics.Add(targetId);
                 break;

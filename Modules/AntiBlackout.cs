@@ -35,6 +35,7 @@ public static class AntiBlackout
             foreach (var pc in Main.AllPlayerControls)
             {
                 if (pc.Data.Role.IsImpostor) numImpostors++;
+                //else if (pc.Is(CustomRoles.Crewpostor)) numImpostors++;
                 else numCrewmates++;
             }
             return numCrewmates - numImpostors;

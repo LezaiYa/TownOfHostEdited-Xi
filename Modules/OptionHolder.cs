@@ -785,6 +785,7 @@ public static class Options
         StrikersShields = IntegerOptionItem.Create(345689, "StrikersShields", new(1, 3, 1), 1, TabGroup.ImpostorRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Strikers]);
         Corpse.SetupCustomOption();
         Mimics.SetupCustomOption();
+        ShapeShifters.SetupCustomOption();
         SetupRoleOptions(12198745, TabGroup.ImpostorRoles, CustomRoles.AbandonedCrew); 
 
         TextOptionItem.Create(909100, "ImpFK", TabGroup.ImpostorRoles)//远程击杀型

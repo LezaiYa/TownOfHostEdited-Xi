@@ -300,6 +300,9 @@ class CheckMurderPatch
                 case CustomRoles.MimicKiller:
                     Mimics.OnCheckMurder(killer,target);
                     break;
+                case CustomRoles.ShapeShifters:
+                    ShapeShifters.OnCheckMurder(killer, target);
+                    break;
                 case CustomRoles.Hangman:
                     if (!Hangman.OnCheckMurder(killer, target)) return false;
                     break;
@@ -321,7 +324,9 @@ class CheckMurderPatch
                 //       case CustomRoles.Kidnapper:
                 //         if (Kidnapper.CheckKidnapperMurder(killer, target))
                 //          return false;
-                //     break;                
+                //     break;
+                //     
+
                 //==========中立阵营==========//
                 case CustomRoles.Loners:
                     Loners.OnCheckMurder(killer);
@@ -1126,6 +1131,18 @@ class CheckMurderPatch
                 return false;
             }
         }
+        if (Main.CupidShieldList.Contains(target))
+        {
+            foreach (var cupid in Main.AllAlivePlayerControls)
+            {
+                if (cupid.Is(CustomRoles.Cupid))
+                {
+                    cupid.RpcMurderPlayerV3(cupid);
+                    Main.PlayerStates[cupid.PlayerId].deathReason = PlayerState.DeathReason.Suicide;
+                }
+                Main.CupidShieldList.Remove(target);
+            }
+        }
         //魅魔
         if (killer.Is(CustomRoles.Akujo))
         {
@@ -1176,18 +1193,7 @@ class CheckMurderPatch
                 return false;
             }
         }
-        if (Main.CupidShieldList.Contains(target))
-        {
-            foreach (var cupid in Main.AllAlivePlayerControls)
-            {
-                if (cupid.Is(CustomRoles.Cupid))
-                {
-                    cupid.RpcMurderPlayerV3(cupid);
-                    Main.PlayerStates[cupid.PlayerId].deathReason = PlayerState.DeathReason.Suicide;
-                }
-                Main.CupidShieldList.Remove(target);
-            }
-        }
+       
         //奴隶主奴隶
         if (killer.Is(CustomRoles.Slaveowner))
         {
@@ -5041,7 +5047,14 @@ class ReportDeadBodyPatch
     
     public static void CupidLoversSuicide(byte deathId = 0x7f, bool isExiled = false, bool now = false)
     {
-        if (Options.CupidLoverSuicide.GetBool() && CustomRoles.Cupid.IsEnable() && Main.isCupidLoversDead == false)
+        foreach(var cu in Main.CupidLoversPlayers)
+        {
+            if (cu.Is(CustomRoles.Cupid))
+            {
+                Main.CupidLoversPlayers.Remove(cu);
+            }
+        }
+        if (Options.CupidLoverSuicide.GetBool() && CustomRoles.Cupid.IsEnable() && Main.isCupidLoversDead == false && Main.CupidLoversPlayers.Count >= 2)
         {
             foreach (var loversPlayer in Main.CupidLoversPlayers)
             {

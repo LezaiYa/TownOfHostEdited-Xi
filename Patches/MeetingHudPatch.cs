@@ -557,7 +557,7 @@ class CheckForEndVotingPatch
                         name += Utils.ColorString(new Color32(255, 25, 25, byte.MaxValue), GetString("TeamImpostor"));
                     else if (player.GetCustomRole().IsNeutral() || player.Is(CustomRoles.Charmed) || player.Is(CustomRoles.Attendant))
                         name += Utils.ColorString(new Color32(255, 171, 27, byte.MaxValue), GetString("TeamNeutral"));
-                    else if (player.GetCustomRole().IsCrewmate())
+                    else if (player.GetCustomRole().IsCrewmate() || player.Is(CustomRoles.Undercover))
                         name += Utils.ColorString(new Color32(140, 255, 255, byte.MaxValue), GetString("TeamCrewmate"));
                     name += ")";
                 }
@@ -986,11 +986,6 @@ class MeetingHudStartPatch
             {
                 Main.NnurseHelep.Remove(player.PlayerId);
                 player.RpcMurderPlayerV3(player);
-            }
-            //化形
-            if (player.Is(CustomRoles.MimicKiller))
-            {
-               player.RpcRevertShapeshift(true);
             }
 
             //操控者
@@ -1870,6 +1865,9 @@ class MeetingHudOnDestroyPatch
                                         break;
                                     case CustomRoles.MimicAss:
                                         Mimics.Add(ps.PlayerId);
+                                        break;
+                                    case CustomRoles.ShapeShifters:
+                                        ShapeShifters.Add(ps.PlayerId);
                                         break;
                                     case CustomRoles.Fake:
                                         Main.FakeMax[ps.PlayerId] = 0;

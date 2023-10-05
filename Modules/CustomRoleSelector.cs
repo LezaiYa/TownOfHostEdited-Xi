@@ -108,7 +108,7 @@ internal class CustomRoleSelector
             {
 
 
-                if (role.IsImpostor()) ImpOnList.Add(role);
+                if (role.IsImpostorForSe()) ImpOnList.Add(role);
                 else if (role.IsMini()) MiniOnList.Add(role);
                 else if (!role.IsNKS() && role.IsNeutral()) NeutralOnList.Add(role);
                 else if (role.IsNKS()) NKOnList.Add(role);
@@ -120,7 +120,7 @@ internal class CustomRoleSelector
         foreach (var role in roleList) if (role.GetMode() == 1)
             {
                 
-                if (role.IsImpostor()) ImpRateList.Add(role);
+                if (role.IsImpostorForSe()) ImpRateList.Add(role);
                 else if (role.IsMini()) MiniRateList.Add(role);
                 else if (!role.IsNKS() && role.IsNeutral()) NeutralRateList.Add(role);
                 else if (role.IsNKS()) NKRateList.Add(role);

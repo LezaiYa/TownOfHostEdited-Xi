@@ -326,6 +326,7 @@ internal class ChangeRoleSettings
             Chameleon.Init();
           //  Kidnapper.Init();
             Mimics.Init();
+            ShapeShifters.Init();
             NiceSwapper.Init();
             EvilSwapper.Init();
             Blackmailer.Init();
@@ -844,6 +845,9 @@ internal class SelectRolesPatch
               //          break;
                     case CustomRoles.MimicKiller:
                         Mimics.Add(pc.PlayerId);
+                        break;
+                        case CustomRoles.ShapeShifters:
+                        ShapeShifters.Add(pc.PlayerId);
                         break;
                     case CustomRoles.Fake:
                         Main.FakeMax[pc.PlayerId] = 0;

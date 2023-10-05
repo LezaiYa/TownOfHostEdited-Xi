@@ -751,6 +751,7 @@ public enum CustomRoles
     BloodSeekers,
     SoulSucker,
     HangTheDevil,
+    ShapeShifters,
     //双阵营
     Mini,
     //船员（原版）

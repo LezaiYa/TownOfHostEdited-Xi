@@ -458,7 +458,6 @@ static class ExtendedPlayerControl
             CustomRoles.King => pc.IsAlive(),
             CustomRoles.Hotpotato => pc.IsAlive(),
             CustomRoles.BSR => pc.IsAlive(),
-            CustomRoles.Undercover => false,
             CustomRoles.MimicAss => false,
             CustomRoles.SchrodingerCat => !SchrodingerCat.noteam,
             CustomRoles.ElectOfficials => ElectOfficials.CanUseKillButton(pc.PlayerId),
@@ -873,6 +872,9 @@ static class ExtendedPlayerControl
             //    break;
             case CustomRoles.MimicKiller:
                 Mimics.SetKillCooldown(player.PlayerId);
+                break;
+            case CustomRoles.ShapeShifters:
+                ShapeShifters.SetKillCooldown(player.PlayerId);
                 break;
             case CustomRoles.Fake:
                 Main.AllPlayerKillCooldown[player.PlayerId] = Options.KillColldown.GetInt();

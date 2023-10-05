@@ -35,49 +35,16 @@ namespace TOHE.Modules.ChatManager
             }
             return false;
         }
-        public static bool CheckName(ref string msg, string command, bool exact = true)
-        {
-            var comList = command.Split('|');
-            foreach (var com in comList)
-            {
-                if (exact)
-                {
-                    if (msg.Contains(com))
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    int index = msg.IndexOf(com);
-                    if (index != -1)
-                    {
-                        msg = msg.Remove(index, com.Length);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        public static string GetFormatString()
-        {
-            string text = GetString("PlayerIdList");
-            foreach (var pc in Main.AllAlivePlayerControls)
-            {
-                string id = pc.PlayerId.ToString();
-                string name = pc.GetRealName();
-                text += $"\n{id} → {name}";
-            }
-            return text;
-        }
         #endregion
         public static void GetMessage(PlayerControl player, string message)
         {
+            List<(string, byte, string)> msgToSend = new();
+
+            void AddMsg(string text, byte sendTo = 255, string title = "")
+                => msgToSend.Add((text, sendTo, title));
             if (!player.IsAlive() || !AmongUsClient.Instance.AmHost) return;
             int operate;
             string msg = message;
-            string playername = player.GetNameWithRole();
-
             if ((
                 GuessManager.GuesserMsg(player, msg) ||
                 Judge.TrialMsg(player, msg) ||
@@ -93,13 +60,14 @@ namespace TOHE.Modules.ChatManager
             else if (Blackmailer.ForBlackmailer.Contains(player.PlayerId))
             {
                 SendPreviousMessagesToAll();
+                AddMsg(string.Format(GetString("BeBlackMailed"), Main.AllPlayerNames[player.PlayerId]), player.PlayerId, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Blackmailer), GetString("BlackmaileKillTitle")));
                 cancel = true;
             }
             else
             {
                 message = message.ToLower().TrimStart().TrimEnd();
                 if (!GameStates.IsInGame) operate = 1;
-                else if (CheckCommond(ref message, "shoot|guess|bet|st|gs|bt|猜|赌|sp|jj|tl|trial|审判|判|审|xp|效颦|效|颦|sw|换票|换|swap", false) || CheckName(ref playername, "系统消息", false)) operate = 2;
+                else if (CheckCommond(ref message, "shoot|guess|bet|st|gs|bt|猜|赌|sp|jj|tl|trial|审判|判|审|xp|效颦|效|颦|sw|换票|换|swap", false)) operate = 2;
                 else if (CheckCommond(ref message, "up", false)) operate = 3;
                 else if (CheckCommond(ref message, "r|role|m|myrole|n|now")) operate = 4;
                 else operate = 1;
@@ -118,6 +86,7 @@ namespace TOHE.Modules.ChatManager
                 {
                     Logger.Info($"包含特殊信息，不记录", "ChatManager");
                     message = msg;
+                    SendPreviousMessagesToAll();
                     cancel = true;
                 }
                 else if (operate == 3)
@@ -137,28 +106,13 @@ namespace TOHE.Modules.ChatManager
             }
 
         }
-        public static bool ID(PlayerControl pc, string msg, bool isUI = true)
-        {
-            if (!AmongUsClient.Instance.AmHost) return false;
-            if (pc == null) return false;
-            msg = msg.ToLower().TrimStart().TrimEnd();
-            if (CheckCommond(ref msg, "id|guesslist|gl编号|玩家编号|玩家id|id列表|玩家列表|列表|所有id|全部id"))
-            {
-                Utils.SendMessage(GetFormatString(), pc.PlayerId);
-                return true;
-            }
-            else return false;
-        }
         public static void SendPreviousMessagesToAll()
         {
             var rd = IRandom.Instance;
             string msg;
-            List<CustomRoles> roles = Enum.GetValues(typeof(CustomRoles)).Cast<CustomRoles>().Where(x => x is not CustomRoles.KB_Normal and not CustomRoles.Hotpotato and not CustomRoles.Coldpotato).ToList();
-            string[] specialTexts = new string[] { "bet", "bt", "guess", "gs", "shoot", "st", "赌", "猜", "审判", "tl", "判", "审", "trial" };
-
             for (int i = chatHistory.Count; i < 30; i++)
             {
-                msg = $"{Translator.GetString("HideMessage")}";
+                msg = $"{GetString("HideMessage")}";
                 var player = Main.AllAlivePlayerControls.ToArray()[rd.Next(0, Main.AllAlivePlayerControls.Count())];
                 DestroyableSingleton<HudManager>.Instance.Chat.AddChat(player, msg);
                 var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
@@ -216,6 +170,31 @@ namespace TOHE.Modules.ChatManager
 
             }
         }
+        #region ID CHECK
+        public static bool ID(PlayerControl pc, string msg, bool isUI = true)
+        {
+            if (!AmongUsClient.Instance.AmHost) return false;
+            if (pc == null) return false;
+            msg = msg.ToLower().TrimStart().TrimEnd();
+            if (CheckCommond(ref msg, "id|guesslist|gl编号|玩家编号|玩家id|id列表|玩家列表|列表|所有id|全部id"))
+            {
+                Utils.SendMessage(GetFormatString(), pc.PlayerId);
+                return true;
+            }
+            else return false;
+        }
+        public static string GetFormatString()
+        {
+            string text = GetString("PlayerIdList");
+            foreach (var pc in Main.AllAlivePlayerControls)
+            {
+                string id = pc.PlayerId.ToString();
+                string name = pc.GetRealName();
+                text += $"\n{id} → {name}";
+            }
+            return text;
+        }
+        #endregion
 
     }
 

@@ -30,11 +30,11 @@ public static class Mimics
     };
     public static void SetupCustomOption()
     {
-        SetupSingleRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.MimicKiller, 1, zeroOne: false);
-        SKillColldown = FloatOptionItem.Create(Id + 2, "KillCooldown", new(0f, 100f, 2.5f), 25f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.MimicKiller])
+        SetupSingleRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.Mimics, 1, zeroOne: false);
+        SKillColldown = FloatOptionItem.Create(Id + 2, "KillCooldown", new(0f, 100f, 2.5f), 25f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics])
            .SetValueFormat(OptionFormat.Seconds);
-        DiedToge = StringOptionItem.Create(Id + 4, "DieTogether", MedicWhoCanSeeProtectName, 0, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.MimicKiller]);
-        //Arrow = BooleanOptionItem.Create(Id + 3, "HaveArrow", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics]);
+        DiedToge = StringOptionItem.Create(Id + 4, "DieTogether", MedicWhoCanSeeProtectName, 0, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics]);
+        Arrow = BooleanOptionItem.Create(Id + 3, "HaveArrow", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics]);
     }
     public static void Init()
     {

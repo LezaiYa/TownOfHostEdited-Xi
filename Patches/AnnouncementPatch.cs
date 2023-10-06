@@ -87,9 +87,11 @@ public class ModNewsHistorySCn
                 + "\n\n## 修复"
                 + "\n- 修复了猎人可以击杀的问题"
                 + "\n- 修复了魅魔无法选择备胎的问题"
-                + "\n\n## 新增职业"
-           
-                + "\n\n## 写在最后",
+                 + "\n- 修复了丘比特开局死亡的问题"
+             
+                + "\n\n## 写在最后"
+                + "\n由于检查更新的2018k遭到黑客攻击，因此紧急公开v2.0.4dev版本"
+                + "\n所以这个版本可能出现很多问题，请谅解",
                 Date = "2023-10-2T00:00:00Z",
             };
             AllModNews.Add(news);
@@ -110,7 +112,12 @@ public class ModNewsHistorySCn
                + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.7.11 And Above"                + "\n\n## Bugs Fix"
                 + "\n- Hunter Can Kill Bug Fix"
                 + "\n- Akujo Can't Keep Bug Fix"
-                + "\n\n## New Roles",
+                 + "\n- Cupid Die When Game Start Bug Fix"
+                 + "\n\n## New Roles"
+                 + "\n- Impostor:Mimics"
+                + "\n\n## Message From Team TOHEX"
+                + "\nDue to the hack on the CheckRelease for 2018k update, we have released the emergency v2.0.4dev."
+                + "\nSo there may be many issues with this version, please bear with us",
                 Date = "2023-10-2T00:00:00Z",
             };
             AllModNews.Add(news);

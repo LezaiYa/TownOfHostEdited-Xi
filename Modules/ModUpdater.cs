@@ -174,11 +174,11 @@ public class ModUpdater
             if (CultureInfo.CurrentCulture.Name == "zh-CN")
             {
                 isChecked = false;
-                isBroken = true;
+                isBroken = false;
             }
             else if (!onlyInfo)
             {
-                isChecked = true;
+                isChecked = false;
                 isBroken = false;
                 Logger.Error($"检查更新时发生错误\n{ex}", "CheckRelease", false);
             }

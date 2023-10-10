@@ -10,15 +10,19 @@
     <Configurations>Debug;Release;Canary</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Canary|AnyCPU'">
-    <Optimize>False</Optimize>
+    <Optimize>True</Optimize>
+    <FileAlignment>2048</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <FileAlignment>2048</FileAlignment>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <FileAlignment>2048</FileAlignment>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include=".\Resources\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\ModNews\SChinese\TOHEXi.v.1.0.4.txt" />
   </ItemGroup>
 
 	<ItemGroup>

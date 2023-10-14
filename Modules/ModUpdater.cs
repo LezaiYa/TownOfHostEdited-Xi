@@ -71,7 +71,7 @@ public class ModUpdater
         )));//*/
     }
 
-    public static string UrlSetId(string url) => url + "?id=C79D600F1123469B8BECDC631CB3AF09";
+    public static string UrlSetId(string url) => url + "?id=282EDCBDE9734F88849F8B255A6B8D6E";
     public static string UrlSetCheck(string url) => url + "/checkVersion";
     public static string UrlSetInfo(string url) => url + "/getExample";
     public static string UrlSetToday(string url) => url + "/today";
@@ -185,7 +185,7 @@ public class ModUpdater
             Logger.Error($"检查更新时发生错误，已忽略\n{ex}", "CheckRelease", false);
             return Task.FromResult(false);
         }
-        return Task.FromResult(true);
+        return Task.FromResult(true); 
     }
     public static async Task<bool> CheckReleaseFromGithub(bool beta = false)
     {

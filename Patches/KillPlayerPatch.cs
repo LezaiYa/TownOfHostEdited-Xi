@@ -1097,6 +1097,7 @@ class CheckMurderPatch
                 killer.RpcGuardAndKill(target);
                 Main.CupidLoveList.Add(target);
                 Main.CupidLoversPlayers.Add(target);
+                Main.CupidComplete = true;
                 NameColorManager.Add(killer.PlayerId, target.PlayerId, "#ff80c0");
                 foreach (var cupidplayer in Main.CupidLoveList)
                 {
@@ -1132,18 +1133,7 @@ class CheckMurderPatch
                 return false;
             }
         }
-        if (Main.CupidShieldList.Contains(target))
-        {
-            foreach (var cupid in Main.AllAlivePlayerControls)
-            {
-                if (cupid.Is(CustomRoles.Cupid))
-                {
-                    cupid.RpcMurderPlayerV3(cupid);
-                    Main.PlayerStates[cupid.PlayerId].deathReason = PlayerState.DeathReason.Suicide;
-                }
-                Main.CupidShieldList.Remove(target);
-            }
-        }
+        
         //魅魔
         if (killer.Is(CustomRoles.Akujo))
         {
@@ -1793,6 +1783,23 @@ class CheckMurderPatch
                     x.PlayerId != target.PlayerId &&
                     Vector2.Distance(x.GetTruePosition(), target.GetTruePosition()) < 2f
                     ).ToList().Count >= 1) return false;
+                break;
+            case CustomRoles.CupidLovers:
+                if (Main.CupidShieldList.Contains(target) && Main.CupidComplete && !killer.Is(CustomRoles.Cupid))
+                {
+
+
+                    foreach (var cupid in Main.AllAlivePlayerControls)
+                    {
+                        if (cupid.Is(CustomRoles.Cupid))
+                        {
+                            cupid.RpcMurderPlayerV3(cupid);
+                            Main.PlayerStates[cupid.PlayerId].deathReason = PlayerState.DeathReason.Suicide;
+                        }
+                        Main.CupidShieldList.Remove(target);
+                    }
+
+                }
                 break;
             //玩家被击杀事件
             case CustomRoles.Gamer:

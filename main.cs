@@ -107,6 +107,7 @@ public class Main : BasePlugin
     public static bool isLoversDead = true;
     public static bool isCrushLoversDead = true;
     public static bool isCupidLoversDead = true;
+    public static bool CupidComplete = true;
     public static bool isAkujoLoversDead = true;
     public static bool isjackalDead = true;
     public static bool isSheriffDead = true; 

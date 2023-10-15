@@ -159,6 +159,7 @@ internal class ChangeRoleSettings
             Main.isCupidLoversDead = false;
             Main.isAkujoLoversDead = false;
             Main.isseniormanagementDead = false;
+            Main.CupidComplete = false;
             Main.ForSpiritualists = new();
             Main.isMKDead = false;
             Main.isHunterDead = false;
@@ -1028,6 +1029,7 @@ internal class SelectRolesPatch
         {
             Main.CupidLoversPlayers.Clear();
             Main.isCupidLoversDead = false;
+            Main.CupidComplete = false;
         }
         if (CustomRoles.Akujo.IsEnable())
         {

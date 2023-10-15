@@ -1321,7 +1321,7 @@ class FixedUpdatePatch
                 Main.CupidLoversPlayers.Remove(cu);
             }
         }
-        if (Options.CupidLoverSuicide.GetBool() && CustomRoles.Cupid.IsEnable() && Main.isCupidLoversDead == false && Main.CupidLoversPlayers.Count >= 2)
+        if (Options.CupidLoverSuicide.GetBool() && CustomRoles.Cupid.IsEnable() && Main.isCupidLoversDead == false && Main.CupidLoversPlayers.Count >= 2 && Main.CupidComplete)
         {
             foreach (var loversPlayer in Main.CupidLoversPlayers)
             {

@@ -49,12 +49,12 @@ public static class ShapeShifters
         if (!killer.Is(CustomRoles.ShapeShifters)) return;
         GameData.PlayerOutfit outfit = new();
         var sender = CustomRpcSender.Create(name: $"RpcSetSkin({target.Data.PlayerName})");
-        KillerSkins = new GameData.PlayerOutfit().Set(killer.GetRealName(), killer.Data.DefaultOutfit.ColorId, killer.Data.DefaultOutfit.HatId, killer.Data.DefaultOutfit.SkinId, killer.Data.DefaultOutfit.VisorId, killer.Data.DefaultOutfit.PetId);
+        KillerSkins = new GameData.PlayerOutfit().Set(Main.AllPlayerNames[killer.PlayerId], killer.Data.DefaultOutfit.ColorId, killer.Data.DefaultOutfit.HatId, killer.Data.DefaultOutfit.SkinId, killer.Data.DefaultOutfit.VisorId, killer.Data.DefaultOutfit.PetId);
         KillerSpeed = Main.AllPlayerSpeed[killer.PlayerId];
         KillerName = Main.AllPlayerNames[killer.PlayerId];
-        TargetSkins = new GameData.PlayerOutfit().Set(target.GetRealName(), target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.PetId);
-        TargetSpeed = Main.AllPlayerSpeed[killer.PlayerId];
-        TargetName = Main.AllPlayerNames[killer.PlayerId];
+        TargetSkins = new GameData.PlayerOutfit().Set(Main.AllPlayerNames[target.PlayerId], target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.PetId);
+        TargetSpeed = Main.AllPlayerSpeed[target.PlayerId];
+        TargetName = Main.AllPlayerNames[target.PlayerId];
         new LateTask(() =>
         {
             Main.AllPlayerSpeed[killer.PlayerId] = Main.AllPlayerSpeed[target.PlayerId];

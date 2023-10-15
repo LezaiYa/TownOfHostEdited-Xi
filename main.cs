@@ -526,7 +526,7 @@ public class Main : BasePlugin
                 {CustomRoles.Crush,"#ff79ce" },
                 {CustomRoles.Slaveowner,"#996600" },
                 {CustomRoles.Jealousy, "#996666"},
-                {CustomRoles.SourcePlague, "#CCCC33"},
+                {CustomRoles.SourcePlague, "#E9E9A8"},
                   {CustomRoles.PlaguesGod, "#101010"},
                 {CustomRoles.King,"#FFCC00" },
                 {CustomRoles.Exorcist,"#336666" },

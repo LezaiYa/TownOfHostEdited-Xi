@@ -45,7 +45,7 @@ public static class CustomSoundsManager
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TOHE.Resources.Sounds." + sound + ".wav");
             if (stream == null)
             {
-                Logger.Warn($"声音文件缺失：{sound}", "CustomSounds");
+                //Logger.Warn($"声音文件缺失：{sound}", "CustomSounds");
                 return;
             }
             var fs = File.Create(path);

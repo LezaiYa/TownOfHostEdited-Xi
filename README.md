@@ -113,6 +113,12 @@
 > - 作者：[Loonie-Toons](https://github.com/Loonie-Toons)
 > - 许多职业想法
 > - 部分职业来源：医生，分散者，研究员
+>
+>### :star: [Town Of Host: Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced) :
+> 
+> - 作者：[Moe](https://github.com/0xDrMoe)
+> - 许多职业想法
+> - v2023.10.24版本适配
 >  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :
 > 

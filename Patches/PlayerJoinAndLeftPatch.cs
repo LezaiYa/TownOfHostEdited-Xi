@@ -6,18 +6,18 @@ using Il2CppSystem.Linq;
 using InnerNet;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using TOHE.Modules;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Neutral;
 using System.Threading;
 using System;
-using static TOHE.Translator;
-using static TOHE.ChatCommands;
-using TOHE.Roles.Crewmate;
+using static TOHEXI.Translator;
+using static TOHEXI.ChatCommands;
+using TOHEXI.Roles.Crewmate;
 using System.Linq;
 using UnityEngine;
-using TOHE.Roles.Impostor;
+using TOHEXI.Roles.Impostor;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
 class OnGameJoinedPatch

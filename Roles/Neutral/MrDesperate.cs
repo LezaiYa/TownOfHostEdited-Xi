@@ -5,14 +5,14 @@ using HarmonyLib;
 using Hazel;
 using Sentry;
 using System.Linq;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
-using static TOHE.RandomSpawn;
+using static TOHEXI.RandomSpawn;
 using static UnityEngine.GraphicsBuffer;
-using static TOHE.Options;
+using static TOHEXI.Options;
 using LibCpp2IL;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class MrDesperate
 {

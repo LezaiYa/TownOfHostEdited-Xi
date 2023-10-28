@@ -2,10 +2,10 @@
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class Medic
 {

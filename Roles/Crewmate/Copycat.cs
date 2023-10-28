@@ -5,11 +5,11 @@ using HarmonyLib;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
-using TOHE.Modules.ChatManager;
+using TOHEXI.Modules.ChatManager;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class Copycat
 {

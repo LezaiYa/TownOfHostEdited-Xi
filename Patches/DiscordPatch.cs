@@ -2,7 +2,7 @@ using HarmonyLib;
 using Discord;
 using System;
 
-namespace TOHE.Patches
+namespace TOHEXI.Patches
 {
     [HarmonyPatch(typeof(ActivityManager), nameof(ActivityManager.UpdateActivity))]
     public class DiscordRPC

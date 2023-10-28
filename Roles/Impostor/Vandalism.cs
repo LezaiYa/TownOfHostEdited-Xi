@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using static TOHE.Options;
+using static TOHEXI.Options;
 using Hazel;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
 using AmongUs.GameOptions;
 using InnerNet;
 using HarmonyLib;
 using System.Linq;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class Vandalism
 {
@@ -71,14 +71,14 @@ public static class Vandalism
             target.RpcMurderPlayerV3(killer);
         }
             VandalismLimit[killer.PlayerId]--;
-            MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, killer.GetClientId());
+            MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, killer.GetClientId());
             SabotageFixWriter.Write((byte)SystemTypes.Electrical);
             MessageExtensions.WriteNetObject(SabotageFixWriter, killer);
             AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
             foreach (var player in Main.AllPlayerControls)
             {
                 if (player.PlayerId == killer.PlayerId || player.Data.Disconnected) continue;
-                SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, player.GetClientId());
+                SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, player.GetClientId());
                 SabotageFixWriter.Write((byte)SystemTypes.Electrical);
                 MessageExtensions.WriteNetObject(SabotageFixWriter, player);
                 AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);

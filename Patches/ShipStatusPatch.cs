@@ -2,11 +2,11 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.FixedUpdate))]
 class ShipFixedUpdatePatch
@@ -28,8 +28,8 @@ class ShipFixedUpdatePatch
         }
     }
 }
-[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.RepairSystem))]
-class RepairSystemPatch
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.UpdateSystem))]
+class UpdateSystemPatch
 {
     public static bool IsComms;
     public static bool Prefix(ShipStatus __instance,
@@ -37,7 +37,7 @@ class RepairSystemPatch
         [HarmonyArgument(1)] PlayerControl player,
         [HarmonyArgument(2)] byte amount)
     {
-        Logger.Msg("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole() + ", amount: " + amount, "RepairSystem");
+        Logger.Msg("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole() + ", amount: " + amount, "UpdateSystem");
         if (RepairSender.enabled && AmongUsClient.Instance.NetworkMode != NetworkModes.OnlineGame)
             Logger.SendInGame("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole() + ", amount: " + amount);
 
@@ -54,7 +54,7 @@ class RepairSystemPatch
 
         //SabotageMaster
         if (player.Is(CustomRoles.SabotageMaster))
-            SabotageMaster.RepairSystem(__instance, systemType, amount);
+            SabotageMaster.UpdateSystem(__instance, systemType, amount);
 
         if (systemType == SystemTypes.Electrical && 0 <= amount && amount <= 4)
         {
@@ -90,7 +90,7 @@ class RepairSystemPatch
                 if (!GameStates.IsMeeting)
                 { Utils.NotifyRoles(ForceLoop: true); }
 
-            }, 0.1f, "ShipStatus.RepairSystem");
+            }, 0.1f, "ShipStatus.UpdateSystem");
         }
         else
         {
@@ -112,7 +112,7 @@ class RepairSystemPatch
     {
         if (DoorIds.Contains(amount)) foreach (var id in DoorIds)
             {
-                __instance.RpcRepairSystem(SystemTypes.Doors, id);
+                __instance.RpcUpdateSystem(SystemTypes.Doors, (byte)id);
             }
     }
 }
@@ -124,7 +124,7 @@ class CloseDoorsPatch
         return !(Options.DisableSabotage.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat);
     }
 }
-[HarmonyPatch(typeof(SwitchSystem), nameof(SwitchSystem.RepairDamage))]
+[HarmonyPatch(typeof(SwitchSystem), nameof(SwitchSystem.UpdateSystem))]
 class SwitchSystemRepairPatch
 {
     public static void Postfix(SwitchSystem __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] byte amount)

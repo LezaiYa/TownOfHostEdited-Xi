@@ -1,11 +1,11 @@
 ﻿using Hazel;
 using System.Collections.Generic;
-using TOHE.Roles.Double;
+using TOHEXI.Roles.Double;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Gangster
 {

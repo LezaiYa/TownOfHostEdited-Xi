@@ -1,10 +1,10 @@
-﻿using TOHE.Modules;
+﻿using TOHEXI.Modules;
 using UnityEngine;
-using static TOHE.Options;
-using static TOHE.Translator;
-using static TOHE.Utils;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
+using static TOHEXI.Utils;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 //来源：TOHER https://github.com/Loonie-Toons/TownOfHost-ReEdited 谢谢Lonnie!
 public static class Disperser
 {

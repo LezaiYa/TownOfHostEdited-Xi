@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
 
-namespace TOHE.Modules;
+namespace TOHEXI.Modules;
 
 internal class CustomRoleSelector
 {

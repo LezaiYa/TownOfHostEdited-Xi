@@ -2,9 +2,9 @@ using AmongUs.GameOptions;
 using Hazel;
 using System.Collections.Generic;
 using System.Text;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public static class BloodKnight
 {

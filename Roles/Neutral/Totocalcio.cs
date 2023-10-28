@@ -2,12 +2,12 @@
 using Il2CppSystem;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
-using static TOHE.Options;
-using static TOHE.Translator;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public static class Totocalcio
 {

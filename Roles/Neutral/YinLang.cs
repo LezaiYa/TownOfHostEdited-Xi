@@ -2,13 +2,13 @@ using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using static Logger;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class YinLang
 {

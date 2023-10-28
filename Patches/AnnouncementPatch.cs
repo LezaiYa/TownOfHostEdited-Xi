@@ -8,7 +8,7 @@ using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System.Reflection;
 
-namespace TOHE;
+namespace TOHEXI;
 
 // ##https://github.com/Yumenopai/TownOfHost_Y
 //来源：TOHY（谢谢！）

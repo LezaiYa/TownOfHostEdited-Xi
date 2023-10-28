@@ -1,10 +1,10 @@
 using HarmonyLib;
 using InnerNet;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.MakePublic))]
 internal class MakePublicPatch

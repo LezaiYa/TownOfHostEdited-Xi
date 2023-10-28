@@ -10,9 +10,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch]
 public class ModUpdater
@@ -229,7 +229,7 @@ public class ModUpdater
                         downloadUrl = assets[i]["browser_download_url"].ToString();
                         break;
                     }
-                    if (assets[i]["name"].ToString() == "TOHE.dll")
+                    if (assets[i]["name"].ToString() == "TOHEXI.dll")
                         downloadUrl = assets[i]["browser_download_url"].ToString();
                 }
                 hasUpdate = latestVersion.CompareTo(Main.version) > 0;
@@ -307,7 +307,7 @@ public class ModUpdater
             foreach (var path in Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.*"))
             {
                 if (path.EndsWith(Path.GetFileName(Assembly.GetExecutingAssembly().Location))) continue;
-                if (path.EndsWith("TOHE.dll")) continue;
+                if (path.EndsWith("TOHEXI.dll")) continue;
                 Logger.Info($"{Path.GetFileName(path)} 已删除", "DeleteOldFiles");
                 File.Delete(path);
             }
@@ -323,7 +323,7 @@ public class ModUpdater
     {
         try
         {
-            var savePath = "BepInEx/plugins/TOHE.dll.temp";
+            var savePath = "BepInEx/plugins/TOHEXI.dll.temp";
             File.Delete(savePath);
 
 #pragma warning disable SYSLIB0014
@@ -336,7 +336,7 @@ public class ModUpdater
 
             var fileName = Assembly.GetExecutingAssembly().Location;
             File.Move(fileName, fileName + ".bak");
-            File.Move("BepInEx/plugins/TOHE.dll.temp", fileName);
+            File.Move("BepInEx/plugins/TOHEXI.dll.temp", fileName);
             ShowPopup(GetString("updateRestart"), StringNames.ExitGame, true, true);
 
         }

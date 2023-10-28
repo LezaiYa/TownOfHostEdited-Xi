@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class BanManager
 {
@@ -30,7 +30,7 @@ public static class BanManager
             {
                 Logger.Warn("创建新的 DenyName.txt 文件", "BanManager");
                 File.Create(DENY_NAME_LIST_PATH).Close();
-                File.WriteAllText(DENY_NAME_LIST_PATH, GetResourcesTxt("TOHE.Resources.Config.DenyName.txt"));
+                File.WriteAllText(DENY_NAME_LIST_PATH, GetResourcesTxt("TOHEXI.Resources.Config.DenyName.txt"));
             }
 
             //读取EAC名单

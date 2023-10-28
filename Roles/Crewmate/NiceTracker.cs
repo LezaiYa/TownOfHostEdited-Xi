@@ -2,11 +2,11 @@ using AmongUs.GameOptions;
 using Hazel;
 using Il2CppSystem.Text;
 using System.Collections.Generic;
-using TOHE.Roles.Crewmate;
+using TOHEXI.Roles.Crewmate;
 using UnityEngine;
-using static TOHE.Options;
-using static TOHE.Translator;
-namespace TOHE.Roles.Impostor;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
+namespace TOHEXI.Roles.Impostor;
 
 public static class NiceTracker
 {

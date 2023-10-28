@@ -1,6 +1,6 @@
 using HarmonyLib;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.IsGameOverDueToDeath))]
 class DontBlackoutPatch

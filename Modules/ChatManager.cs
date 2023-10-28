@@ -2,12 +2,12 @@
 using System.Linq;
 using Hazel;
 using System;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
-using TOHE.Roles.Crewmate;
-using static TOHE.Translator;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
+using TOHEXI.Roles.Crewmate;
+using static TOHEXI.Translator;
 
-namespace TOHE.Modules.ChatManager
+namespace TOHEXI.Modules.ChatManager
 {
     public class ChatManager
     {

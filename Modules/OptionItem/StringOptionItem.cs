@@ -1,4 +1,4 @@
-namespace TOHE;
+namespace TOHEXI;
 
 public class StringOptionItem : OptionItem
 {

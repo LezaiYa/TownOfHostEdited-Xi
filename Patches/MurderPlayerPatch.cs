@@ -6,39 +6,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using Hazel;
 using InnerNet;
 using System.Threading.Tasks;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Crewmate;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
 using UnityEngine.Profiling;
 using System.Runtime.Intrinsics.X86;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.UI;
 using UnityEngine.Networking.Types;
-using TOHE.Roles.Double;
+using TOHEXI.Roles.Double;
 using Microsoft.Extensions.Logging;
 using Sentry;
 using UnityEngine.SocialPlatforms;
 using static UnityEngine.ParticleSystem.PlaybackState;
 using Cpp2IL.Core.Extensions;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
 class MurderPlayerPatch
 {
     public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
-        Logger.Info($"{__instance.GetNameWithRole()} => {target.GetNameWithRole()}{(target.protectedByGuardian ? "(Protected)" : "")}", "MurderPlayer");
+        Logger.Info($"{__instance.GetNameWithRole()} => {target.GetNameWithRole()}{(target.protectedByGuardianThisRound ? "(Protected)" : "")}", "MurderPlayer");
 
         if (RandomSpawn.CustomNetworkTransformPatch.NumOfTP.TryGetValue(__instance.PlayerId, out var num) && num > 2) RandomSpawn.CustomNetworkTransformPatch.NumOfTP[__instance.PlayerId] = 3;
-        if (!target.protectedByGuardian)
+        if (!target.protectedByGuardianThisRound)
             Camouflage.RpcSetSkin(target, ForceRevert: true);
     }
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)

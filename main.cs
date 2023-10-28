@@ -8,13 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 
-[assembly: AssemblyFileVersion(TOHE.Main.PluginVersion)]
-[assembly: AssemblyInformationalVersion(TOHE.Main.PluginVersion)]
-[assembly: AssemblyVersion(TOHE.Main.PluginVersion)]
-namespace TOHE;
+[assembly: AssemblyFileVersion(TOHEXI.Main.PluginVersion)]
+[assembly: AssemblyInformationalVersion(TOHEXI.Main.PluginVersion)]
+[assembly: AssemblyVersion(TOHEXI.Main.PluginVersion)]
+namespace TOHEXI;
 
 [BepInPlugin(PluginGuid, "TOHEX", PluginVersion)]
 [BepInIncompatibility("jp.ykundesu.supernewroles")]
@@ -348,32 +348,32 @@ public class Main : BasePlugin
 
 
         Logger = BepInEx.Logging.Logger.CreateLogSource("TOHEX");
-        TOHE.Logger.Enable();
-        TOHE.Logger.Disable("NotifyRoles");
-        TOHE.Logger.Disable("SwitchSystem");
-        TOHE.Logger.Disable("ModNews");
+        TOHEXI.Logger.Enable();
+        TOHEXI.Logger.Disable("NotifyRoles");
+        TOHEXI.Logger.Disable("SwitchSystem");
+        TOHEXI.Logger.Disable("ModNews");
         if (!DebugModeManager.AmDebugger)
         {
-            TOHE.Logger.Disable("2018k");
-            //TOHE.Logger.Disable("Github");
-            TOHE.Logger.Disable("CustomRpcSender");
-            //TOHE.Logger.Disable("ReceiveRPC");
-            TOHE.Logger.Disable("SendRPC");
-            TOHE.Logger.Disable("SetRole");
-            TOHE.Logger.Disable("Info.Role");
-            TOHE.Logger.Disable("TaskState.Init");
-            //TOHE.Logger.Disable("Vote");
-            TOHE.Logger.Disable("RpcSetNamePrivate");
-            //TOHE.Logger.Disable("SendChat");
-            TOHE.Logger.Disable("SetName");
-            //TOHE.Logger.Disable("AssignRoles");
-            //TOHE.Logger.Disable("RepairSystem");
-            //TOHE.Logger.Disable("MurderPlayer");
-            //TOHE.Logger.Disable("CheckMurder");
-            TOHE.Logger.Disable("PlayerControl.RpcSetRole");
-            TOHE.Logger.Disable("SyncCustomSettings");
+            TOHEXI.Logger.Disable("2018k");
+            //TOHEXI.Logger.Disable("Github");
+            TOHEXI.Logger.Disable("CustomRpcSender");
+            //TOHEXI.Logger.Disable("ReceiveRPC");
+            TOHEXI.Logger.Disable("SendRPC");
+            TOHEXI.Logger.Disable("SetRole");
+            TOHEXI.Logger.Disable("Info.Role");
+            TOHEXI.Logger.Disable("TaskState.Init");
+            //TOHEXI.Logger.Disable("Vote");
+            TOHEXI.Logger.Disable("RpcSetNamePrivate");
+            //TOHEXI.Logger.Disable("SendChat");
+            TOHEXI.Logger.Disable("SetName");
+            //TOHEXI.Logger.Disable("AssignRoles");
+            //TOHEXI.Logger.Disable("UpdateSystem");
+            //TOHEXI.Logger.Disable("MurderPlayer");
+            //TOHEXI.Logger.Disable("CheckMurder");
+            TOHEXI.Logger.Disable("PlayerControl.RpcSetRole");
+            TOHEXI.Logger.Disable("SyncCustomSettings");
         }
-        //TOHE.Logger.isDetail = true;
+        //TOHEXI.Logger.isDetail = true;
 
         // 認証関連-初期化
         DebugKeyAuth = new HashAuth(DebugKeyHash, DebugKeySalt);
@@ -626,8 +626,8 @@ public class Main : BasePlugin
         }
         catch (ArgumentException ex)
         {
-            TOHE.Logger.Error("错误：字典出现重复项", "LoadDictionary");
-            TOHE.Logger.Exception(ex, "LoadDictionary");
+            TOHEXI.Logger.Error("错误：字典出现重复项", "LoadDictionary");
+            TOHEXI.Logger.Exception(ex, "LoadDictionary");
             hasArgumentException = true;
             ExceptionMessage = ex.Message;
             ExceptionMessageIsShown = false;
@@ -644,9 +644,9 @@ public class Main : BasePlugin
 
         IRandom.SetInstance(new NetRandomWrapper());
 
-        TOHE.Logger.Info($"{Application.version}", "AmongUs Version");
+        TOHEXI.Logger.Info($"{Application.version}", "AmongUs Version");
 
-        var handler = TOHE.Logger.Handler("GitVersion");
+        var handler = TOHEXI.Logger.Handler("GitVersion");
         handler.Info($"{nameof(ThisAssembly.Git.BaseTag)}: {ThisAssembly.Git.BaseTag}");
         handler.Info($"{nameof(ThisAssembly.Git.Commit)}: {ThisAssembly.Git.Commit}");
         handler.Info($"{nameof(ThisAssembly.Git.Commits)}: {ThisAssembly.Git.Commits}");
@@ -661,7 +661,7 @@ public class Main : BasePlugin
         if (!DebugModeManager.AmDebugger) ConsoleManager.DetachConsole();
         else ConsoleManager.CreateConsole();
 
-        TOHE.Logger.Msg("========= TOHE loaded! =========", "Plugin Load");
+        TOHEXI.Logger.Msg("========= TOHE loaded! =========", "Plugin Load");
     }
 
     

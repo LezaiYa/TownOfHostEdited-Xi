@@ -1,9 +1,9 @@
 ﻿using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 internal static class Eraser
 {

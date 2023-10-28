@@ -6,16 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Impostor;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Impostor;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 static class ExtendedPlayerControl
 {
@@ -172,7 +172,7 @@ static class ExtendedPlayerControl
         if (killer.AmOwner)
         {
             killer.ProtectPlayer(target, colorId);
-            killer.MurderPlayer(target);
+            killer.MurderPlayer(target, MurderResultFlags.DecisionByHost);
         }
         // Other Clients
         if (killer.PlayerId != 0)
@@ -232,7 +232,7 @@ static class ExtendedPlayerControl
         if (target == null) target = killer;
         if (killer.AmOwner)
         {
-            killer.MurderPlayer(target);
+            killer.MurderPlayer(target, MurderResultFlags.DecisionByHost);
         }
     }
     [Obsolete]
@@ -271,9 +271,9 @@ static class ExtendedPlayerControl
             ホストのクールダウンは直接リセットします。
         */
     }
-    public static void RpcDesyncRepairSystem(this PlayerControl target, SystemTypes systemType, int amount)
+    public static void RpcDesyncUpdateSystem(this PlayerControl target, SystemTypes systemType, int amount)
     {
-        MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, target.GetClientId());
+        var messageWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, target.GetClientId());
         messageWriter.Write((byte)systemType);
         messageWriter.WriteNetObject(target);
         messageWriter.Write((byte)amount);
@@ -361,7 +361,7 @@ static class ExtendedPlayerControl
 
         new LateTask(() =>
         {
-            pc.RpcDesyncRepairSystem(systemtypes, 128);
+            pc.RpcDesyncUpdateSystem(systemtypes, 128);
         }, 0f + delay, "Reactor Desync");
 
         new LateTask(() =>
@@ -371,9 +371,9 @@ static class ExtendedPlayerControl
 
         new LateTask(() =>
         {
-            pc.RpcDesyncRepairSystem(systemtypes, 16);
+            pc.RpcDesyncUpdateSystem(systemtypes, 16);
             if (Main.NormalOptions.MapId == 4) //Airship用
-                pc.RpcDesyncRepairSystem(systemtypes, 17);
+                pc.RpcDesyncUpdateSystem(systemtypes, 17);
         }, 0.4f + delay, "Fix Desync Reactor");
     }
     public static void ReactorFlash(this PlayerControl pc, float delay = 0f)
@@ -385,14 +385,14 @@ static class ExtendedPlayerControl
         if (Main.NormalOptions.MapId == 2) systemtypes = SystemTypes.Laboratory;
         float FlashDuration = Options.KillFlashDuration.GetFloat();
 
-        pc.RpcDesyncRepairSystem(systemtypes, 128);
+        pc.RpcDesyncUpdateSystem(systemtypes, 128);
 
         new LateTask(() =>
         {
-            pc.RpcDesyncRepairSystem(systemtypes, 16);
+            pc.RpcDesyncUpdateSystem(systemtypes, 16);
 
             if (Main.NormalOptions.MapId == 4) //Airship用
-                pc.RpcDesyncRepairSystem(systemtypes, 17);
+                pc.RpcDesyncUpdateSystem(systemtypes, 17);
         }, FlashDuration + delay, "Fix Desync Reactor");
     }
 
@@ -951,18 +951,18 @@ static class ExtendedPlayerControl
 
         if (killer.PlayerId == target.PlayerId && killer.shapeshifting)
         {
-            new LateTask(() => { killer.RpcMurderPlayer(target); }, 1.5f, "Shapeshifting Suicide Delay");
+            new LateTask(() => { killer.RpcMurderPlayer(target, true); }, 1.5f, "Shapeshifting Suicide Delay");
             return;
         }
 
-        killer.RpcMurderPlayer(target);
+        killer.RpcMurderPlayer(target, true);
     }
     public static void RpcMurderPlayerV2(this PlayerControl killer, PlayerControl target)
     {
         if (target == null) target = killer;
         if (AmongUsClient.Instance.AmClient)
         {
-            killer.MurderPlayer(target);
+            killer.MurderPlayer(target, MurderResultFlags.DecisionByHost);
         }
         MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)RpcCalls.MurderPlayer, SendOption.None, -1);
         messageWriter.WriteNetObject(target);

@@ -11,21 +11,21 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Crewmate;
-using TOHE.Roles.AddOns.Impostor;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
+using TOHEXI.Roles.AddOns.Impostor;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements.UIR;
-using static TOHE.ChatCommands;
-using static TOHE.Translator;
+using static TOHEXI.ChatCommands;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class Utils
 {
@@ -112,13 +112,14 @@ public static class Utils
         {
             case SystemTypes.Electrical:
                 {
+                    if (mapId == 5) return false;
                     var SwitchSystem = ShipStatus.Instance.Systems[type].Cast<SwitchSystem>();
                     return SwitchSystem != null && SwitchSystem.IsActive;
                 }
             case SystemTypes.Reactor:
                 {
                     if (mapId == 2) return false;
-                    else if (mapId == 4)
+                    else if (mapId is 4)
                     {
                         var HeliSabotageSystem = ShipStatus.Instance.Systems[type].Cast<HeliSabotageSystem>();
                         return HeliSabotageSystem != null && HeliSabotageSystem.IsActive;
@@ -137,13 +138,13 @@ public static class Utils
                 }
             case SystemTypes.LifeSupp:
                 {
-                    if (mapId is 2 or 4) return false;
+                    if (mapId is 2 or 4 or 5) return false;
                     var LifeSuppSystemType = ShipStatus.Instance.Systems[type].Cast<LifeSuppSystemType>();
                     return LifeSuppSystemType != null && LifeSuppSystemType.IsActive;
                 }
             case SystemTypes.Comms:
                 {
-                    if (mapId == 1)
+                    if (mapId is 1 or 5)
                     {
                         var HqHudSystemType = ShipStatus.Instance.Systems[type].Cast<HqHudSystemType>();
                         return HqHudSystemType != null && HqHudSystemType.IsActive;
@@ -153,6 +154,12 @@ public static class Utils
                         var HudOverrideSystemType = ShipStatus.Instance.Systems[type].Cast<HudOverrideSystemType>();
                         return HudOverrideSystemType != null && HudOverrideSystemType.IsActive;
                     }
+                }
+            case SystemTypes.MushroomMixupSabotage:
+                {
+                    if (mapId != 5) return false; // Only The Fungle
+                    var MushroomMixupSabotageSystem = ShipStatus.Instance.Systems[type].Cast<MushroomMixupSabotageSystem>();
+                    return MushroomMixupSabotageSystem != null && MushroomMixupSabotageSystem.IsActive;
                 }
             default:
                 return false;

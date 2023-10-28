@@ -3,9 +3,9 @@ using MS.Internal.Xml.XPath;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class BloodSeekers
 {

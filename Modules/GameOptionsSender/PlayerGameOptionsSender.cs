@@ -4,19 +4,19 @@ using Il2CppSystem.Linq;
 using InnerNet;
 using MS.Internal.Xml.XPath;
 using System.Linq;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using static Logger;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using Mathf = UnityEngine.Mathf;
-using TOHE.Roles.Crewmate;
+using TOHEXI.Roles.Crewmate;
 //using UnityEngine;
 using System.Threading.Tasks;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Crewmate;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE.Modules;
+namespace TOHEXI.Modules;
 
 public class PlayerGameOptionsSender : GameOptionsSender
 {

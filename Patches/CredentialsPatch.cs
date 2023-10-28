@@ -2,10 +2,10 @@ using HarmonyLib;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using TOHE.Modules;
-using static TOHE.Translator;
+using TOHEXI.Modules;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch]
 public static class Credentials
@@ -212,7 +212,7 @@ public static class Credentials
                 //var CustomBG = new GameObject("CustomBG");
                 //CustomBG.transform.position = new Vector3(2.095f, -0.25f, 520f);
                 //var bgRenderer = CustomBG.AddComponent<SpriteRenderer>();
-                //bgRenderer.sprite = Utils.LoadSprite("TOHE.Resources.Background.TOH-Background-Old.jpg", 245f);
+                //bgRenderer.sprite = Utils.LoadSprite("TOHEXI.Resources.Background.TOH-Background-Old.jpg", 245f);
             }
         }
     }

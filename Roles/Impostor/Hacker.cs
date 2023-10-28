@@ -1,10 +1,10 @@
 ﻿using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
-using static TOHE.Options;
-using static TOHE.Translator;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Hacker
 {

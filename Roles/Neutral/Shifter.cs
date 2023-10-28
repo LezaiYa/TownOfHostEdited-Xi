@@ -4,10 +4,10 @@ using Sentry.Protocol;
 using System.Collections.Generic;
 using UnityEngine;
 using static Logger;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using System;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public class Shifter
 {

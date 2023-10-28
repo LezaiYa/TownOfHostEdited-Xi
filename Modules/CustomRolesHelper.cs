@@ -1,11 +1,11 @@
 using AmongUs.GameOptions;
 using System.Linq;
 using System.Security.Authentication;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE;
+namespace TOHEXI;
 
 internal static class CustomRolesHelper
 {

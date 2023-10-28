@@ -4,7 +4,7 @@ using Il2CppSystem.Collections.Generic;
 using InnerNet;
 //using UnityEngine;
 
-namespace TOHE;
+namespace TOHEXI;
 
 //[HarmonyPatch(typeof(FindAGameManager), nameof(FindAGameManager.Update))]
 //public static class FindAGameManagerUpdatePatch

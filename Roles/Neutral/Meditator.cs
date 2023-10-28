@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.Services.Authentication.Internal;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class Meditator
 {

@@ -7,22 +7,22 @@ using MS.Internal.Xml.XPath;
 using Sentry.Internal.Extensions;
 using System.Linq;
 using System.Text;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
-using static TOHE.Translator;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.Translator;
 using Hazel;
 using InnerNet;
 using System.Threading.Tasks;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Crewmate;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
 using UnityEngine.Profiling;
 using System.Runtime.Intrinsics.X86;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.UI;
 using UnityEngine.Networking.Types;
 
-namespace TOHE;
+namespace TOHEXI;
 [HarmonyPatch(typeof(MainMenuManager))]
 //参考TO-HOPE（N让我搬过来））））https://gitee.com/xigua_ya/to-hope
 public class MainAN

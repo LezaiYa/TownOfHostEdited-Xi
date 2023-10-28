@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class SabotageMaster
 {
@@ -38,7 +38,7 @@ public static class SabotageMaster
         playerIdList.Add(playerId);
     }
     public static bool IsEnable() => playerIdList.Count > 0;
-    public static void RepairSystem(ShipStatus __instance, SystemTypes systemType, byte amount)
+    public static void UpdateSystem(ShipStatus __instance, SystemTypes systemType, byte amount)
     {
         switch (systemType)
         {
@@ -47,8 +47,8 @@ public static class SabotageMaster
                 if (SkillLimit.GetFloat() > 0 && UsedSkillCount >= SkillLimit.GetFloat()) break;
                 if (amount is 64 or 65)
                 {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 16);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 17);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Reactor, 16);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Reactor, 17);
                     UsedSkillCount++;
                 }
                 break;
@@ -57,8 +57,8 @@ public static class SabotageMaster
                 if (SkillLimit.GetFloat() > 0 && UsedSkillCount >= SkillLimit.GetFloat()) break;
                 if (amount is 64 or 65)
                 {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Laboratory, 67);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Laboratory, 66);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Laboratory, 67);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Laboratory, 66);
                     UsedSkillCount++;
                 }
                 break;
@@ -67,8 +67,8 @@ public static class SabotageMaster
                 if (SkillLimit.GetFloat() > 0 && UsedSkillCount >= SkillLimit.GetFloat()) break;
                 if (amount is 64 or 65)
                 {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.LifeSupp, 67);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.LifeSupp, 66);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.LifeSupp, 67);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.LifeSupp, 66);
                     UsedSkillCount++;
                 }
                 break;
@@ -77,8 +77,8 @@ public static class SabotageMaster
                 if (SkillLimit.GetFloat() > 0 && UsedSkillCount >= SkillLimit.GetFloat()) break;
                 if (amount is 64 or 65)
                 {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 17);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 16);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 17);
                     UsedSkillCount++;
                 }
                 break;
@@ -93,20 +93,20 @@ public static class SabotageMaster
                 if (mapId == 2)
                 {
                     //Polus
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 71, 72);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 67, 68);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 64, 66);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 73, 74);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 71, 72);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 67, 68);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 64, 66);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 73, 74);
                 }
                 else if (mapId == 4)
                 {
                     //Airship
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 64, 67);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 71, 73);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 74, 75);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 76, 78);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 68, 70);
-                    RepairSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 83, 84);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 64, 67);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 71, 73);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 74, 75);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 76, 78);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 68, 70);
+                    UpdateSystemPatch.CheckAndOpenDoorsRange(__instance, amount, 83, 84);
                 }
                 DoorsProgressing = false;
                 break;

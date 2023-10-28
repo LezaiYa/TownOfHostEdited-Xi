@@ -1,11 +1,11 @@
 ﻿using Hazel;
 using System.Collections.Generic;
-using TOHE.Roles.Double;
+using TOHEXI.Roles.Double;
 using UnityEngine;
-using static TOHE.Options;
-using static TOHE.Translator;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class Captain
 {

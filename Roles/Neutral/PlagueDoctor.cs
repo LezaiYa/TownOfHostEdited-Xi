@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using static TOHE.Options;
+using static TOHEXI.Options;
 using UnityEngine;
 using Hazel;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 public static class PlagueDoctor
 {
     private static readonly int Id = 75650040;

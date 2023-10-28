@@ -1,6 +1,6 @@
 using System;
 
-namespace TOHE.Modules;
+namespace TOHEXI.Modules;
 
 class LogHandler : ILogHandler
 {

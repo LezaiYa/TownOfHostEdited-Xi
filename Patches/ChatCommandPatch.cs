@@ -7,17 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using TOHE.Modules;
-using TOHE.Roles.Crewmate;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Crewmate;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using System.IO;
-using TOHE.Roles.Impostor;
-using TOHE.Modules.ChatManager;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Modules.ChatManager;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
 internal class ChatCommands
@@ -184,7 +184,7 @@ internal class ChatCommands
                             cancelVal = "/dis";
                             break;
                     }
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Admin, 0);
+                    ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Admin, 0);
                     break;
 
                 case "/r":
@@ -996,7 +996,7 @@ internal class ChatCommands
             if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
                 DestroyableSingleton<HudManager>.Instance.Chat.AddChat(__instance, chatText);
             if (chatText.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
-                DestroyableSingleton<Telemetry>.Instance.SendWho();
+                DestroyableSingleton<UnityTelemetry>.Instance.SendWho();
             MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, (byte)RpcCalls.SendChat, SendOption.None);
             messageWriter.Write(chatText);
             messageWriter.EndMessage();

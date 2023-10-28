@@ -72,7 +72,7 @@ public class ModNewsHistorySCn
             {
                 Number = 100006,
                 Title = "TownOfHostEdited-Xi v2.0.4",
-                SubTitle = "★★★★公开回归！★★★★",
+                SubTitle = "★★★★真菌世界！★★★★",
                 ShortTitle = "★TOHEX v2.0.4★\n<size=75%>简体中文</size>",
                 Text =
                 "简体中文"
@@ -83,7 +83,7 @@ public class ModNewsHistorySCn
                 + "\n\n\n## 对应官方版本"
                 + "\n- 基于TOH版本 v4.1.2"
                 + "\n- 基于TOHE版本 v2.3.55"
-                + "\n- 适配Among Us版本 v2023.7.11及以上版本"
+                + "\n- 适配Among Us版本 v2023.10.24及以上版本"
                 + "\n\n## 修复"
                 + "\n- 修复了猎人可以击杀的问题"
                 + "\n- 修复了魅魔无法选择备胎的问题"
@@ -91,10 +91,9 @@ public class ModNewsHistorySCn
                 + "\n\n## 新增职业"
                 +"\n- 内鬼阵营：模仿者团队"
                 + "\n- 内鬼阵营：化形者"
-                + "\n\n## 写在最后"
-                + "\n由于检查更新的2018k遭到黑客攻击，因此紧急公开v2.0.4dev版本"
-                + "\n所以这个版本可能出现很多问题，请谅解",
-                Date = "2023-10-2T00:00:00Z",
+                + "\n\n## 更改"
+                 + "\n- 暂时删除音效",
+                Date = "2023-10-29T00:00:00Z",
             };
             AllModNews.Add(news);
         }
@@ -111,16 +110,16 @@ public class ModNewsHistorySCn
                  + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
                 + "\n-----------------------------"
                 + "\nLet's Play Public Games!"
-               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.7.11 And Above"                + "\n\n## Bugs Fix"
+               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24 And Above"                + "\n\n## Bugs Fix"
                 + "\n- Hunter Can Kill Bug Fix"
                 + "\n- Akujo Can't Keep Bug Fix"
                  + "\n- Cupid Die When Game Start Bug Fix"
                  + "\n\n## New Roles"
                  + "\n- Impostor:Mimics"
-                + "\n\n## Message From Team TOHEX"
-                + "\nDue to the hack on the CheckRelease for 2018k update, we have released the emergency v2.0.4dev."
-                + "\nSo there may be many issues with this version, please bear with us",
-                Date = "2023-10-2T00:00:00Z",
+                 + "\n\n## Changes"
+                 + "\n- Temporarily Remove Sounds"
+                 + "\n-Support English",
+                Date = "2023-10-29T00:00:00Z",
             };
             AllModNews.Add(news);
         }
@@ -143,7 +142,7 @@ public class ModNewsHistorySCn
                 + "\n- 适配Among Us版本 v2023.7.11及以上版本"
                 + "\n\n## 修复"
                 + "\n- 修复大量bug"
-                         + "\n- 可以公开"
+                + "\n- 可以公开"
                 + "\n\n## 新增职业"
                 + "\n- 船员阵营：管道工"
                 + "\n\n## 写在最后"

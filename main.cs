@@ -31,10 +31,10 @@ public class Main : BasePlugin
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
-    public static readonly string MainMenuText = "</color><color=#FFFF00>国庆节快乐！</color>";
+    public static readonly string MainMenuText = "</color><color=#fffcbe>真菌世界！！</color>";
     public const string PluginGuid = "com.xi.tohexi";
     public const string PluginVersion = "2.0.4";
-    public const string PluginDisplayVersion = "2.0.4-Dev 1";
+    public const string PluginDisplayVersion = "2.0.4-Dev 4";
     public const string CanaryPluginVersion = "Canary_裤";
     public static readonly string SupportedVersionAU = "2023.7.11";
     public const int PluginCreate = 7;

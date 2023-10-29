@@ -324,7 +324,7 @@ class GameEndChecker
                         CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                         CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Prosecutors);
                     }
-                   if (Main.ForRudepeople.Contains(pc.PlayerId))
+                   if (Rudepeople.ForRudepeople.Contains(pc.PlayerId))
                     {
                         CustomWinnerHolder.WinnerIds.Remove(pc.PlayerId);
                     }

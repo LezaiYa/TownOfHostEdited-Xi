@@ -98,6 +98,7 @@ class FixedUpdatePatch
             BountyHunter.FixedUpdate(player);
             SerialKiller.FixedUpdate(player);
             RewardOfficer.FixedUpdate(player);
+            Rudepeople.FixedUpdate(player);
 
             #region 女巫处理
             if (GameStates.IsInTask && Main.WarlockTimer.ContainsKey(player.PlayerId))//処理を1秒遅らせる
@@ -564,16 +565,6 @@ class FixedUpdatePatch
                         {
                             Main.ForGrenadiers.Remove(pc.PlayerId);
                         }
-                    }
-                }
-                //检查挑衅者技能是否失效
-                if (GameStates.IsInTask && player.Is(CustomRoles.Rudepeople))
-                {
-                    if (Main.RudepeopleInProtect.TryGetValue(player.PlayerId, out var vtime) && vtime + Options.RudepeopleSkillDuration.GetInt() < Utils.GetTimeStamp())
-                    {
-                        Main.RudepeopleInProtect.Remove(player.PlayerId);
-                        player.RpcGuardAndKill();
-                        player.Notify(string.Format(GetString("RudepeopleOffGuard")));
                     }
                 }
                 //检查扰乱者技能是否失效

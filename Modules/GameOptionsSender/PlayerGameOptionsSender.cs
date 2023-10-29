@@ -250,11 +250,8 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
             case CustomRoles.Rudepeople:
-                AURoleOptions.EngineerCooldown =
-                    !Main.RudepeopleNumOfUsed.TryGetValue(player.PlayerId, out var count5) || count5 > 0
-                    ? Options.RudepeopleSkillCooldown.GetFloat()
-                    : 300f;
-                AURoleOptions.EngineerInVentMaxTime = 1;
+                Rudepeople.SetCooldown(player.PlayerId);
+                AURoleOptions.EngineerInVentMaxTime = 1f;
                 break;
             case CustomRoles.Vulture:
                 AURoleOptions.EngineerCooldown = 0f;

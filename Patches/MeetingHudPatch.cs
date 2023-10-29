@@ -1701,7 +1701,7 @@ class MeetingHudOnDestroyPatch
                                         Main.DovesOfNeaceNumOfUsed.Add(ps.PlayerId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                                         break;
                                     case CustomRoles.Rudepeople:
-                                        Main.RudepeopleNumOfUsed.Add(ps.PlayerId, Options.RudepeoplekillMaxOfUseage.GetInt());
+                                        Rudepeople.Add(ps.PlayerId);
                                         break;
                                     case CustomRoles.TimeMaster:
                                         Main.TimeMasterNum[ps.PlayerId] = 0;

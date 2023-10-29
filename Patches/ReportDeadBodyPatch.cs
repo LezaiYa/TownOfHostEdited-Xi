@@ -391,7 +391,7 @@ class ReportDeadBodyPatch
         Main.VeteranInProtect.Clear();
         Main.GrenadierBlinding.Clear();
         Main.MadGrenadierBlinding.Clear();
-        Main.RudepeopleInProtect.Clear();
+        Rudepeople.RudepeopleInProtect.Clear();
         Divinator.didVote.Clear();
         Main.NiceShieldsInProtect.Clear();
         Main.DeputyInProtect.Clear();

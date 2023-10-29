@@ -191,8 +191,6 @@ public class Main : BasePlugin
     public static Dictionary<byte, int> sabcatNumOfUsed = new();
     public static Dictionary<byte, byte> Provoked = new();
     public static Dictionary<byte, int> DovesOfNeaceNumOfUsed = new();
-    public static Dictionary<byte, long> RudepeopleInProtect = new();
-    public static Dictionary<byte, int> RudepeopleNumOfUsed = new();
     public static Dictionary<byte, long> TimeStopsInProtect = new();
     //public static Dictionary<byte, int> HypnotistMax = new();
     public static Dictionary<byte, long> TimeMasterInProtect = new();
@@ -295,7 +293,6 @@ public class Main : BasePlugin
     public static Dictionary<byte, Vector2> Spiritualistsbacktrack = new();
     public static List<byte> HangTheDevilKiller = new();
     public static List<byte> ForHangTheDevil = new();
-    public static List<byte> ForRudepeople = new(); 
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();

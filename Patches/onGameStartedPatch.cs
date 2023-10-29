@@ -106,7 +106,6 @@ internal class ChangeRoleSettings
             Main.GuideMax = new();
             Main.ForYandere = new();
             Main.NeedKillYandere = new();
-            Main.ForRudepeople = new();
 
             Main.AfterMeetingDeathPlayers = new();
             Main.ResetCamPlayerList = new();
@@ -135,7 +134,6 @@ internal class ChangeRoleSettings
             Main.MadmateNum = 0;
             Main.BardCreations = 0;
             Main.DovesOfNeaceNumOfUsed = new();
-            Main.RudepeopleNumOfUsed = new();
             Main.TimeMasterNum = new();
             Main.VultureEatMax = new();
             Main.BullKillMax = new();
@@ -685,7 +683,7 @@ internal class SelectRolesPatch
                         Main.DovesOfNeaceNumOfUsed.Add(pc.PlayerId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                         break;
                     case CustomRoles.Rudepeople:
-                        Main.RudepeopleNumOfUsed.Add(pc.PlayerId, Options.RudepeoplekillMaxOfUseage.GetInt());
+                        Rudepeople.Add(pc.PlayerId);
                         break;
                     case CustomRoles.TimeMaster:
                         Main.TimeMasterNum[pc.PlayerId] = 0;

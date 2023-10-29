@@ -26,7 +26,6 @@ using Microsoft.Extensions.Logging;
 using Sentry;
 using UnityEngine.SocialPlatforms;
 using static UnityEngine.ParticleSystem.PlaybackState;
-using Cpp2IL.Core.Extensions;
 
 namespace TOHEXI;
 
@@ -281,6 +280,10 @@ class CheckMurderPatch
                     killer.RpcGuardAndKill(killer);
                     killer.SetKillCooldown();
                     return false;
+                case CustomRoles.Mare:
+                    if (Mare.OnCheckMurder(killer, target))
+                        return false;
+                    break;
                 case CustomRoles.Gangster:
                     if (Gangster.OnCheckMurder(killer, target))
                         return false;
@@ -651,10 +654,12 @@ class CheckMurderPatch
         {
             Utils.TP(killer.NetTransform, target.GetTruePosition());
             RPC.PlaySoundRPC(killer.PlayerId, Sounds.KillSound);
-            Utils.TP(target.NetTransform, Pelican.GetBlackRoomPS());
             target.SetRealKiller(killer);
             Main.PlayerStates[target.PlayerId].SetDead();
-            target.RpcMurderPlayerV3(target);
+            target.Exiled();
+            var hudManager = DestroyableSingleton<HudManager>.Instance;
+            SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            hudManager.KillOverlay.ShowKillAnimation(killer.Data, target.Data);
             killer.SetKillCooldownV2();
             NameNotifyManager.Notify(target, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Scavenger), GetString("KilledByScavenger")));
             return false;
@@ -1818,16 +1823,8 @@ class CheckMurderPatch
                 break;
             //击杀挑衅者
             case CustomRoles.Rudepeople:
-                if (Main.RudepeopleInProtect.ContainsKey(target.PlayerId) && killer.PlayerId != target.PlayerId)
-                    if (Main.RudepeopleInProtect[target.PlayerId] + Options.RudepeopleSkillDuration.GetInt() >= Utils.GetTimeStamp(DateTime.Now))
-                    {
-                        Main.PlayerStates[killer.PlayerId].deathReason = PlayerState.DeathReason.PissedOff;
-                        killer.RpcMurderPlayerV3(target);
-                        killer.RpcMurderPlayerV3(killer);
-                        killer.SetRealKiller(target);
-                        Main.ForRudepeople.Add(killer.PlayerId);
-                        return false;
-                    }
+                if (!Rudepeople.CheckMurder(killer, target))
+                    return false;
                 break;
             //击杀银狼
             case CustomRoles.YinLang:

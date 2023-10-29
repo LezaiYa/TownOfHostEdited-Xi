@@ -1,3 +1,6 @@
+using Hazel;
+using InnerNet;
+using MS.Internal.Xml.XPath;
 using System.Collections.Generic;
 
 using static TOHEXI.Options;
@@ -11,7 +14,7 @@ public static class Mare
 
     private static OptionItem KillCooldownInLightsOut;
     private static OptionItem SpeedInLightsOut;
-    private static bool idAccelerated = false;  //加速済みかフラグ
+    public static bool idAccelerated = false;  //加速済みかフラグ
 
 
     public static void SetupCustomOption()
@@ -46,7 +49,20 @@ public static class Mare
             Main.AllPlayerSpeed[playerId] -= SpeedInLightsOut.GetFloat();//Mareの速度を減算
         }
     }
-
-    public static bool KnowTargetRoleColor(PlayerControl target, bool isMeeting)
+    public static bool OnCheckMurder(PlayerControl killer, PlayerControl target)
+    {
+        if (idAccelerated == false) return false;
+        killer.RpcGuardAndKill(target);
+        MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, killer.GetClientId());
+        SabotageFixWriter.Write((byte)SystemTypes.Electrical);
+        MessageExtensions.WriteNetObject(SabotageFixWriter, killer);
+        AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
+            SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, target.GetClientId());
+            SabotageFixWriter.Write((byte)SystemTypes.Electrical);
+            MessageExtensions.WriteNetObject(SabotageFixWriter, target);
+            AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
+        return true;
+    }
+        public static bool KnowTargetRoleColor(PlayerControl target, bool isMeeting)
         => !isMeeting && playerIdList.Contains(target.PlayerId) && Utils.IsActive(SystemTypes.Electrical);
 }

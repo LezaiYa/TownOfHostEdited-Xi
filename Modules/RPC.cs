@@ -906,7 +906,7 @@ internal static class RPC
                 Main.DovesOfNeaceNumOfUsed.Add(targetId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                 break;
             case CustomRoles.Rudepeople:
-                Main.RudepeopleNumOfUsed.Add(targetId, Options.RudepeoplekillMaxOfUseage.GetInt());
+                Rudepeople.Add(targetId);
                 break;
             case CustomRoles.Vulture:
                 Vulture.Add(targetId);

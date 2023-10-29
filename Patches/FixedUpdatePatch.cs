@@ -290,6 +290,21 @@ class FixedUpdatePatch
                         Main.ForHemophobia.Remove(player.PlayerId);
                     }
                 }
+                if (GameStates.IsInTask && player.Is(CustomRoles.MagnetMan))
+                {
+                    foreach (var pc in Main.AllAlivePlayerControls)
+                    {
+                        if (!pc.IsAlive() || Pelican.IsEaten(pc.PlayerId)) continue;
+                        if (Vector2.Distance(player.transform.position, pc.transform.position) <= Options.MagnetManRadius.GetFloat())
+                        {
+                            Main.ForMagnetMan.Add(pc.PlayerId);
+                        }
+                        else
+                        {
+                            Main.ForMagnetMan.Remove(pc.PlayerId);
+                        }
+                    }
+                }
                 //检查灵化者
                 if (GameStates.IsInTask && player.Is(CustomRoles.Spiritualists))
                 {

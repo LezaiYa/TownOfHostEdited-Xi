@@ -189,7 +189,10 @@ class EnterVentPatch
                 }, Options.TimeStopsSkillDuration.GetFloat(), "Time Stop");
             }
         }
-
+        if (Main.ForMagnetMan.Contains(pc.PlayerId))
+        {
+            pc?.MyPhysics?.RpcBootFromVent(__instance.Id);
+        }
         if (pc.Is(CustomRoles.TimeMaster))
         {
             Main.TimeMasterInProtect.Remove(pc.PlayerId);

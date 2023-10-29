@@ -293,6 +293,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, Vector2> Spiritualistsbacktrack = new();
     public static List<byte> HangTheDevilKiller = new();
     public static List<byte> ForHangTheDevil = new();
+    public static List<byte> ForMagnetMan = new(); 
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();
@@ -481,6 +482,7 @@ public class Main : BasePlugin
                  {CustomRoles.Copycat,"#00CC00" },
                 {CustomRoles.Spiritualists,"#87CEFA" },
                 {CustomRoles.Plumber,"#99CCCC" },
+                {CustomRoles.MagnetMan,"#FF3333" },
                 //中立职业颜色设置
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -832,6 +834,7 @@ public enum CustomRoles
     Tom,
     Copycat,
     Spiritualists,
+    MagnetMan,
     //中立
     Arsonist,
     Jester,

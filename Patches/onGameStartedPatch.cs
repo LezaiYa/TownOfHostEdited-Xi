@@ -177,6 +177,7 @@ internal class ChangeRoleSettings
             Main.PGuesserMax = new();
             Main.HangTheDevilKiller = new();
             Main.ForHangTheDevil = new();
+            Main.ForMagnetMan = new();
 
             Main.RefuserShields = 0;
 

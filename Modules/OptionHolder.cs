@@ -367,6 +367,7 @@ public static class Options
     public static OptionItem RefuserKillCooldown;
     public static OptionItem ZeyanRefuserVote;
     public static OptionItem PlumberCooldown;
+    public static OptionItem MagnetManRadius;
 
 
     // タスク無効化
@@ -1077,6 +1078,9 @@ public static class Options
         TextOptionItem.Create(909200, "CF", TabGroup.CrewmateRoles)//辅助型
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(247, 70, 49, byte.MaxValue));
+        SetupRoleOptions(15458694, TabGroup.CrewmateRoles, CustomRoles.MagnetMan);
+        MagnetManRadius = FloatOptionItem.Create(18994887, "MagnetManRadius", new(0.5f, 5f, 0.5f), 1.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.MagnetMan])
+    .SetValueFormat(OptionFormat.Multiplier);
         SetupRoleOptions(1566694, TabGroup.CrewmateRoles, CustomRoles.Plumber);
         PlumberCooldown = FloatOptionItem.Create(1106495, "PlumberCooldown", new(0f, 990f, 1f), 25f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Plumber])
    .SetValueFormat(OptionFormat.Seconds);

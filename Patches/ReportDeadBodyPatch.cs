@@ -193,6 +193,8 @@ class ReportDeadBodyPatch
                     NameNotifyManager.Notify(__instance, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Cleaner), GetString("CleanerNot__instance")));
                     return false;
                 }
+                //被磁铁人干扰
+                if(Main.ForMagnetMan.Contains(__instance.PlayerId)) return false;
 
                 //被吞噬的尸体无法报告
                 if (Main.VultureBodies.Contains(target.PlayerId))

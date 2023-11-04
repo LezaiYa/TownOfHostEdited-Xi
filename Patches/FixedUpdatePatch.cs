@@ -334,7 +334,7 @@ class FixedUpdatePatch
                     }
                     else
                     {
-                        player.Notify(GetString("HenryChoose"));
+                        player.NotifyV2(GetString("HenryChoose"));
                     }
                 }
                 if (GameStates.IsInTask && player.Is(CustomRoles.RewardOfficer) && RewardOfficer.RewardOfficerShow.Contains(player.PlayerId))
@@ -354,7 +354,19 @@ class FixedUpdatePatch
                     }
                 }
 
-                if (GameStates.IsInTask && player.Is(CustomRoles.MrDesperate))
+                if (GameStates.IsInTask && player.Is(CustomRoles.Bait))
+                {
+
+                 foreach (var pc in Main.AllAlivePlayerControls)
+                    {
+                        if (pc.PlayerId == player.PlayerId) continue;
+                        if (Vector2.Distance(player.transform.position, pc.transform.position) <= 3f && pc.inVent)
+                        {
+                            player.Notify(GetString("BaitSeeVentPlayer"));
+                        }
+                    }
+                }
+                    if (GameStates.IsInTask && player.Is(CustomRoles.MrDesperate))
                 {
                     if (player.IsAlive())
                     {

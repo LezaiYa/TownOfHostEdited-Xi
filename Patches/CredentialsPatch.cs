@@ -86,7 +86,7 @@ public static class Credentials
 
         private static void Postfix(VersionShower __instance)
         {
-
+            if (AmongUsClient.Instance.AmHost) return;
             Main.credentialsText = $"\r\n<color={Main.ModColor}>{Main.ModName}</color> v{Main.PluginDisplayVersion}";
             if (Main.IsAprilFools) Main.credentialsText = $"\r\n<color=#00bfff>Town Of Host</color> v11.45.14";
             else if (Main.IsTOHEInitialRelease) Main.credentialsText = $"\r\n<color=#ffc0cb>Town Of Host Edited</color> v4.0.23";

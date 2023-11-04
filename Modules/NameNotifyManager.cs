@@ -19,6 +19,17 @@ public static class NameNotifyManager
         Utils.NotifyRoles(pc);
         Logger.Info($"New name notify for {pc.GetNameWithRole()}: {text} ({time}s)", "Name Notify");
     }
+    public static void NotifyV2(this PlayerControl pc, string text, float time = 99999999f)
+    {
+        if (!AmongUsClient.Instance.AmHost || pc == null) return;
+        if (!GameStates.IsInTask) return;
+        if (!text.Contains("<color=#")) text = Utils.ColorString(Utils.GetRoleColor(pc.GetCustomRole()), text);
+        Notice.Remove(pc.PlayerId);
+        Notice.Add(pc.PlayerId, new(text, Utils.GetTimeStamp() + (long)time));
+        SendRPC(pc.PlayerId);
+        Utils.NotifyRoles(pc);
+        Logger.Info($"New name notify for {pc.GetNameWithRole()}: {text} ({time}s)", "Name Notify");
+    }
     public static void OnFixedUpdate(PlayerControl player)
     {
         if (!GameStates.IsInTask)

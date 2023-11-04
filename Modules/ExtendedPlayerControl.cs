@@ -411,7 +411,6 @@ static class ExtendedPlayerControl
             //Standard
             CustomRoles.FireWorks => FireWorks.CanUseKillButton(pc),
             CustomRoles.Mafia => Utils.CanMafiaKill(),
-            CustomRoles.Mare => Utils.IsActive(SystemTypes.Electrical),
             CustomRoles.Sniper => Sniper.CanUseKillButton(pc),
             CustomRoles.Sheriff => Sheriff.CanUseKillButton(pc.PlayerId),
             CustomRoles.Pelican => pc.IsAlive(),
@@ -457,6 +456,7 @@ static class ExtendedPlayerControl
             CustomRoles.Lawyer => false,
             CustomRoles.King => pc.IsAlive(),
             CustomRoles.Hotpotato => pc.IsAlive(),
+            CustomRoles.Coldpotato => false,
             CustomRoles.BSR => pc.IsAlive(),
             CustomRoles.MimicAss => false,
             CustomRoles.SchrodingerCat => !SchrodingerCat.noteam,

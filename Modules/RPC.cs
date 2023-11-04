@@ -502,9 +502,6 @@ internal class RPCHandlerPatch
             case CustomRPC.SyncKBPlayer:
                 SoloKombatManager.ReceiveRPCSyncKBPlayer(reader);
                 break;
-            case CustomRPC.SyncHPPlayer:
-                HotPotatoManager.ReceiveRPCSyncHPPlayer(reader);
-                break;
             case CustomRPC.SyncAllPlayerNames:
                 Main.AllPlayerNames = new();
                 int num = reader.ReadInt32();

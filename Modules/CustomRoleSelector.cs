@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TOHEXI.Roles.Crewmate;
 using TOHEXI.Roles.Double;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TOHEXI.Modules;
 
@@ -24,7 +25,7 @@ internal class CustomRoleSelector
         int optImpNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
         int optNeutralNum = 0;
         int optNKNum = 0;
-        int optHPNum = HotPotatoManager.HotQuan.GetInt();
+        int optHPNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
         //int Count = -1;
         if (Options.NeutralRolesMaxPlayer.GetInt() > 0 && Options.NeutralRolesMaxPlayer.GetInt() >= Options.NeutralRolesMinPlayer.GetInt())
             optNeutralNum = rd.Next(Options.NeutralRolesMinPlayer.GetInt(), Options.NeutralRolesMaxPlayer.GetInt() + 1);
@@ -71,26 +72,19 @@ internal class CustomRoleSelector
         {
             List<PlayerControl> HotPotatoList = new();
 
-
-                while (HotPotatoList.Count < optHPNum)
-                {
-                    var player = Main.AllAlivePlayerControls.ToArray()[rd.Next(0, Main.AllAlivePlayerControls.Count())];
-                    HotPotatoList.Add(player);
-                }
-               
-            
-
             RoleResult = new();
+
+           for(int i=0;i<optHPNum;i++)
+            {
+                 var pcList = Main.AllAlivePlayerControls.Where(x => x.GetCustomRole() != CustomRoles.Hotpotato).ToList();
+                var Ho = pcList[IRandom.Instance.Next(0, pcList.Count)];
+                HotPotatoList.Add(Ho);
+                RoleResult.Add(Ho, CustomRoles.Hotpotato);
+            }  
             foreach (var pc in Main.AllAlivePlayerControls)
             {
-                if (HotPotatoList.Contains(pc))
-                {
-                    RoleResult.Add(pc, CustomRoles.Hotpotato);
-                }
-                else 
-                {
-                    RoleResult.Add(pc, CustomRoles.Coldpotato);
-                }
+                if (HotPotatoList.Contains(pc)) continue;
+                RoleResult.Add(pc, CustomRoles.Coldpotato);
             }
             return;
         }

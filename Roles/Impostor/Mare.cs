@@ -51,12 +51,9 @@ public static class Mare
     }
     public static bool OnCheckMurder(PlayerControl killer, PlayerControl target)
     {
-        if (idAccelerated == false) return false;
+        if (idAccelerated == true) return false;
         killer.RpcGuardAndKill(target);
         MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, killer.GetClientId());
-        SabotageFixWriter.Write((byte)SystemTypes.Electrical);
-        MessageExtensions.WriteNetObject(SabotageFixWriter, killer);
-        AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
             SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, target.GetClientId());
             SabotageFixWriter.Write((byte)SystemTypes.Electrical);
             MessageExtensions.WriteNetObject(SabotageFixWriter, target);

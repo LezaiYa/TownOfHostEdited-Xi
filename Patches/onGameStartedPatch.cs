@@ -1,7 +1,7 @@
 using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
-using MS.Internal.Xml.XPath;
+using TOHEXI.Roles.GameModsRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
 using static TOHEXI.Modules.CustomRoleSelector;
 using static TOHEXI.Translator;
+using MS.Internal.Xml.XPath;
 
 namespace TOHEXI;
 
@@ -241,6 +242,25 @@ internal class ChangeRoleSettings
                 Camouflage.PlayerSkins[pc.PlayerId] = new GameData.PlayerOutfit().Set(outfit.PlayerName, outfit.ColorId, outfit.HatId, outfit.SkinId, outfit.VisorId, outfit.PetId);
                 Main.clientIdList.Add(pc.GetClientId());
             }
+            if (Options.CurrentGameMode == CustomGameMode.HotPotato)
+            {
+                List<PlayerControl> HotPotatoList = new();
+                int optHPNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
+                RoleResult = new();
+
+                for (int i = 0; i < optHPNum; i++)
+                {
+                    var pcList = Main.AllAlivePlayerControls.Where(x => x.GetCustomRole() != CustomRoles.Hotpotato).ToList();
+                    var Ho = pcList[IRandom.Instance.Next(0, pcList.Count)];
+                    HotPotatoList.Add(Ho);
+                    Ho.RpcSetCustomRole(CustomRoles.Hotpotato);
+                }
+                foreach (var pc in Main.AllAlivePlayerControls)
+                {
+                    if (HotPotatoList.Contains(pc)) continue;
+                    pc.RpcSetCustomRole(CustomRoles.Coldpotato);
+                }
+            }
             Main.DyingTurns = 0;
             Main.VisibleTasksCount = true;
             ChatManager.cancel = false;
@@ -340,6 +360,7 @@ internal class ChangeRoleSettings
             SoulSucker.Init();
                 SoloKombatManager.Init();
             HotPotatoManager.Init();
+            Holdpotato.Init();
             CustomWinnerHolder.Reset();
             AntiBlackout.Reset();
             NameNotifyManager.Reset();
@@ -840,9 +861,16 @@ internal class SelectRolesPatch
                     case CustomRoles.Chameleon:
                         Chameleon.Add(pc.PlayerId);
                         break;
-             //       case CustomRoles.Kidnapper:
-             //           Kidnapper.Add(pc.PlayerId);
-              //          break;
+                    case CustomRoles.Hotpotato:
+                       Holdpotato.Add(pc.PlayerId);
+                      pc.NotifyV2(string.Format(GetString("ScoutOffGuard"),HotPotatoManager.BoomTimes )); ;
+                        break;
+                    case CustomRoles.Coldpotato:
+                        pc.NotifyV2(string.Format(GetString("ScoutOffGuard"), HotPotatoManager.BoomTimes)); ;
+                        break;
+                    //       case CustomRoles.Kidnapper:
+                    //           Kidnapper.Add(pc.PlayerId);
+                    //          break;
                     case CustomRoles.MimicKiller:
                         Mimics.Add(pc.PlayerId);
                         break;

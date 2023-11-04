@@ -808,15 +808,10 @@ class GameEndChecker
             foreach (var player in Main.AllAlivePlayerControls)
             {
                 var pcList = Main.AllAlivePlayerControls.ToList();
-                if (HotPotatoManager.RoundTime > 0) return false;
-                
-                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CP);
-                foreach (var pc in Main.AllPlayerControls)
+                if (pcList.Count == 1)
                 {
-                    if (pc.Is(CustomRoles.Coldpotato) && pc.IsAlive())
-                    {
-                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
-                    }
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CP);
+                    CustomWinnerHolder.WinnerIds.Add(player.PlayerId);
                 }
             }
             Main.DoBlockNameChange = true;

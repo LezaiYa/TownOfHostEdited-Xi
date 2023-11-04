@@ -171,6 +171,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Plumber => CustomRoles.Engineer,
                 CustomRoles.ShapeShifters => CustomRoles.Impostor,
                 CustomRoles.MagnetMan => CustomRoles.Crewmate,
+                CustomRoles.Coldpotato => CustomRoles.Impostor,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };;
     }
@@ -182,7 +183,6 @@ internal static class CustomRolesHelper
             CustomRoles.KB_Normal => RoleTypes.Impostor,
             //烫手的山芋
             CustomRoles.Hotpotato => RoleTypes.Impostor,
-            CustomRoles.Coldpotato => RoleTypes.Impostor,
             //抓捕
             CustomRoles.runagat => RoleTypes.Impostor,
             CustomRoles.captor => RoleTypes.Impostor,

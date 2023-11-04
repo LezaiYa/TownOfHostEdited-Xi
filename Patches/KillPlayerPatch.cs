@@ -23,9 +23,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking.Types;
 using TOHEXI.Roles.Double;
 using Microsoft.Extensions.Logging;
-using Sentry;
-using UnityEngine.SocialPlatforms;
-using static UnityEngine.ParticleSystem.PlaybackState;
+using TOHEXI.Roles.GameModsRoles;
 
 namespace TOHEXI;
 
@@ -128,11 +126,6 @@ class CheckMurderPatch
         if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
         {
             SoloKombatManager.OnPlayerAttack(killer, target);
-            return false;
-        }
-        if (Options.CurrentGameMode == CustomGameMode.HotPotato)
-        {
-            HotPotatoManager.OnPlayerAttack(killer, target);
             return false;
         }
         /*if (Options.CurrentGameMode == CustomGameMode.ModeArrest)
@@ -584,6 +577,9 @@ class CheckMurderPatch
                     }, Challenger.CooldwonMax.GetFloat(), "Trapper BlockMove");
 
                     Main.Provoked.TryAdd(killer.PlayerId, target.PlayerId);
+                    return false;
+                case CustomRoles.Hotpotato:
+                    Holdpotato.OnCheckMurder(killer, target);
                     return false;
                 //==========船员职业==========//
                 case CustomRoles.Sheriff:

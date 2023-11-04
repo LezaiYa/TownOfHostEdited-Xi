@@ -27,7 +27,7 @@ public static class Rudepeople
             .SetValueFormat(OptionFormat.Seconds);
         ReduceKillCooldown = FloatOptionItem.Create(Id + 11, "ReduceCooldown", new(0f, 180f, 2.5f), 5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Rudepeople])
     .SetValueFormat(OptionFormat.Seconds);
-        MinKillCooldown = FloatOptionItem.Create(Id + 12, "MinCooldown", new(0f, 180f, 2.5f), 65f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Rudepeople])
+        MinKillCooldown = FloatOptionItem.Create(Id + 12, "MaxCooldown", new(0f, 180f, 2.5f), 65f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Rudepeople])
             .SetValueFormat(OptionFormat.Seconds);
         RudepeopleSkillDuration = FloatOptionItem.Create(807412747, "RudepeopleSkillDuration", new(1f, 999f, 1f), 20f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Rudepeople])
             .SetValueFormat(OptionFormat.Seconds);

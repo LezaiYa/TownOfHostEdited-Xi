@@ -2,6 +2,7 @@ using HarmonyLib;
 using Il2CppSystem.Text;
 using System.Collections.Generic;
 using System.Linq;
+using TOHEXI.GameMode;
 using TOHEXI.Roles.Crewmate;
 using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
@@ -368,6 +369,10 @@ class HudManagerPatch
                 if (Options.CurrentGameMode == CustomGameMode.HotPotato)
                 {
                     LowerInfoText.text = HotPotatoManager.GetHudText();
+                }
+                if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+                {
+                    LowerInfoText.text = TheLivingDaylights.GetHudText();
                 }
                 else if (player.Is(CustomRoles.BountyHunter))
                 {

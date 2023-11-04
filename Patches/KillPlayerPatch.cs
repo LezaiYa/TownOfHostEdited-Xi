@@ -24,6 +24,7 @@ using UnityEngine.Networking.Types;
 using TOHEXI.Roles.Double;
 using Microsoft.Extensions.Logging;
 using TOHEXI.Roles.GameModsRoles;
+using TOHEXI.GameMode;
 
 namespace TOHEXI;
 
@@ -104,6 +105,7 @@ class CheckMurderPatch
 
         var divice = Options.CurrentGameMode == CustomGameMode.SoloKombat ? 3000f : 2000f;
         var pivice = Options.CurrentGameMode == CustomGameMode.HotPotato ? 3000f : 2000f;
+        var bivice = Options.CurrentGameMode == CustomGameMode.TheLivingDaylights ? 3000f : 2000f; 
         float minTime = Mathf.Max(0.02f, AmongUsClient.Instance.Ping / divice * 6f); //※AmongUsClient.Instance.Pingの値はミリ秒(ms)なので÷1000
         //TimeSinceLastKillに値が保存されていない || 保存されている時間がminTime以上 => キルを許可
         //↓許可されない場合
@@ -642,6 +644,9 @@ class CheckMurderPatch
                     if (DemonHunterm.OnCheckMurder(killer, target))
                         return false;
                     break;
+                case CustomRoles.Guardian:
+                    killer.RpcProtectPlayer(target, killer.PlayerId);
+                    return false;
             }
         }
 

@@ -4,6 +4,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOHEXI.GameMode;
 using UnityEngine;
 using static TOHEXI.Translator;
 using Object = UnityEngine.Object;
@@ -376,8 +377,12 @@ public static class SetRecommendationsPatch
             __instance.NumCommonTasks = 0;
             __instance.NumLongTasks = 0;
             __instance.NumShortTasks = 0;
-            __instance.KillCooldown = 0f;
+            __instance.KillCooldown = 10f;
         }
-        return false;
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)   // TheLivingDaylights
+        {
+
+        }
+            return false;
     }
 }

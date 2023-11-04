@@ -1,7 +1,16 @@
 ﻿using AmongUs.GameOptions;
 using HarmonyLib;
+using Hazel;
 using System.Linq;
 using UnityEngine;
+using HarmonyLib;
+using Hazel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TOHEXI.Roles.Neutral;
+using UnityEngine;
+using static TOHEXI.RandomSpawn;
 using static TOHEXI.Translator;
 
 namespace TOHEXI;
@@ -37,11 +46,51 @@ internal static class HotPotatoManager
         IsAliveCold = 0;
         
     }
+    public static void SendRPCSyncNameNotify(PlayerControl pc)
+    {
+        if (pc.AmOwner || !pc.IsModClient()) return;
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SyncKBNameNotify, SendOption.Reliable, pc.GetClientId());
+        if (NameNotify.ContainsKey(pc.PlayerId))
+            writer.Write(NameNotify[pc.PlayerId].Item1);
+        else writer.Write("");
+        AmongUsClient.Instance.FinishRpcImmediately(writer);
+    }
+    public static void ReceiveRPCSyncNameNotify(MessageReader reader)
+    {
+        var name = reader.ReadString();
+        NameNotify.Remove(PlayerControl.LocalPlayer.PlayerId);
+        if (name != null && name != "")
+            NameNotify.Add(PlayerControl.LocalPlayer.PlayerId, (name, 0));
+    }
+
     public static string GetHudText()
     {
         return string.Format(Translator.GetString("HotPotatoTimeRemain"), BoomTimes.ToString());
     }
-
+    public static Dictionary<byte, (string, long)> NameNotify = new();
+    public static void GetNameNotify(PlayerControl player, ref string name)
+    {
+        if (Options.CurrentGameMode != CustomGameMode.SoloKombat || player == null) return;
+        //ModeArrest
+        if (NameNotify.ContainsKey(player.PlayerId))
+        {
+            name = NameNotify[player.PlayerId].Item1;
+            return;
+        }
+    }
+    public static void AddNameNotify(PlayerControl pc, string text, int time = 5)
+    {
+        NameNotify.Remove(pc.PlayerId);
+        NameNotify.Add(pc.PlayerId, (text, Utils.GetTimeStamp() + time));
+        SendRPCSyncNameNotify(pc);
+        Utils.NotifyRoles(pc);
+    }
+    public static string GetDisplayScore(byte playerId)
+    {
+        string text = string.Format(Translator.GetString("KBDisplayScore"), BoomTimes);
+        Color color = Utils.GetRoleColor(CustomRoles.KB_Normal);
+        return Utils.ColorString(color, text);
+    }
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     class FixedUpdatePatch
     {
@@ -52,6 +101,7 @@ internal static class HotPotatoManager
 
             if (AmongUsClient.Instance.AmHost)
             {
+                bool notifyRoles = false;
                 foreach (var player in Main.AllPlayerControls)
                 {
                     if (!player.IsAlive()) continue;
@@ -73,9 +123,15 @@ internal static class HotPotatoManager
                         if (HotPotatoMax == 2)
                             HotPotatoMax = 1;
                     }
-                    
-                        
-                        //爆炸时间为0时
+
+                    // 清除过期的提示信息
+                    if (NameNotify.ContainsKey(player.PlayerId) && NameNotify[player.PlayerId].Item2 < Utils.GetTimeStamp())
+                    {
+                        NameNotify.Remove(player.PlayerId);
+                        SendRPCSyncNameNotify(player);
+                        notifyRoles = true;
+                    }
+                    //爆炸时间为0时
                     if (BoomTimes <= 0)
                     {
                         BoomTimes = Boom.GetInt();
@@ -103,6 +159,11 @@ internal static class HotPotatoManager
                 LastFixedUpdate = Utils.GetTimeStamp();
                 //减少爆炸冷却
                 BoomTimes--;
+                 foreach (var pc in Main.AllPlayerControls)
+                {
+                    // 必要时刷新玩家名字
+                    if (notifyRoles) Utils.NotifyRoles(pc);
+                }
             }
         }
     }

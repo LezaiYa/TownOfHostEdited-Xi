@@ -13,6 +13,7 @@ using UnityEngine;
 using TOHEXI.Roles.Double;
 using static Il2CppSystem.DateTimeParse;
 using TOHEXI.Modules;
+using TOHEXI.GameMode;
 
 namespace TOHEXI;
 
@@ -22,7 +23,8 @@ public enum CustomGameMode
     Standard = 0x01,
     SoloKombat = 0x02,
     HotPotato = 0x03,
-    ModeArrest = 0x04,
+    TheLivingDaylights = 0x04,
+    ModeArrest = 0x05,
     All = int.MaxValue
 }
 
@@ -61,12 +63,13 @@ public static class Options
         {
             1 => CustomGameMode.SoloKombat,
             2 => CustomGameMode.HotPotato,
+            3 => CustomGameMode.TheLivingDaylights,
             _ => CustomGameMode.Standard
         };
 
     public static readonly string[] gameModes =
     {
-        "Standard", "SoloKombat","HotPotato"
+        "Standard", "SoloKombat","HotPotato","TheLivingDaylights"
     };
 
     // MapActive
@@ -1567,6 +1570,8 @@ public static class Options
         HotPotatoManager.SetupCustomOption();
         //抓捕
         //ModeArrestManager.SetupCustomOption();
+        //黎明
+        TheLivingDaylights.SetupCustomOption();
 
         //驱逐相关设定
         TextOptionItem.Create(66_123_126, "MenuTitle.Ejections", TabGroup.GameSettings)

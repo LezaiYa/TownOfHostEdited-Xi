@@ -3,6 +3,7 @@ using HarmonyLib;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using TOHEXI.GameMode;
 using UnityEngine;
 using static TOHEXI.Translator;
 
@@ -36,7 +37,17 @@ class SetUpRoleTextPatch
                     __instance.RoleBlurbText.color = color;
                     __instance.RoleBlurbText.text = PlayerControl.LocalPlayer.GetRoleInfo();
             }
-
+            else if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+            {
+                var color = ColorUtility.TryParseHtmlString("#FFFF00", out var c) ? c : new(255, 255, 255, 255);
+                CustomRoles role = PlayerControl.LocalPlayer.GetCustomRole();
+                __instance.YouAreText.color = color;
+                __instance.RoleText.text = Utils.GetRoleName(role);
+                __instance.RoleText.color = Utils.GetRoleColor(role);
+                __instance.RoleBlurbText.color = color;
+                __instance.RoleBlurbText.text = PlayerControl.LocalPlayer.GetRoleInfo();
+            }
+            
 
             else
             {
@@ -240,6 +251,16 @@ class BeginCrewmatePatch
             __instance.BackgroundBar.material.color = color;
             PlayerControl.LocalPlayer.Data.Role.IntroSound = DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSOtherImpostorTransformSfx;
         }
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+        {
+            var color = ColorUtility.TryParseHtmlString("#ffff00", out var c) ? c : new(255, 255, 255, 255);
+            __instance.TeamTitle.text = Utils.GetRoleName(role);
+            __instance.TeamTitle.color = Utils.GetRoleColor(role);
+            __instance.ImpostorText.gameObject.SetActive(true);
+            __instance.ImpostorText.text = GetString("ModeTheLivingDaylights");
+            __instance.BackgroundBar.material.color = color;
+            PlayerControl.LocalPlayer.Data.Role.IntroSound = PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Impostor);
+        }
         if (Options.CurrentGameMode == CustomGameMode.HotPotato)
         {
             var color = ColorUtility.TryParseHtmlString("#ffa300", out var c) ? c : new(255, 255, 255, 255);
@@ -355,6 +376,21 @@ class IntroCutsceneDestroyPatch
                 Main.PlayerStates[PlayerControl.LocalPlayer.PlayerId].SetDead();
             }
             if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat)
+            {
+                RandomSpawn.SpawnMap map;
+                switch (Main.NormalOptions.MapId)
+                {
+                    case 0:
+                        map = new RandomSpawn.SkeldSpawnMap();
+                        Main.AllPlayerControls.Do(map.RandomTeleport);
+                        break;
+                    case 1:
+                        map = new RandomSpawn.MiraHQSpawnMap();
+                        Main.AllPlayerControls.Do(map.RandomTeleport);
+                        break;
+                }
+            }
+            if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
             {
                 RandomSpawn.SpawnMap map;
                 switch (Main.NormalOptions.MapId)

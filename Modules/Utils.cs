@@ -382,7 +382,8 @@ public static class Utils
         if (p.Role.IsImpostor)
             hasTasks = false; //タスクはCustomRoleを元に判定する
         if (Options.CurrentGameMode == CustomGameMode.SoloKombat) return false;
-        if (Options.CurrentGameMode == CustomGameMode.HotPotato) return false; 
+        if (Options.CurrentGameMode == CustomGameMode.HotPotato) return false;
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights) return false;
         if (p.IsDead && Options.GhostIgnoreTasks.GetBool()) hasTasks = false;
         var role = States.MainRole;
         switch (role)
@@ -604,6 +605,12 @@ public static class Utils
                 break; 
             case CustomRoles.KB_Normal:
                 ProgressText.Append(SoloKombatManager.GetDisplayScore(playerId));
+                break;
+            case CustomRoles.Coldpotato:
+                ProgressText.Append(HotPotatoManager.GetDisplayScore(playerId));
+                break;
+            case CustomRoles.Hotpotato:
+                ProgressText.Append(HotPotatoManager.GetDisplayScore(playerId));
                 break;
             case CustomRoles.Totocalcio:
                 ProgressText.Append(Totocalcio.GetProgressText(playerId));
@@ -1085,6 +1092,8 @@ public static class Utils
                     name = $"<color=#f55252><size=1.7>{GetString("ModeSoloKombat")}</size></color>\r\n" + name;
                 if (Options.CurrentGameMode == CustomGameMode.HotPotato)
                     name = $"<color=#ffa300><size=1.7>{GetString("ModeHotPotato")}</size></color>\r\n" + name;
+                if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+                    name = $"<color=#ffa300><size=1.7>{GetString("ModeTheLivingDaylights")}</size></color>\r\n" + name;
             }
 #if RELEASE
             if (!name.Contains('\r') && player.FriendCode.GetDevUser().HasTag())
@@ -1306,6 +1315,11 @@ public static class Utils
             if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
             {
                 SoloKombatManager.GetNameNotify(seer, ref SelfName);
+                SelfName = $"<size={fontSize}>{SelfTaskText}</size>\r\n{SelfName}";
+            }
+           else  if (Options.CurrentGameMode == CustomGameMode.HotPotato)
+            {
+                HotPotatoManager.GetNameNotify(seer, ref SelfName);
                 SelfName = $"<size={fontSize}>{SelfTaskText}</size>\r\n{SelfName}";
             }
             else SelfName = SelfRoleName + "\r\n" + SelfName;

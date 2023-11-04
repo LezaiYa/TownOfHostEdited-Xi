@@ -16,6 +16,7 @@ using TOHEXI.Roles.Neutral;
 using static TOHEXI.Modules.CustomRoleSelector;
 using static TOHEXI.Translator;
 using MS.Internal.Xml.XPath;
+using TOHEXI.GameMode;
 
 namespace TOHEXI;
 
@@ -242,25 +243,6 @@ internal class ChangeRoleSettings
                 Camouflage.PlayerSkins[pc.PlayerId] = new GameData.PlayerOutfit().Set(outfit.PlayerName, outfit.ColorId, outfit.HatId, outfit.SkinId, outfit.VisorId, outfit.PetId);
                 Main.clientIdList.Add(pc.GetClientId());
             }
-            if (Options.CurrentGameMode == CustomGameMode.HotPotato)
-            {
-                List<PlayerControl> HotPotatoList = new();
-                int optHPNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
-                RoleResult = new();
-
-                for (int i = 0; i < optHPNum; i++)
-                {
-                    var pcList = Main.AllAlivePlayerControls.Where(x => x.GetCustomRole() != CustomRoles.Hotpotato).ToList();
-                    var Ho = pcList[IRandom.Instance.Next(0, pcList.Count)];
-                    HotPotatoList.Add(Ho);
-                    Ho.RpcSetCustomRole(CustomRoles.Hotpotato);
-                }
-                foreach (var pc in Main.AllAlivePlayerControls)
-                {
-                    if (HotPotatoList.Contains(pc)) continue;
-                    pc.RpcSetCustomRole(CustomRoles.Coldpotato);
-                }
-            }
             Main.DyingTurns = 0;
             Main.VisibleTasksCount = true;
             ChatManager.cancel = false;
@@ -360,6 +342,7 @@ internal class ChangeRoleSettings
             SoulSucker.Init();
                 SoloKombatManager.Init();
             HotPotatoManager.Init();
+            TheLivingDaylights.Init();
             Holdpotato.Init();
             CustomWinnerHolder.Reset();
             AntiBlackout.Reset();
@@ -517,6 +500,12 @@ internal class SelectRolesPatch
             }
             // 热土豆用
             if (Options.CurrentGameMode == CustomGameMode.HotPotato)
+            {
+                foreach (var pair in Main.PlayerStates)
+                    ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
+                goto EndOfSelectRolePatch;
+            }
+            if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
             {
                 foreach (var pair in Main.PlayerStates)
                     ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
@@ -863,10 +852,10 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Hotpotato:
                        Holdpotato.Add(pc.PlayerId);
-                      pc.NotifyV2(string.Format(GetString("ScoutOffGuard"),HotPotatoManager.BoomTimes )); ;
+                      pc.NotifyV2(string.Format(GetString("HotPotatoTimeRemain"),HotPotatoManager.BoomTimes )); ;
                         break;
                     case CustomRoles.Coldpotato:
-                        pc.NotifyV2(string.Format(GetString("ScoutOffGuard"), HotPotatoManager.BoomTimes)); ;
+                        pc.NotifyV2(string.Format(GetString("HotPotatoTimeRemain"), HotPotatoManager.BoomTimes)); ;
                         break;
                     //       case CustomRoles.Kidnapper:
                     //           Kidnapper.Add(pc.PlayerId);
@@ -960,6 +949,9 @@ internal class SelectRolesPatch
                     break;
                 case CustomGameMode.HotPotato:
                     GameEndChecker.SetPredicateToHotPotato();
+                    break;
+                case CustomGameMode.TheLivingDaylights:
+                    GameEndChecker.SetPredicateToTheLivingDaylights();
                     break;
             }
 

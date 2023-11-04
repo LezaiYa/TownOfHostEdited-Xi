@@ -646,7 +646,8 @@ class GameEndChecker
 
     public static void SetPredicateToNormal() => predicate = new NormalGameEndPredicate();
     public static void SetPredicateToSoloKombat() => predicate = new SoloKombatGameEndPredicate();
-    public static void SetPredicateToHotPotato () => predicate = new HotPotatomeEndPredicate();
+    public static void SetPredicateToHotPotato() => predicate = new HotPotatomeEndPredicate();
+    public static void SetPredicateToTheLivingDaylights() => predicate = new HotPotatomeEndPredicate(); 
 
     // ===== ゲーム終了条件 =====
     // 通常ゲーム用

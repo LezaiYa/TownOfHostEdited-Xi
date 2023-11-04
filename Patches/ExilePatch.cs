@@ -356,7 +356,7 @@ class ExileControllerWrapUpPatch
                 CustomRoles.QuickShooter
                 ) pc.RpcResetAbilityCooldown();
         }
-        if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat || Options.CurrentGameMode == CustomGameMode.HotPotato)
+        if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat || Options.CurrentGameMode == CustomGameMode.HotPotato || Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
         {
             RandomSpawn.SpawnMap map;
             switch (Main.NormalOptions.MapId)

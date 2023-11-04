@@ -1,32 +1,15 @@
 ﻿using AmongUs.GameOptions;
 using HarmonyLib;
-using MS.Internal.Xml.XPath;
-using Sentry.Internal.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
 using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using static TOHEXI.Translator;
-using Hazel;
-using InnerNet;
-using System.Threading.Tasks;
-using TOHEXI.Modules;
-using TOHEXI.Roles.AddOns.Crewmate;
-using UnityEngine.Profiling;
-using System.Runtime.Intrinsics.X86;
-using static UnityEngine.GraphicsBuffer;
-using UnityEngine.UI;
-using UnityEngine.Networking.Types;
-using TOHEXI.Roles.Double;
-using Microsoft.Extensions.Logging;
-using Sentry;
-using UnityEngine.SocialPlatforms;
-using static UnityEngine.ParticleSystem.PlaybackState;
-using Cpp2IL.Core.Extensions;
 
 namespace TOHEXI;
 
@@ -357,7 +340,7 @@ class FixedUpdatePatch
                 if (GameStates.IsInTask && player.Is(CustomRoles.Bait))
                 {
 
-                 foreach (var pc in Main.AllAlivePlayerControls)
+                    foreach (var pc in Main.AllAlivePlayerControls)
                     {
                         if (pc.PlayerId == player.PlayerId) continue;
                         if (Vector2.Distance(player.transform.position, pc.transform.position) <= 3f && pc.inVent)
@@ -366,7 +349,7 @@ class FixedUpdatePatch
                         }
                     }
                 }
-                    if (GameStates.IsInTask && player.Is(CustomRoles.MrDesperate))
+                if (GameStates.IsInTask && player.Is(CustomRoles.MrDesperate))
                 {
                     if (player.IsAlive())
                     {
@@ -874,6 +857,8 @@ class FixedUpdatePatch
                         RealName = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Pelican), GetString("EatenByPelican"));
                     if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
                         SoloKombatManager.GetNameNotify(target, ref RealName);
+                    if (Options.CurrentGameMode == CustomGameMode.HotPotato)
+                        HotPotatoManager.GetNameNotify(target, ref RealName);
                     if (NameNotifyManager.GetNameNotify(target, out var name))
                         RealName = name;
                 }

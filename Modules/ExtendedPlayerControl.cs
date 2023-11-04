@@ -482,6 +482,7 @@ static class ExtendedPlayerControl
             CustomRoles.AttendRefuser => pc.IsAlive(),
             CustomRoles.CrazyRefuser => pc.IsAlive(),
             CustomRoles.Refuser => pc.IsAlive(),
+            CustomRoles.Guardian => pc.IsAlive(),
             _ => pc.Is(CustomRoleTypes.Impostor),
 
         } ;
@@ -531,7 +532,8 @@ static class ExtendedPlayerControl
             CustomRoles.RewardOfficer or
             CustomRoles.Loners or
             CustomRoles.Meditator or
-            CustomRoles.Challenger
+            CustomRoles.Challenger or
+            CustomRoles.Guardian
             => false,
 
             CustomRoles.Jackal => Jackal.CanVent.GetBool(),
@@ -905,6 +907,9 @@ static class ExtendedPlayerControl
                 break;
             case CustomRoles.Refuser:
                 Main.AllPlayerKillCooldown[player.PlayerId] = Options.RefuserKillCooldown.GetFloat();
+                break;
+            case CustomRoles.Guardian:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.GuardianCooldown.GetFloat();
                 break;
         }
         if (player.PlayerId == LastImpostor.currentId)

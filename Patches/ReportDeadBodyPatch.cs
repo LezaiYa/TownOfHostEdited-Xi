@@ -41,6 +41,7 @@ class ReportDeadBodyPatch
         if (Options.DisableMeeting.GetBool()) return false;
         if (Options.CurrentGameMode == CustomGameMode.SoloKombat) return false;
         if (Options.CurrentGameMode == CustomGameMode.HotPotato) return false;
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights) return false;
         if (!CanReport[__instance.PlayerId])
         {
             WaitReport[__instance.PlayerId].Add(target);

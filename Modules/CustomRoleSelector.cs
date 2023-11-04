@@ -26,6 +26,7 @@ internal class CustomRoleSelector
         int optNeutralNum = 0;
         int optNKNum = 0;
         int optHPNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
+        int optBtNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
         //int Count = -1;
         if (Options.NeutralRolesMaxPlayer.GetInt() > 0 && Options.NeutralRolesMaxPlayer.GetInt() >= Options.NeutralRolesMinPlayer.GetInt())
             optNeutralNum = rd.Next(Options.NeutralRolesMinPlayer.GetInt(), Options.NeutralRolesMaxPlayer.GetInt() + 1);
@@ -85,6 +86,25 @@ internal class CustomRoleSelector
             {
                 if (HotPotatoList.Contains(pc)) continue;
                 RoleResult.Add(pc, CustomRoles.Coldpotato);
+            }
+            return;
+        }
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+        {
+            List<PlayerControl> ButcherList = new();
+
+            RoleResult = new();
+            for (int i = 0; i < optBtNum; i++)
+            {
+                var pcList = Main.AllAlivePlayerControls.Where(x => x.GetCustomRole() != CustomRoles.Butcher).ToList();
+                var Ho = pcList[IRandom.Instance.Next(0, pcList.Count)];
+                ButcherList.Add(Ho);
+                RoleResult.Add(Ho, CustomRoles.Butcher);
+            }
+            foreach (var pc in Main.AllAlivePlayerControls)
+            {
+                if (ButcherList.Contains(pc)) continue;
+                RoleResult.Add(pc, CustomRoles.Fugitives);
             }
             return;
         }
@@ -465,6 +485,7 @@ internal class CustomRoleSelector
 
         if (Options.CurrentGameMode == CustomGameMode.HotPotato) return;
 
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights) return;
         AddonRolesList = new();
         foreach (var cr in Enum.GetValues(typeof(CustomRoles)))
         {

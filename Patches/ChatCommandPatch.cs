@@ -656,6 +656,11 @@ internal class ChatCommands
             Utils.SendMessage(GetString("ModeDescribe.HotPotato"), playerId);
             return;
         }
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+        {
+            Utils.SendMessage(GetString("ModeDescribe.TheLivingDaylights"), playerId);
+            return;
+        }
 
         if (input.Trim() == "" || input.Trim() == string.Empty)
         {

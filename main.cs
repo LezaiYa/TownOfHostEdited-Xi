@@ -910,6 +910,10 @@ public enum CustomRoles
     Hotpotato,
     Coldpotato,
 
+    //黎明杀机
+    Fugitives,
+    Butcher,
+
     //抓捕
     captor,
     runagat,

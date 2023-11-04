@@ -1671,6 +1671,7 @@
 "ReduceCooldown","增加的冷却"
 "MaxCooldown","最大冷却"
 "MagnetManRadius","影响范围"
+"GuardianCooldown","守护冷却"
 
 "## 死因 / Death Reasons"
 "DeathReason.Kill","被杀","Kill","Убит","被殺","被杀"
@@ -1871,9 +1872,8 @@
 "DovesOfNeaceMaxUsage","已达到技能使用次数上限","Ability use limit reached","Вы использовали все свои способности","已達到技能使用次數上限",""
 "DovesOfNeaceSkillNotify","和平之鸽重置了您的击杀/技能冷却","Dove of Peace Reset your kill CD","Пацифист сбросил ваш откат убийства / способности","和平之鴿重置了您的殺人/技能冷卻",""
 "IAMSUS!!!","我 是 可 疑 的 ！！！","i am sus!!!"
-"RudepeopleMaxUsage","挑衅技能用完了","you have no times to use skill"
 "RudepeopleOnGuard","正在挑衅","on guard ......"
-"RudepeopleOffGuard","挑衅技能已失效，剩余{0}次","off guard ,remain {0} times"
+"RudepeopleOffGuard","挑衅技能已失效","off guard"
 "YouKillXiaoMu1","你击杀了萧暮，触发自动报告","you kill XiaoMu,self report"
 "YouKillXiaoMu2","你击杀了萧暮，触发原地不能动","you kill XiaoMu,cannot move"
 "YouKillXiaoMu3","你击杀了萧暮，触发CD114514","you kill XiaoMu,CD change to 114514"
@@ -2203,6 +2203,8 @@
 "GameMode","游戏模式","Game Mode","Игровой Режим","遊戲模式","游戏模式"
 "HotPotato","烫手山芋","Hot Potato"
 "ModeHotPotato","烫手山芋模式","Mode Hot Potato"
+"ModeTheLivingDaylights","<color=#ffff00>黎明</color>\n<color=#ff0000>杀机</color>"
+"ModeTheLivingDaylights","<color=#ffff00>黎明</color>\n<color=#ff0000>杀机</color>"
 "Arrest","抓捕","Arrest"
 "ModeArrest","抓捕模式","Mode: Arrest"
 "PressTabToNextPage","按下<color=#FFFF00>Tab</color>键或<color=#FFFF00>数字</color>键查看更多...","Press <color=#FFFF00>Tab</color> or <color=#FFFF00>Number</color> for Next Page...","Нажмите Tab или Цифру чтобы перейти на следующую страницу...","按下Tab鍵以顯示下一頁....","按下tab键查看更多..."
@@ -2419,8 +2421,9 @@
 
 "## 模式介绍 / Mode descriptions"
 "ModeDescribe.SoloKombat","本房间模式为【个人竞技模式】\n没有职业分配，所有人拥有血量，可以使用击杀键对其他人造成伤害。游戏结束时击杀数量最多的玩家获胜。","Current mode is [Solo PVP]\nNo role assignment. Everyone has HP and can use the kill button to cause damage to other players. The player with the highest number of kills wins at the end of the game.","Текущий режим - [ПВП]. У каждого есть здоровье, и может использовать кнопку 'Убить', чтобы нанести урон другим игрокам. Игрок, совершивший наибольшее количество убийств, выигрывает в конце игры.","本房間模式為【個人競技模式】\n沒有職業分配，所有人擁有血量，可以使用殺人鍵對其他人造成傷害。遊戲結束時殺人數量最多的玩家獲勝。","本房间模式为【个人竞技模式】\n没有职业分配，所有人拥有血量，可以使用击杀键对其他人造成伤害。游戏结束时击杀数量最多的玩家获胜。"
-"ModeDescribe.HotPotato","本房间模式为【烫手山芋模式】\n在开始时会随机分配几个人成为热土豆，热土豆必须传给别人，否则就会炸掉，当时间结束时或者场上只有一个冷土豆时冷土豆获胜"
+"ModeDescribe.HotPotato","本房间模式为【烫手山芋模式】\n在开始时会随机分配几个人成为热土豆，热土豆必须传给别人，否则就会炸掉，当时间结束时或者场上只有一个人存活时冷土豆获胜"
 "ModeDescribe.Arrest","嘿嘿~『当前』模式为「抓捕模式」\n游戏开始后，随机一人成为抓捕者，其余为逃亡者，逃亡者被抓捕者抓捕后成为抓捕者，若时间结束前所有玩家成为抓捕者，则抓捕者获胜，反之，剩余的逃亡者获胜"
+"ModeDescribe.TheLivingDaylights","本房间模式为【黎明杀机模式】\n开局会按照伪装者数量分配猎人 接下来的所有人都是逃脱者 逃脱者需要完成任务 当所有逃脱者都完成任务时 会为所有存活的逃脱者最后分配一个任务 第一个做完任务的逃脱者可以开启大门（波罗斯为开局的地方 飞艇在两个瞭望台 真菌世界在码头）当逃脱者在大门范围里并且摸宠物时 就会逃脱 猎人失败 地图上有不存在的窗户（无法更改地图组件 所以靠近窗户时会有提示）摸宠物可以跳的窗户的对立面（飞艇特殊）猎人需要击杀逃脱者 第一次击杀逃脱者时 猎人的速度会减慢一段时间 逃脱者的速度提升一段时间 第二次击杀时会绑住逃脱者 猎人的速度会减少 当他使用地图上指定的管道时（波罗斯为厕所 图书馆 大树那里的管道 飞艇为金库 厨房 驾驶室 真菌世界为通讯 实验室 滑索下面的）会把绑住的逃脱者定在那里 一段时间后死亡 逃脱者可以使用被绑玩家所处位置的管道来解救"
 
 "## 主界面内容"
 "gitee","Gitee"

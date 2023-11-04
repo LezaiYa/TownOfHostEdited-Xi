@@ -1,7 +1,7 @@
 using Hazel;
 using System.Collections.Generic;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class SabotageMaster
 {

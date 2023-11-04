@@ -249,6 +249,7 @@ internal static class CustomRolesHelper
             CustomRoles.UnanimalRefuser => RoleTypes.Impostor,
             CustomRoles.AttendRefuser => RoleTypes.Impostor,
             CustomRoles.CrazyRefuser => RoleTypes.Impostor,
+            CustomRoles.Guardian => RoleTypes.Impostor,
             _ => RoleTypes.GuardianAngel
         };
     }

@@ -12,6 +12,7 @@ using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using TOHEXI.Roles.Double;
 using static Il2CppSystem.DateTimeParse;
+using TOHEXI.Modules;
 
 namespace TOHEXI;
 
@@ -368,6 +369,9 @@ public static class Options
     public static OptionItem ZeyanRefuserVote;
     public static OptionItem PlumberCooldown;
     public static OptionItem MagnetManRadius;
+    public static OptionItem GuardianCooldown;
+        public static OptionItem ResetDoorsEveryTurns;
+    public static OptionItem DoorsResetMode;
 
 
     // タスク無効化
@@ -1035,6 +1039,9 @@ public static class Options
         TextOptionItem.Create(909170, "CPro", TabGroup.CrewmateRoles)//守护型
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(247, 70, 49, byte.MaxValue));
+        SetupRoleOptions(1218954, TabGroup.CrewmateRoles, CustomRoles.Guardian);
+        GuardianCooldown  = FloatOptionItem.Create(1899484, "GuardianCooldown", new(1f, 999f, 1f), 20f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Guardian])
+            .SetValueFormat(OptionFormat.Seconds);
         Medic.SetupCustomOption();
         SetupRoleOptions(12123454, TabGroup.CrewmateRoles, CustomRoles.NiceShields);
         NiceShieldsRadius = FloatOptionItem.Create(154354, "NiceShieldsRadius", new(0.5f, 3f, 0.5f), 1.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.NiceShields])
@@ -1582,6 +1589,14 @@ public static class Options
         //Voteerroles = BooleanOptionItem.Create(609045321, "Voteerroles", true, TabGroup.GameSettings, false)
         //    .SetGameMode(CustomGameMode.Standard)
         //    .SetColor(new Color32(255, 238, 232, byte.MaxValue));
+
+        // Reset Doors After Meeting
+        ResetDoorsEveryTurns = BooleanOptionItem.Create(22120, "ResetDoorsEveryTurns", false, TabGroup.GameSettings, false)
+            .SetColor(new Color32(19, 188, 233, byte.MaxValue));
+        // Reset Doors Mode
+        DoorsResetMode = StringOptionItem.Create(22122, "DoorsResetMode", EnumHelper.GetAllNames<DoorsReset.ResetMode>(), 2, TabGroup.GameSettings, false)
+            .SetColor(new Color32(19, 188, 233, byte.MaxValue))
+            .SetParent(ResetDoorsEveryTurns);
 
         //禁用相关设定
         TextOptionItem.Create(66_123_120, "MenuTitle.Disable", TabGroup.GameSettings)

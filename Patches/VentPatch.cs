@@ -532,6 +532,10 @@ class EnterVentPatch
                 {
                     var self = seer.PlayerId == target.PlayerId;
                     var seerIsKiller = seer.Is(CustomRoleTypes.Impostor) || Main.ResetCamPlayerList.Contains(seer.PlayerId);
+                    if (target.Is(CustomRoles.Guardian))
+                    {
+                        ghostRoles[seer] = RoleTypes.GuardianAngel;
+                    }
                     if ((self && targetIsKiller) || (!seerIsKiller && target.Is(CustomRoleTypes.Impostor)))
                     {
                         ghostRoles[seer] = RoleTypes.ImpostorGhost;
@@ -544,6 +548,10 @@ class EnterVentPatch
                 if (ghostRoles.All(kvp => kvp.Value == RoleTypes.CrewmateGhost))
                 {
                     roleType = RoleTypes.CrewmateGhost;
+                }
+                else if (ghostRoles.All(kvp => kvp.Value == RoleTypes.GuardianAngel))
+                {
+                    roleType = RoleTypes.GuardianAngel;
                 }
                 else if (ghostRoles.All(kvp => kvp.Value == RoleTypes.ImpostorGhost))
                 {

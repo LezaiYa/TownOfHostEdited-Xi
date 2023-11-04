@@ -108,11 +108,25 @@ class UpdateSystemPatch
         }
         CheckAndOpenDoors(__instance, amount, Ids.ToArray());
     }
+    public static void OpenDoors(ShipStatus __instance, int amount, int min, int max)
+    {
+       for (var i = 0; i <= 100; i++)
+        {
+            __instance.RpcUpdateSystem(SystemTypes.Doors, (byte)i);
+        }
+    }
+    public static void CloseDoors(ShipStatus __instance)
+    {
+   
+            __instance.RpcCloseDoorsOfType(SystemTypes.Doors);
+        
+    }
     private static void CheckAndOpenDoors(ShipStatus __instance, int amount, params int[] DoorIds)
     {
         if (DoorIds.Contains(amount)) foreach (var id in DoorIds)
             {
                 __instance.RpcUpdateSystem(SystemTypes.Doors, (byte)id);
+                __instance.RpcCloseDoorsOfType(SystemTypes.Doors);
             }
     }
 }

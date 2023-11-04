@@ -141,6 +141,7 @@ class CheckMurderPatch
         //鹈鹕肚子里的人无法击杀
         if (Pelican.IsEaten(target.PlayerId))
             return false;
+        if (killer.Is(CustomRoles.Coldpotato)) return false;
         //refuser change role
         var change = IRandom.Instance;
         var refusekind = change.Next(1, 5);
@@ -213,7 +214,7 @@ class CheckMurderPatch
         if (Counterfeiter.OnClientMurder(killer)) return false;
 
         //磁铁人干扰
-        if (Main.ForMagnetMan.Contains(killer.PlayerId)) return true;
+        if (Main.ForMagnetMan.Contains(killer.PlayerId)) return false;
 
         //判定凶手技能
         if (killer.PlayerId != target.PlayerId)

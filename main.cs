@@ -401,6 +401,7 @@ public class Main : BasePlugin
                 {CustomRoles.Engineer, "#8cffff"},
                 {CustomRoles.Scientist, "#8cffff"},
                 {CustomRoles.GuardianAngel, "#ffffff"},
+                {CustomRoles.Guardian, "#ffffff"},
                 //伪装者颜色设置
                 {CustomRoles.Disorder, "#666699" },
                 {CustomRoles.EvilMini, "#FF0000" },
@@ -835,6 +836,7 @@ public enum CustomRoles
     Copycat,
     Spiritualists,
     MagnetMan,
+    Guardian,
     //中立
     Arsonist,
     Jester,

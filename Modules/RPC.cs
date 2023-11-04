@@ -54,6 +54,7 @@ enum CustomRPC
     SetNiceTrackerTarget,
     SetYandereTarget,
     RemoveYandereTarget,
+    SyncSabotageMasterSkill,
 
     // TOHE
     AntiBlackout,
@@ -410,6 +411,9 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetProsecutorsSellLimit:
                 Prosecutors.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SyncSabotageMasterSkill:
+                SabotageMaster.ReceiveRPC(reader);
                 break;
             case CustomRPC.SetDemonHuntermSellLimit:
                 DemonHunterm.ReceiveRPC(reader);

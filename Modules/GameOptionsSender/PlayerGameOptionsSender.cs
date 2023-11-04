@@ -336,6 +336,11 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.EngineerCooldown = Options.PlumberCooldown.GetFloat();
                 AURoleOptions.EngineerInVentMaxTime = 1f;
                 break;
+            case CustomRoles.Guardian:
+                AURoleOptions.ProtectionDurationSeconds = 114514;
+                AURoleOptions.GuardianAngelCooldown = Options.GuardianCooldown.GetFloat();
+                AURoleOptions.ImpostorsCanSeeProtect = false;
+                break;
         }
 
         // 为迷幻者的凶手

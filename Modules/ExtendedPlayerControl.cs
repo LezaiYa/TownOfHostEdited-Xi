@@ -456,7 +456,7 @@ static class ExtendedPlayerControl
             CustomRoles.Lawyer => false,
             CustomRoles.King => pc.IsAlive(),
             CustomRoles.Hotpotato => pc.IsAlive(),
-            CustomRoles.Coldpotato => false,
+            CustomRoles.Coldpotato => !pc.IsAlive(),
             CustomRoles.BSR => pc.IsAlive(),
             CustomRoles.MimicAss => false,
             CustomRoles.SchrodingerCat => !SchrodingerCat.noteam,

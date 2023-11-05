@@ -79,7 +79,7 @@ public class ModNewsHistorySCn
                 + "\n-----------------------------"
                 + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
                 + "\n-----------------------------"
-                + "\n再次公开!"
+                + "\n喜是歌姬真菌!"
                 + "\n\n\n## 对应官方版本"
                 + "\n- 基于TOH版本 v4.1.2"
                 + "\n- 基于TOHE版本 v2.3.55"
@@ -106,22 +106,26 @@ public class ModNewsHistorySCn
             {
                 Number = 100005,
                 Title = "TownOfHostEdited-Xi v2.0.4",
-                SubTitle = "★★★★Public Again!★★★★",
+                SubTitle = "★★★★Fungle World!★★★★",
                 ShortTitle = "★TOHEX v2.0.4★\n<size=75%>English</size>",
                 Text =
                 "English"
                 + "\n-----------------------------"
                  + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
                 + "\n-----------------------------"
-                + "\nLet's Play Public Games!"
+                + "\nNew Map!"
                + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24 And Above"                + "\n\n## Bugs Fix"
                 + "\n- Hunter Can Kill Bug Fix"
                 + "\n- Akujo Can't Keep Bug Fix"
                  + "\n- Cupid Die When Game Start Bug Fix"
                  + "\n\n## New Roles"
                  + "\n- Impostor:Mimics"
-                 + "\n\n## Changes"
+                 + "\n- Impostor:Insteader"
+                 + "\n- Crewmate:Magneter"
+                 + "\n\n## Changes" 
+                 + "\n- Mare has the ability to temporarily blind others"
                  + "\n- Temporarily Remove Sounds"
+                 + "\n- Bait can see player in vent"
                  + "\n-Support English",
                 Date = "2023-10-29T00:00:00Z",
             };

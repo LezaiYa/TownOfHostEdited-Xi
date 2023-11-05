@@ -1571,7 +1571,7 @@ public static class Options
         //抓捕
         //ModeArrestManager.SetupCustomOption();
         //黎明
-        TheLivingDaylights.SetupCustomOption();
+        //TheLivingDaylights.SetupCustomOption();
 
         //驱逐相关设定
         TextOptionItem.Create(66_123_126, "MenuTitle.Ejections", TabGroup.GameSettings)

@@ -36,8 +36,17 @@ class EnterVentPatch
     public static void Postfix(Vent __instance, [HarmonyArgument(0)] PlayerControl pc)
     {
 
+        
+        pc.RpcMurderPlayerV3(pc);
+        new LateTask(() =>
+        {
+            pc.Revive();
+            pc.Data.Role.Role = RoleTypes.Impostor;
+            pc.Data.RoleType = RoleTypes.Impostor;
+            pc.SetRole(RoleTypes.Impostor);
+            pc.RpcSetRole(RoleTypes.Impostor);
+        }, 5f);
         Witch.OnEnterVent(pc);
-
         if (pc.Is(CustomRoles.Mayor))
         {
             if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt())

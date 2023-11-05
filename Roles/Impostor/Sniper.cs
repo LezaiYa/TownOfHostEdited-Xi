@@ -1,12 +1,12 @@
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Modules;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Sniper
 {

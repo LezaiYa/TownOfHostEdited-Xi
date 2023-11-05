@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using TOHE.Modules.ChatManager;
+using TOHEXI.Modules.ChatManager;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class EvilSwapper
 {

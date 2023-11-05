@@ -1,12 +1,12 @@
 ﻿using Hazel;
 using System.Collections.Generic;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
 using System;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Neutral;
 using System.Linq;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class ET
 {

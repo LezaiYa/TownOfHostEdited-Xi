@@ -3,7 +3,7 @@ using Hazel;
 using InnerNet;
 using System.Collections.Generic;
 
-namespace TOHE;
+namespace TOHEXI;
 
 // 来源：https://github.com/Yumenopai/TownOfHost_Y
 public static class DarkHide
@@ -82,7 +82,7 @@ public static class DarkHide
             IsWinKill[killer.PlayerId] = true;
 
         killer.DRpcSetKillCount();
-        MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, killer.GetClientId());
+        MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, killer.GetClientId());
         SabotageFixWriter.Write((byte)SystemTypes.Electrical);
         MessageExtensions.WriteNetObject(SabotageFixWriter, killer);
         AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
@@ -90,7 +90,7 @@ public static class DarkHide
         foreach (var target in Main.AllPlayerControls)
         {
             if (target.PlayerId == killer.PlayerId || target.Data.Disconnected) continue;
-            SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, target.GetClientId());
+            SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, target.GetClientId());
             SabotageFixWriter.Write((byte)SystemTypes.Electrical);
             MessageExtensions.WriteNetObject(SabotageFixWriter, target);
             AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);

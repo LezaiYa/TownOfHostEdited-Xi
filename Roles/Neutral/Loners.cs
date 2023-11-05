@@ -1,9 +1,9 @@
 ﻿using MS.Internal.Xml.XPath;
 using System;
 using System.Collections.Generic;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class Loners
 {

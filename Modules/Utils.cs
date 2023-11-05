@@ -11,21 +11,21 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Crewmate;
-using TOHE.Roles.AddOns.Impostor;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
+using TOHEXI.Roles.AddOns.Impostor;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements.UIR;
-using static TOHE.ChatCommands;
-using static TOHE.Translator;
+using static TOHEXI.ChatCommands;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class Utils
 {
@@ -112,13 +112,14 @@ public static class Utils
         {
             case SystemTypes.Electrical:
                 {
+                    if (mapId == 5) return false;
                     var SwitchSystem = ShipStatus.Instance.Systems[type].Cast<SwitchSystem>();
                     return SwitchSystem != null && SwitchSystem.IsActive;
                 }
             case SystemTypes.Reactor:
                 {
                     if (mapId == 2) return false;
-                    else if (mapId == 4)
+                    else if (mapId is 4)
                     {
                         var HeliSabotageSystem = ShipStatus.Instance.Systems[type].Cast<HeliSabotageSystem>();
                         return HeliSabotageSystem != null && HeliSabotageSystem.IsActive;
@@ -137,13 +138,13 @@ public static class Utils
                 }
             case SystemTypes.LifeSupp:
                 {
-                    if (mapId is 2 or 4) return false;
+                    if (mapId is 2 or 4 or 5) return false;
                     var LifeSuppSystemType = ShipStatus.Instance.Systems[type].Cast<LifeSuppSystemType>();
                     return LifeSuppSystemType != null && LifeSuppSystemType.IsActive;
                 }
             case SystemTypes.Comms:
                 {
-                    if (mapId == 1)
+                    if (mapId is 1 or 5)
                     {
                         var HqHudSystemType = ShipStatus.Instance.Systems[type].Cast<HqHudSystemType>();
                         return HqHudSystemType != null && HqHudSystemType.IsActive;
@@ -153,6 +154,12 @@ public static class Utils
                         var HudOverrideSystemType = ShipStatus.Instance.Systems[type].Cast<HudOverrideSystemType>();
                         return HudOverrideSystemType != null && HudOverrideSystemType.IsActive;
                     }
+                }
+            case SystemTypes.MushroomMixupSabotage:
+                {
+                    if (mapId != 5) return false; // Only The Fungle
+                    var MushroomMixupSabotageSystem = ShipStatus.Instance.Systems[type].Cast<MushroomMixupSabotageSystem>();
+                    return MushroomMixupSabotageSystem != null && MushroomMixupSabotageSystem.IsActive;
                 }
             default:
                 return false;
@@ -375,7 +382,8 @@ public static class Utils
         if (p.Role.IsImpostor)
             hasTasks = false; //タスクはCustomRoleを元に判定する
         if (Options.CurrentGameMode == CustomGameMode.SoloKombat) return false;
-        if (Options.CurrentGameMode == CustomGameMode.HotPotato) return false; 
+        if (Options.CurrentGameMode == CustomGameMode.HotPotato) return false;
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights) return false;
         if (p.IsDead && Options.GhostIgnoreTasks.GetBool()) hasTasks = false;
         var role = States.MainRole;
         switch (role)
@@ -597,6 +605,12 @@ public static class Utils
                 break; 
             case CustomRoles.KB_Normal:
                 ProgressText.Append(SoloKombatManager.GetDisplayScore(playerId));
+                break;
+            case CustomRoles.Coldpotato:
+                ProgressText.Append(HotPotatoManager.GetDisplayScore(playerId));
+                break;
+            case CustomRoles.Hotpotato:
+                ProgressText.Append(HotPotatoManager.GetDisplayScore(playerId));
                 break;
             case CustomRoles.Totocalcio:
                 ProgressText.Append(Totocalcio.GetProgressText(playerId));
@@ -1078,6 +1092,8 @@ public static class Utils
                     name = $"<color=#f55252><size=1.7>{GetString("ModeSoloKombat")}</size></color>\r\n" + name;
                 if (Options.CurrentGameMode == CustomGameMode.HotPotato)
                     name = $"<color=#ffa300><size=1.7>{GetString("ModeHotPotato")}</size></color>\r\n" + name;
+                if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+                    name = $"<color=#ffa300><size=1.7>{GetString("ModeTheLivingDaylights")}</size></color>\r\n" + name;
             }
 #if RELEASE
             if (!name.Contains('\r') && player.FriendCode.GetDevUser().HasTag())
@@ -1210,7 +1226,14 @@ public static class Utils
             SelfMark.Append(Sniper.GetShotNotify(seer.PlayerId));
             //Markとは違い、改行してから追記されます。
             SelfSuffix.Clear();
-
+            if (seer.Is(CustomRoles.MimicKiller))
+            {
+                SelfSuffix.Append(Mimics.GetTargetArrow(seer));
+            }
+            if (seer.Is(CustomRoles.MimicAss))
+            {
+                SelfSuffix.Append(Mimics.GetKillArrow(seer));
+            }
             if (seer.Is(CustomRoles.BountyHunter))
             {
                 SelfSuffix.Append(BountyHunter.GetTargetText(seer, false));
@@ -1292,6 +1315,11 @@ public static class Utils
             if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
             {
                 SoloKombatManager.GetNameNotify(seer, ref SelfName);
+                SelfName = $"<size={fontSize}>{SelfTaskText}</size>\r\n{SelfName}";
+            }
+           else  if (Options.CurrentGameMode == CustomGameMode.HotPotato)
+            {
+                HotPotatoManager.GetNameNotify(seer, ref SelfName);
                 SelfName = $"<size={fontSize}>{SelfTaskText}</size>\r\n{SelfName}";
             }
             else SelfName = SelfRoleName + "\r\n" + SelfName;
@@ -1910,6 +1938,7 @@ public static class Utils
         return null;
     }
     public static string ColorString(Color32 color, string str) => $"<color=#{color.r:x2}{color.g:x2}{color.b:x2}{color.a:x2}>{str}</color>";
+    public static string ColorStringV2(Color32 color, string str,int i) => $"<color=#{color.r:x2}{color.g:x2}{color.b:x2}{color.a:x2}>{str}</color>{i}</color>";
     /// <summary>
     /// Darkness:１の比率で黒色と元の色を混ぜる。マイナスだと白色と混ぜる。
     /// </summary>

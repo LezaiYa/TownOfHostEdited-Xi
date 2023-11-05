@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE.Modules;
+namespace TOHEXI.Modules;
 
 internal class CustomRoleSelector
 {
@@ -24,7 +25,8 @@ internal class CustomRoleSelector
         int optImpNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
         int optNeutralNum = 0;
         int optNKNum = 0;
-        int optHPNum = HotPotatoManager.HotQuan.GetInt();
+        int optHPNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
+        int optBtNum = Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors);
         //int Count = -1;
         if (Options.NeutralRolesMaxPlayer.GetInt() > 0 && Options.NeutralRolesMaxPlayer.GetInt() >= Options.NeutralRolesMinPlayer.GetInt())
             optNeutralNum = rd.Next(Options.NeutralRolesMinPlayer.GetInt(), Options.NeutralRolesMaxPlayer.GetInt() + 1);
@@ -71,26 +73,38 @@ internal class CustomRoleSelector
         {
             List<PlayerControl> HotPotatoList = new();
 
-
-                while (HotPotatoList.Count < optHPNum)
-                {
-                    var player = Main.AllAlivePlayerControls.ToArray()[rd.Next(0, Main.AllAlivePlayerControls.Count())];
-                    HotPotatoList.Add(player);
-                }
-               
-            
-
             RoleResult = new();
+
+           for(int i=0;i<optHPNum;i++)
+            {
+                 var pcList = Main.AllAlivePlayerControls.Where(x => x.GetCustomRole() != CustomRoles.Hotpotato).ToList();
+                var Ho = pcList[IRandom.Instance.Next(0, pcList.Count)];
+                HotPotatoList.Add(Ho);
+                RoleResult.Add(Ho, CustomRoles.Hotpotato);
+            }  
             foreach (var pc in Main.AllAlivePlayerControls)
             {
-                if (HotPotatoList.Contains(pc))
-                {
-                    RoleResult.Add(pc, CustomRoles.Hotpotato);
-                }
-                else 
-                {
-                    RoleResult.Add(pc, CustomRoles.Coldpotato);
-                }
+                if (HotPotatoList.Contains(pc)) continue;
+                RoleResult.Add(pc, CustomRoles.Coldpotato);
+            }
+            return;
+        }
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+        {
+            List<PlayerControl> ButcherList = new();
+
+            RoleResult = new();
+            for (int i = 0; i < optBtNum; i++)
+            {
+                var pcList = Main.AllAlivePlayerControls.Where(x => x.GetCustomRole() != CustomRoles.Butcher).ToList();
+                var Ho = pcList[IRandom.Instance.Next(0, pcList.Count)];
+                ButcherList.Add(Ho);
+                RoleResult.Add(Ho, CustomRoles.Butcher);
+            }
+            foreach (var pc in Main.AllAlivePlayerControls)
+            {
+                if (ButcherList.Contains(pc)) continue;
+                RoleResult.Add(pc, CustomRoles.Fugitives);
             }
             return;
         }
@@ -108,7 +122,7 @@ internal class CustomRoleSelector
             {
 
 
-                if (role.IsImpostor()) ImpOnList.Add(role);
+                if (role.IsImpostorForSe()) ImpOnList.Add(role);
                 else if (role.IsMini()) MiniOnList.Add(role);
                 else if (!role.IsNKS() && role.IsNeutral()) NeutralOnList.Add(role);
                 else if (role.IsNKS()) NKOnList.Add(role);
@@ -120,7 +134,7 @@ internal class CustomRoleSelector
         foreach (var role in roleList) if (role.GetMode() == 1)
             {
                 
-                if (role.IsImpostor()) ImpRateList.Add(role);
+                if (role.IsImpostorForSe()) ImpRateList.Add(role);
                 else if (role.IsMini()) MiniRateList.Add(role);
                 else if (!role.IsNKS() && role.IsNeutral()) NeutralRateList.Add(role);
                 else if (role.IsNKS()) NKRateList.Add(role);
@@ -471,6 +485,7 @@ internal class CustomRoleSelector
 
         if (Options.CurrentGameMode == CustomGameMode.HotPotato) return;
 
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights) return;
         AddonRolesList = new();
         foreach (var cr in Enum.GetValues(typeof(CustomRoles)))
         {

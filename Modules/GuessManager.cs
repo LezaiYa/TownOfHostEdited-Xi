@@ -7,17 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
-using TOHE.Modules;
-using TOHE.Modules.ChatManager;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Modules.ChatManager;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
-using static TOHE.ChatCommands;
-using static TOHE.Translator;
+using static TOHEXI.ChatCommands;
+using static TOHEXI.Translator;
 using static UnityEngine.ParticleSystem.PlaybackState;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class GuessManager
 {
@@ -303,23 +303,8 @@ public static class GuessManager
         }
         return true;
     }
-    public static bool ID(PlayerControl pc, string msg, bool isUI = true)
-    {
-        if (!AmongUsClient.Instance.AmHost) return false;
-        if (pc == null) return false;
-        msg = msg.ToLower().TrimStart().TrimEnd();
-        if (CheckCommond(ref msg, "id|guesslist|gl编号|玩家编号|玩家id|id列表|玩家列表|列表|所有id|全部id"))
-        {
-            if (Options.NewHideMsg.GetBool())
-            {
-                ChatManager.SendPreviousMessagesToAll();
-            }
-            Utils.SendMessage(GetFormatString(), pc.PlayerId);
-            return true;
-        }
-        else return false;
-    }
 
+ 
     public static TextMeshPro nameText(this PlayerControl p) => p.cosmetics.nameText;
     public static TextMeshPro NameText(this PoolablePlayer p) => p.cosmetics.nameText;
     public static void RpcGuesserMurderPlayer(this PlayerControl pc, float delay = 0f) //ゲッサー用の殺し方

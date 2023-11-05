@@ -1,7 +1,7 @@
 ﻿using Hazel;
 using System.Collections.Generic;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class NameNotifyManager
 {
@@ -9,6 +9,17 @@ public static class NameNotifyManager
     public static void Reset() => Notice = new();
     public static bool Notifying(this PlayerControl pc) => Notice.ContainsKey(pc.PlayerId);
     public static void Notify(this PlayerControl pc, string text, float time = 4f)
+    {
+        if (!AmongUsClient.Instance.AmHost || pc == null) return;
+        if (!GameStates.IsInTask) return;
+        if (!text.Contains("<color=#")) text = Utils.ColorString(Utils.GetRoleColor(pc.GetCustomRole()), text);
+        Notice.Remove(pc.PlayerId);
+        Notice.Add(pc.PlayerId, new(text, Utils.GetTimeStamp() + (long)time));
+        SendRPC(pc.PlayerId);
+        Utils.NotifyRoles(pc);
+        Logger.Info($"New name notify for {pc.GetNameWithRole()}: {text} ({time}s)", "Name Notify");
+    }
+    public static void NotifyV2(this PlayerControl pc, string text, float time = 99999999f)
     {
         if (!AmongUsClient.Instance.AmHost || pc == null) return;
         if (!GameStates.IsInTask) return;

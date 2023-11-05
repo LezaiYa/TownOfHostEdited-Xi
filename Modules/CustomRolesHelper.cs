@@ -1,11 +1,11 @@
 using AmongUs.GameOptions;
 using System.Linq;
 using System.Security.Authentication;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE;
+namespace TOHEXI;
 
 internal static class CustomRolesHelper
 {
@@ -169,6 +169,9 @@ internal static class CustomRolesHelper
                 CustomRoles.SoulSucker => CustomRoles.Shapeshifter,
                 CustomRoles.HangTheDevil => CustomRoles.Impostor,
                 CustomRoles.Plumber => CustomRoles.Engineer,
+                CustomRoles.ShapeShifters => CustomRoles.Impostor,
+                CustomRoles.MagnetMan => CustomRoles.Crewmate,
+                CustomRoles.Coldpotato => CustomRoles.Impostor,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };;
     }
@@ -180,7 +183,6 @@ internal static class CustomRolesHelper
             CustomRoles.KB_Normal => RoleTypes.Impostor,
             //烫手的山芋
             CustomRoles.Hotpotato => RoleTypes.Impostor,
-            CustomRoles.Coldpotato => RoleTypes.Impostor,
             //抓捕
             CustomRoles.runagat => RoleTypes.Impostor,
             CustomRoles.captor => RoleTypes.Impostor,
@@ -247,6 +249,7 @@ internal static class CustomRolesHelper
             CustomRoles.UnanimalRefuser => RoleTypes.Impostor,
             CustomRoles.AttendRefuser => RoleTypes.Impostor,
             CustomRoles.CrazyRefuser => RoleTypes.Impostor,
+            CustomRoles.Guardian => RoleTypes.Impostor,
             _ => RoleTypes.GuardianAngel
         };
     }
@@ -510,7 +513,93 @@ internal static class CustomRolesHelper
         CustomRoles.Batter or
         CustomRoles.BloodSeekers or
         CustomRoles.SoulSucker or
-        CustomRoles.HangTheDevil;
+        CustomRoles.HangTheDevil or
+        CustomRoles.ShapeShifters;
+    }
+    public static bool IsImpostorForSe(this CustomRoles role) // 是否内鬼
+    {
+        return role is
+            CustomRoles.Impostor or
+            CustomRoles.Shapeshifter or
+            CustomRoles.BountyHunter or
+            CustomRoles.Vampire or
+            CustomRoles.Witch or
+            CustomRoles.ShapeMaster or
+            CustomRoles.Zombie or
+            CustomRoles.Warlock or
+            CustomRoles.Assassin or
+            CustomRoles.Hacker or
+            CustomRoles.Miner or
+            CustomRoles.Escapee or
+            CustomRoles.SerialKiller or
+            CustomRoles.Mare or
+            CustomRoles.Puppeteer or
+            CustomRoles.TimeThief or
+            CustomRoles.Mafia or
+            CustomRoles.Minimalism or
+            CustomRoles.FireWorks or
+            CustomRoles.Sniper or
+            CustomRoles.EvilTracker or
+            CustomRoles.EvilGuesser or
+            CustomRoles.AntiAdminer or
+            CustomRoles.Sans or
+            CustomRoles.Bomber or
+            CustomRoles.Scavenger or
+            CustomRoles.BoobyTrap or
+            CustomRoles.Capitalism or
+            CustomRoles.Gangster or
+            CustomRoles.Cleaner or
+            CustomRoles.BallLightning or
+            CustomRoles.Greedier or
+            CustomRoles.CursedWolf or
+            CustomRoles.ImperiusCurse or
+            CustomRoles.QuickShooter or
+            CustomRoles.Concealer or
+            CustomRoles.Eraser or
+            CustomRoles.OverKiller or
+            CustomRoles.Hangman or
+            CustomRoles.Bard or
+            CustomRoles.Swooper or
+            CustomRoles.Crewpostor or
+            CustomRoles.Depressed or
+        CustomRoles.SpecialAgent or
+        CustomRoles.EvilGambler or
+        CustomRoles.Fraudster or
+        CustomRoles.Cultivator or
+        CustomRoles.sabcat or
+        CustomRoles.Disorder or
+        CustomRoles.Vandalism or
+        CustomRoles.Followers or
+        CustomRoles.Spellmaster or
+        CustomRoles.DemolitionManiac or
+        CustomRoles.DestinyChooser or
+        CustomRoles.Hemophobia or
+        CustomRoles.Anglers or
+        CustomRoles.Guide or
+        CustomRoles.Strikers or
+        CustomRoles.Squeezers or
+        CustomRoles.Corpse or
+        CustomRoles.EvilMini or
+        CustomRoles.Defector or
+        CustomRoles.DoubleKiller or
+        CustomRoles.Disperser or
+        //CustomRoles.Kidnapper or
+        CustomRoles.Sleeve or
+        CustomRoles.MimicKiller or
+        CustomRoles.MimicAss or
+        CustomRoles.Mimics or
+        CustomRoles.Medusa or
+        CustomRoles.Cluster or
+        CustomRoles.Forger or
+        CustomRoles.EvilSwapper or
+        CustomRoles.Blackmailer or
+        CustomRoles.AbandonedCrew or
+        CustomRoles.Batter or
+        CustomRoles.BloodSeekers or
+        CustomRoles.SoulSucker or
+        CustomRoles.HangTheDevil or
+        CustomRoles.Undercover or
+        CustomRoles.ShapeShifters;
     }
     public static bool IsHotPotato(this CustomRoles role)
     {
@@ -582,7 +671,8 @@ internal static class CustomRolesHelper
         CustomRoles.EvilMini or
         CustomRoles.Defector or
         CustomRoles.MimicKiller or
-        CustomRoles.Blackmailer;
+        CustomRoles.Blackmailer or
+        CustomRoles.ShapeShifters;
     }
     public static bool IsGuress(this CustomRoles role) // 是否赌
     {
@@ -809,7 +899,7 @@ internal static class CustomRolesHelper
             _ => role.IsImpostor() ? RoleTypes.Impostor : RoleTypes.Crewmate,
         };
     public static bool IsDesyncRole(this CustomRoles role) => role.GetDYRole() != RoleTypes.GuardianAngel;
-    public static bool IsCrewmate(this CustomRoles role) => !role.IsImpostorTeam() && !role.IsNeutral() || role == CustomRoles.SchrodingerCat && SchrodingerCat.iscrew;
+    public static bool IsCrewmate(this CustomRoles role) => !role.IsImpostorTeam() && !role.IsNeutral() || role == CustomRoles.SchrodingerCat && SchrodingerCat.iscrew || role == CustomRoles.Undercover;
     public static bool IsImpostorTeam(this CustomRoles role) => role.IsImpostor() || role == CustomRoles.Madmate || role == CustomRoles.SchrodingerCat && SchrodingerCat.isimp; 
     public static bool IsNNK(this CustomRoles role) => role.IsNeutral() && !role.IsNK(); // 是否无刀中立
     public static bool IsVanilla(this CustomRoles role) // 是否原版职业

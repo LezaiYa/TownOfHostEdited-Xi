@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using TOHE.Modules;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Neutral;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class AntiBlackout
 {
@@ -35,6 +35,7 @@ public static class AntiBlackout
             foreach (var pc in Main.AllPlayerControls)
             {
                 if (pc.Data.Role.IsImpostor) numImpostors++;
+                //else if (pc.Is(CustomRoles.Crewpostor)) numImpostors++;
                 else numCrewmates++;
             }
             return numCrewmates - numImpostors;

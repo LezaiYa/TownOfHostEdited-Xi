@@ -4,19 +4,19 @@ using Il2CppSystem.Linq;
 using InnerNet;
 using MS.Internal.Xml.XPath;
 using System.Linq;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using static Logger;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using Mathf = UnityEngine.Mathf;
-using TOHE.Roles.Crewmate;
+using TOHEXI.Roles.Crewmate;
 //using UnityEngine;
 using System.Threading.Tasks;
-using TOHE.Modules;
-using TOHE.Roles.AddOns.Crewmate;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE.Modules;
+namespace TOHEXI.Modules;
 
 public class PlayerGameOptionsSender : GameOptionsSender
 {
@@ -250,11 +250,8 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
             case CustomRoles.Rudepeople:
-                AURoleOptions.EngineerCooldown =
-                    !Main.RudepeopleNumOfUsed.TryGetValue(player.PlayerId, out var count5) || count5 > 0
-                    ? Options.RudepeopleSkillCooldown.GetFloat()
-                    : 300f;
-                AURoleOptions.EngineerInVentMaxTime = 1;
+                Rudepeople.SetCooldown(player.PlayerId);
+                AURoleOptions.EngineerInVentMaxTime = 1f;
                 break;
             case CustomRoles.Vulture:
                 AURoleOptions.EngineerCooldown = 0f;
@@ -338,6 +335,11 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Plumber:
                 AURoleOptions.EngineerCooldown = Options.PlumberCooldown.GetFloat();
                 AURoleOptions.EngineerInVentMaxTime = 1f;
+                break;
+            case CustomRoles.Guardian:
+                AURoleOptions.ProtectionDurationSeconds = 114514;
+                AURoleOptions.GuardianAngelCooldown = Options.GuardianCooldown.GetFloat();
+                AURoleOptions.ImpostorsCanSeeProtect = false;
                 break;
         }
 

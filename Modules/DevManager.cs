@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public class DevUser
 {
@@ -142,6 +142,7 @@ public static class DevManager
             DevUser.Add(new(code: "nowtazure#8254", color: "#FFFF00", tag: "鸽子区up主", isUp: false, isDev: false, deBug: true, upName: null));
              DevUser.Add(new(code: "stillchest#8146", color: "#FFCCFF", tag: "SctUyrK\r\n", isUp: true, isDev: false, deBug: true, upName: "SctUyrK"));
         DevUser.Add(new(code: "preysocial#6794", color: "#1379bf", tag: "宝石668", isUp: false, isDev: false, deBug: false, upName: null));
+        DevUser.Add(new(code: "loadedwont#3525", color: "#fff62e", tag: "非常普通の魔法使", isUp: true, isDev: false, deBug: false, upName: "非常普通の魔法使"));
         //}
     }
     public static bool IsDevUser(this string code) => DevUser.Any(x => x.Code == code);

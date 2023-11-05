@@ -1,7 +1,7 @@
 ﻿using Hazel;
 using System.Collections.Generic;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Concealer
 {

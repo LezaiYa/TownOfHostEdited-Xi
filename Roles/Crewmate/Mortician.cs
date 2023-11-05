@@ -1,9 +1,9 @@
 ﻿using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 public static class Mortician
 {
     private static readonly int Id = 8021150;

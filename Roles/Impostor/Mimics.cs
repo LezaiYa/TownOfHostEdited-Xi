@@ -1,24 +1,27 @@
 ﻿using AmongUs.GameOptions;
+using Hazel;
 using MS.Internal.Xml.XPath;
+using Steamworks;
 using System;
 using System.Collections.Generic;
-using static TOHE.Options;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.Options;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE.Roles.Impostor;
-//模仿者杀手来源：TOHTOR https://github.com/music-discussion/TownOfHost-TheOtherRoles
+namespace TOHEXI.Roles.Impostor;
 public static class Mimics
 {
     private static readonly int Id = 574687;
     public static List<byte> playerIdList = new();
     public static OptionItem SKillColldown;
     public static OptionItem DiedToge;
-    public static List<byte> KillerList = new();
-    public static List<byte> TargetList = new();
-    static GameData.PlayerOutfit CamouflageOutfit = new GameData.PlayerOutfit().Set("", "", "", "", "");
-    public static Dictionary<byte, GameData.PlayerOutfit> PlayerSkins = new();
-    public static Dictionary<byte, GameData.PlayerOutfit> KillerSkins = new();
     public static OptionItem Arrow;
+    public static GameData.PlayerOutfit TargetSkins = new();
+    public static GameData.PlayerOutfit KillerSkins = new();
+    public static float KillerSpeed = new();
+    public static string KillerName = "";
+    public static Dictionary<byte, byte> Kill = new();
+    public static Dictionary<byte, byte> Assis = new();
     public static readonly string[] MedicWhoCanSeeProtectName =
 {
         "DieSus",
@@ -31,11 +34,15 @@ public static class Mimics
         SKillColldown = FloatOptionItem.Create(Id + 2, "KillCooldown", new(0f, 100f, 2.5f), 25f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics])
            .SetValueFormat(OptionFormat.Seconds);
         DiedToge = StringOptionItem.Create(Id + 4, "DieTogether", MedicWhoCanSeeProtectName, 0, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics]);
-        //Arrow = BooleanOptionItem.Create(Id + 3, "HaveArrow", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics]);
+        Arrow = BooleanOptionItem.Create(Id + 3, "HaveArrow", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Mimics]);
     }
     public static void Init()
     {
         playerIdList = new();
+        TargetSkins = new();
+        KillerSkins = new();
+        KillerSpeed = new();
+        KillerName = "";
     }
     public static void Add(byte playerId)
     {
@@ -47,30 +54,21 @@ public static class Mimics
     {
         if (!killer.Is(CustomRoles.MimicKiller)) return;
         GameData.PlayerOutfit outfit = new();
-        var sender = CustomRpcSender.Create(name: $"Camouflage.RpcSetSkin({target.Data.PlayerName})");
-        foreach (var pc in Main.AllPlayerControls)
-        {
-            if (pc.Is(CustomRoles.MimicKiller))
-            {
-                var killeroutfit = killer.Data.DefaultOutfit;
-                KillerSkins[pc.PlayerId] = new GameData.PlayerOutfit().Set(killeroutfit.PlayerName, killeroutfit.ColorId, killeroutfit.HatId, killeroutfit.SkinId, killeroutfit.VisorId, killeroutfit.PetId);
-                var targetcolorId = target.Data.DefaultOutfit.ColorId;
-                Main.PlayerStates[pc.PlayerId] = new(pc.PlayerId);
-                Main.PlayerColors[pc.PlayerId] = Palette.PlayerColors[targetcolorId];
-                Main.AllPlayerSpeed[pc.PlayerId] = Main.RealOptionsData.GetFloat(FloatOptionNames.PlayerSpeedMod); //移動速度をデフォルトの移動速度に変更
-                ReportDeadBodyPatch.CanReport[pc.PlayerId] = true;
-                ReportDeadBodyPatch.WaitReport[pc.PlayerId] = new();
-                pc.cosmetics.nameText.text = pc.name;
-                RandomSpawn.CustomNetworkTransformPatch.NumOfTP.Add(pc.PlayerId, 0);
-                var outfits = target.Data.DefaultOutfit;
-                PlayerSkins[pc.PlayerId] = new GameData.PlayerOutfit().Set(outfits.PlayerName, outfits.ColorId, outfits.HatId, outfits.SkinId, outfits.VisorId, outfits.PetId);
-            }
-
-        }
+        var sender = CustomRpcSender.Create(name: $"RpcSetSkin({target.Data.PlayerName})");
+        KillerSkins = new GameData.PlayerOutfit().Set(killer.GetRealName(), killer.Data.DefaultOutfit.ColorId, killer.Data.DefaultOutfit.HatId, killer.Data.DefaultOutfit.SkinId, killer.Data.DefaultOutfit.VisorId, killer.Data.DefaultOutfit.PetId);
+        KillerSpeed = Main.AllPlayerSpeed[killer.PlayerId];
+        KillerName = Main.AllPlayerNames[killer.PlayerId];
+        TargetSkins = new GameData.PlayerOutfit().Set(target.GetRealName(), target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.PetId);
         new LateTask(() =>
         {
-            outfit = PlayerSkins[killer.PlayerId];
+            Main.AllPlayerSpeed[killer.PlayerId] = Main.AllPlayerSpeed[target.PlayerId];
+            var outfit = TargetSkins;
             //凶手变样子
+            killer.SetName(outfit.PlayerName);
+            sender.AutoStartRpc(killer.NetId, (byte)RpcCalls.SetName)
+                .Write(outfit.PlayerName)
+                .EndRpc();
+            Main.AllPlayerNames[killer.PlayerId] = Main.AllPlayerNames[target.PlayerId];
             killer.SetColor(outfit.ColorId);
             sender.AutoStartRpc(killer.NetId, (byte)RpcCalls.SetColor)
                 .Write(outfit.ColorId)
@@ -96,72 +94,84 @@ public static class Mimics
                 .Write(outfit.PetId)
                 .EndRpc();
             sender.SendMessage();
-        }, 0.1f, "Trapper BlockMove");
+        }, 0.1f, "Clam");
+        Utils.TP(killer.NetTransform, target.GetTruePosition());
+        RPC.PlaySoundRPC(killer.PlayerId, Sounds.KillSound);
+        Utils.TP(target.NetTransform, Pelican.GetBlackRoomPS());
+        target.SetRealKiller(killer);
+        Main.PlayerStates[target.PlayerId].SetDead();
+        target.RpcMurderPlayerV3(target);
+        killer.SetKillCooldownV2();
+        NameNotifyManager.Notify(target, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Scavenger), Translator.GetString("KilledByMimics")));
+        return;
+
     }
-   /* public static string GetTargetArrow(PlayerControl seer, PlayerControl target = null)
+    public static void revert()
     {
-        if (!seer.Is(CustomRoles.MimicKiller)|| !seer.Is(CustomRoles.MimicAss)) return "";
+
+        foreach (var pc in Main.AllPlayerControls)
+        {
+            if (pc.Is(CustomRoles.MimicKiller) && pc.IsAlive())
+            {
+                var sender = CustomRpcSender.Create(name: $"RpcSetSkin({pc.Data.PlayerName})");
+                Main.AllPlayerSpeed[pc.PlayerId] = KillerSpeed;
+                var outfit = KillerSkins;
+                //凶手变样子
+                pc.SetName(outfit.PlayerName);
+                sender.AutoStartRpc(pc.NetId, (byte)RpcCalls.SetName)
+                    .Write(outfit.PlayerName)
+                    .EndRpc();
+                Main.AllPlayerNames[pc.PlayerId] = KillerName;
+                pc.SetColor(outfit.ColorId);
+                sender.AutoStartRpc(pc.NetId, (byte)RpcCalls.SetColor)
+                    .Write(outfit.ColorId)
+                    .EndRpc();
+
+                pc.SetHat(outfit.HatId, outfit.ColorId);
+                sender.AutoStartRpc(pc.NetId, (byte)RpcCalls.SetHatStr)
+                    .Write(outfit.HatId)
+                    .EndRpc();
+
+                pc.SetSkin(outfit.SkinId, outfit.ColorId);
+                sender.AutoStartRpc(pc.NetId, (byte)RpcCalls.SetSkinStr)
+                    .Write(outfit.SkinId)
+                    .EndRpc();
+
+                pc.SetVisor(outfit.VisorId, outfit.ColorId);
+                sender.AutoStartRpc(pc.NetId, (byte)RpcCalls.SetVisorStr)
+                    .Write(outfit.VisorId)
+                    .EndRpc();
+
+                pc.SetPet(outfit.PetId);
+                sender.AutoStartRpc(pc.NetId, (byte)RpcCalls.SetPetStr)
+                    .Write(outfit.PetId)
+                    .EndRpc();
+                sender.SendMessage();
+            }
+        }
+
+    }
+   
+    public static string GetTargetArrow(PlayerControl seer, PlayerControl target = null)
+    {
+        if (!(seer.Is(CustomRoles.MimicKiller))) return "";
         if (target != null && seer.PlayerId != target.PlayerId) return "";
-        if (GameStates.IsMeeting) return "";
-        foreach (var kill in Main.AllAlivePlayerControls)
-        {
-            if (kill.Is(CustomRoles.MimicKiller))
-            {
-                foreach (var ass in Main.AllAlivePlayerControls)
-                {
-                    if (ass.Is(CustomRoles.MimicAss))
-                    {
-                        var playerId = ass.PlayerId;
-                        NameColorManager.Add(ass.PlayerId, ass.PlayerId, "#FF0000");
-                        var targetId = ass.PlayerId;
-                        TargetArrow.Add(playerId, targetId);
-                        return TargetArrow.GetArrows(seer, targetId);
-                    }
-                }
-            }
-            if (kill.Is(CustomRoles.MimicAss))
-            {
-                foreach (var ass in Main.AllAlivePlayerControls)
-                {
-                    if (ass.Is(CustomRoles.MimicKiller))
-                    {
-                        var playerId = ass.PlayerId;
-                        NameColorManager.Add(ass.PlayerId, ass.PlayerId, "#FF0000");
-                        var targetId = ass.PlayerId;
-                        TargetArrow.Add(playerId, targetId);
-                        return TargetArrow.GetArrows(seer, targetId);
-                    }
-                }
-            }
-        }
-        return TargetArrow.GetArrows(seer);
-    }*/
-}
-static class PlayerOutfitExtension
-{
-    public static GameData.PlayerOutfit Set(this GameData.PlayerOutfit instance, string playerName, string hatId, string skinId, string visorId, string petId)
+        if (!Arrow.GetBool() || GameStates.IsMeeting) return "";
+        if (!target.Is(CustomRoles.MimicAss) || target.Is(CustomRoles.MimicAss) && target.Data.IsDead) return "";
+        //seerがtarget自身でBountyHunterのとき、
+        //矢印オプションがありミーティング以外で矢印表示
+        var targetId = target.PlayerId;
+        return TargetArrow.GetArrows(seer, targetId);
+    }
+    public static string GetKillArrow(PlayerControl seer, PlayerControl target = null)
     {
-        foreach (var player in Main.AllAlivePlayerControls)
-        {
-            if (Mimics.TargetList.Contains(player.PlayerId))
-            {
-                instance.PlayerName = playerName;
-                instance.HatId = hatId;
-                instance.SkinId = skinId;
-                instance.VisorId = visorId;
-                instance.PetId = petId;
-                return instance;
-            }
-            if (Mimics.KillerList.Contains(player.PlayerId))
-            {
-                instance.PlayerName = playerName;
-                instance.HatId = hatId;
-                instance.SkinId = skinId;
-                instance.VisorId = visorId;
-                instance.PetId = petId;
-                return instance;
-            }
-        }
-        return instance;
+        if (!(seer.Is(CustomRoles.MimicAss))) return "";
+        if (target != null && seer.PlayerId != target.PlayerId) return "";
+        if (!Arrow.GetBool() || GameStates.IsMeeting) return "";
+        if (!target.Is(CustomRoles.MimicKiller) || target.Is(CustomRoles.MimicKiller) && target.Data.IsDead) return "";
+        //seerがtarget自身でBountyHunterのとき、
+        //矢印オプションがありミーティング以外で矢印表示
+        var targetId = target.PlayerId;
+        return TargetArrow.GetArrows(seer, targetId);
     }
 }

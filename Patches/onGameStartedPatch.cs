@@ -1,22 +1,24 @@
 using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
-using MS.Internal.Xml.XPath;
+using TOHEXI.Roles.GameModsRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Modules;
-using TOHE.Modules.ChatManager;
-using TOHE.Roles.AddOns.Crewmate;
-using TOHE.Roles.AddOns.Impostor;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
-using static TOHE.Modules.CustomRoleSelector;
-using static TOHE.Translator;
+using TOHEXI.Modules;
+using TOHEXI.Modules.ChatManager;
+using TOHEXI.Roles.AddOns.Crewmate;
+using TOHEXI.Roles.AddOns.Impostor;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.Modules.CustomRoleSelector;
+using static TOHEXI.Translator;
+using MS.Internal.Xml.XPath;
+using TOHEXI.GameMode;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
 internal class ChangeRoleSettings
@@ -106,7 +108,6 @@ internal class ChangeRoleSettings
             Main.GuideMax = new();
             Main.ForYandere = new();
             Main.NeedKillYandere = new();
-            Main.ForRudepeople = new();
 
             Main.AfterMeetingDeathPlayers = new();
             Main.ResetCamPlayerList = new();
@@ -135,7 +136,6 @@ internal class ChangeRoleSettings
             Main.MadmateNum = 0;
             Main.BardCreations = 0;
             Main.DovesOfNeaceNumOfUsed = new();
-            Main.RudepeopleNumOfUsed = new();
             Main.TimeMasterNum = new();
             Main.VultureEatMax = new();
             Main.BullKillMax = new();
@@ -159,6 +159,7 @@ internal class ChangeRoleSettings
             Main.isCupidLoversDead = false;
             Main.isAkujoLoversDead = false;
             Main.isseniormanagementDead = false;
+            Main.CupidComplete = false;
             Main.ForSpiritualists = new();
             Main.isMKDead = false;
             Main.isHunterDead = false;
@@ -178,6 +179,7 @@ internal class ChangeRoleSettings
             Main.PGuesserMax = new();
             Main.HangTheDevilKiller = new();
             Main.ForHangTheDevil = new();
+            Main.ForMagnetMan = new();
 
             Main.RefuserShields = 0;
 
@@ -326,6 +328,7 @@ internal class ChangeRoleSettings
             Chameleon.Init();
           //  Kidnapper.Init();
             Mimics.Init();
+            ShapeShifters.Init();
             NiceSwapper.Init();
             EvilSwapper.Init();
             Blackmailer.Init();
@@ -339,6 +342,8 @@ internal class ChangeRoleSettings
             SoulSucker.Init();
                 SoloKombatManager.Init();
             HotPotatoManager.Init();
+            TheLivingDaylights.Init();
+            Holdpotato.Init();
             CustomWinnerHolder.Reset();
             AntiBlackout.Reset();
             NameNotifyManager.Reset();
@@ -495,6 +500,12 @@ internal class SelectRolesPatch
             }
             // 热土豆用
             if (Options.CurrentGameMode == CustomGameMode.HotPotato)
+            {
+                foreach (var pair in Main.PlayerStates)
+                    ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
+                goto EndOfSelectRolePatch;
+            }
+            if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
             {
                 foreach (var pair in Main.PlayerStates)
                     ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
@@ -683,7 +694,7 @@ internal class SelectRolesPatch
                         Main.DovesOfNeaceNumOfUsed.Add(pc.PlayerId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                         break;
                     case CustomRoles.Rudepeople:
-                        Main.RudepeopleNumOfUsed.Add(pc.PlayerId, Options.RudepeoplekillMaxOfUseage.GetInt());
+                        Rudepeople.Add(pc.PlayerId);
                         break;
                     case CustomRoles.TimeMaster:
                         Main.TimeMasterNum[pc.PlayerId] = 0;
@@ -839,11 +850,21 @@ internal class SelectRolesPatch
                     case CustomRoles.Chameleon:
                         Chameleon.Add(pc.PlayerId);
                         break;
-             //       case CustomRoles.Kidnapper:
-             //           Kidnapper.Add(pc.PlayerId);
-              //          break;
+                    case CustomRoles.Hotpotato:
+                       Holdpotato.Add(pc.PlayerId);
+                      pc.NotifyV2(string.Format(GetString("HotPotatoTimeRemain"),HotPotatoManager.BoomTimes )); ;
+                        break;
+                    case CustomRoles.Coldpotato:
+                        pc.NotifyV2(string.Format(GetString("HotPotatoTimeRemain"), HotPotatoManager.BoomTimes)); ;
+                        break;
+                    //       case CustomRoles.Kidnapper:
+                    //           Kidnapper.Add(pc.PlayerId);
+                    //          break;
                     case CustomRoles.MimicKiller:
                         Mimics.Add(pc.PlayerId);
+                        break;
+                        case CustomRoles.ShapeShifters:
+                        ShapeShifters.Add(pc.PlayerId);
                         break;
                     case CustomRoles.Fake:
                         Main.FakeMax[pc.PlayerId] = 0;
@@ -928,6 +949,9 @@ internal class SelectRolesPatch
                     break;
                 case CustomGameMode.HotPotato:
                     GameEndChecker.SetPredicateToHotPotato();
+                    break;
+                case CustomGameMode.TheLivingDaylights:
+                    GameEndChecker.SetPredicateToTheLivingDaylights();
                     break;
             }
 
@@ -1024,6 +1048,7 @@ internal class SelectRolesPatch
         {
             Main.CupidLoversPlayers.Clear();
             Main.isCupidLoversDead = false;
+            Main.CupidComplete = false;
         }
         if (CustomRoles.Akujo.IsEnable())
         {

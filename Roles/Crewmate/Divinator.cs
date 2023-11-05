@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using static TOHE.Options;
-using static TOHE.Translator;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class Divinator
 {

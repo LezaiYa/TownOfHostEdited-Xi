@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Hangman
 {

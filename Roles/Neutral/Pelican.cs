@@ -1,7 +1,7 @@
 ﻿using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public static class Pelican
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TOHE;
+namespace TOHEXI;
 
 static class DoubleTrigger
 {

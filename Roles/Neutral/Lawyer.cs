@@ -2,9 +2,9 @@
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public static class Lawyer
 {
@@ -28,7 +28,7 @@ public static class Lawyer
         CanTargetJester = BooleanOptionItem.Create(Id + 13, "LawyerCanTargetJester", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Lawyer]);
         KnowTargetRole = BooleanOptionItem.Create(Id + 14, "KnowTargetRole", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Lawyer]);
         TargetKnowsLawyer = BooleanOptionItem.Create(Id + 15, "TargetKnowsLawyer", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Lawyer]);
-        Prosecutors.SkillCooldown = FloatOptionItem.Create(Id + 15, "ProsecutorsSkillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Lawyer])
+        Prosecutors.SkillCooldown = FloatOptionItem.Create(Id + 17, "ProsecutorsSkillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Lawyer])
             .SetValueFormat(OptionFormat.Seconds);
         Prosecutors.SkillLimitOpt = IntegerOptionItem.Create(Id + 16, "ProsecutorsSkillLimit", new(1, 990, 1), 3, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Lawyer])
             .SetValueFormat(OptionFormat.Times);

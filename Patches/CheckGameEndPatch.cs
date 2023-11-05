@@ -5,12 +5,12 @@ using Hazel;
 using MS.Internal.Xml.XPath;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Double;
-using TOHE.Roles.Neutral;
-using static TOHE.Translator;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
 
@@ -324,7 +324,7 @@ class GameEndChecker
                         CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
                         CustomWinnerHolder.AdditionalWinnerTeams.Add(AdditionalWinners.Prosecutors);
                     }
-                   if (Main.ForRudepeople.Contains(pc.PlayerId))
+                   if (Rudepeople.ForRudepeople.Contains(pc.PlayerId))
                     {
                         CustomWinnerHolder.WinnerIds.Remove(pc.PlayerId);
                     }
@@ -646,7 +646,8 @@ class GameEndChecker
 
     public static void SetPredicateToNormal() => predicate = new NormalGameEndPredicate();
     public static void SetPredicateToSoloKombat() => predicate = new SoloKombatGameEndPredicate();
-    public static void SetPredicateToHotPotato () => predicate = new HotPotatomeEndPredicate();
+    public static void SetPredicateToHotPotato() => predicate = new HotPotatomeEndPredicate();
+    public static void SetPredicateToTheLivingDaylights() => predicate = new HotPotatomeEndPredicate(); 
 
     // ===== ゲーム終了条件 =====
     // 通常ゲーム用
@@ -808,15 +809,10 @@ class GameEndChecker
             foreach (var player in Main.AllAlivePlayerControls)
             {
                 var pcList = Main.AllAlivePlayerControls.ToList();
-                if (HotPotatoManager.RoundTime > 0) return false;
-                
-                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CP);
-                foreach (var pc in Main.AllPlayerControls)
+                if (pcList.Count == 1)
                 {
-                    if (pc.Is(CustomRoles.Coldpotato) && pc.IsAlive())
-                    {
-                        CustomWinnerHolder.WinnerIds.Add(pc.PlayerId);
-                    }
+                    CustomWinnerHolder.ResetAndSetWinner(CustomWinner.CP);
+                    CustomWinnerHolder.WinnerIds.Add(player.PlayerId);
                 }
             }
             Main.DoBlockNameChange = true;

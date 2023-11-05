@@ -3,10 +3,10 @@ using Hazel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static TOHE.Options;
-using static TOHE.Translator;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 //À´Ô´£ºTOHER https://github.com/Loonie-Toons/TownOfHost-ReEdited Ð»Ð»Lonnie!
 public static class Chameleon
 {

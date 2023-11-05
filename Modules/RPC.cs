@@ -5,17 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TOHE.Modules;
-using TOHE.Modules.ChatManager;
-using TOHE.Roles.AddOns.Crewmate;
-using TOHE.Roles.AddOns.Impostor;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
-using static TOHE.ChatCommands;
-using static TOHE.Translator;
-namespace TOHE;
+using TOHEXI.Modules;
+using TOHEXI.Modules.ChatManager;
+using TOHEXI.Roles.AddOns.Crewmate;
+using TOHEXI.Roles.AddOns.Impostor;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.ChatCommands;
+using static TOHEXI.Translator;
+namespace TOHEXI;
 
 enum CustomRPC
 {
@@ -27,6 +27,7 @@ enum CustomRPC
     PlaySound,
     SetCustomRole,
     SetBountyTarget,
+    Mimics,
     SetKillOrSpell,
     SetSheriffShotLimit,
     SetDousedPlayer,
@@ -53,6 +54,7 @@ enum CustomRPC
     SetNiceTrackerTarget,
     SetYandereTarget,
     RemoveYandereTarget,
+    SyncSabotageMasterSkill,
 
     // TOHE
     AntiBlackout,
@@ -299,6 +301,7 @@ internal class RPCHandlerPatch
             case CustomRPC.SetBountyTarget:
                 BountyHunter.ReceiveRPC(reader);
                 break;
+         
             case CustomRPC.SetKillOrSpell:
                 Witch.ReceiveRPC(reader, false);
                 break;
@@ -409,6 +412,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetProsecutorsSellLimit:
                 Prosecutors.ReceiveRPC(reader);
                 break;
+            case CustomRPC.SyncSabotageMasterSkill:
+                SabotageMaster.ReceiveRPC(reader);
+                break;
             case CustomRPC.SetDemonHuntermSellLimit:
                 DemonHunterm.ReceiveRPC(reader);
                 break;
@@ -499,9 +505,6 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SyncKBPlayer:
                 SoloKombatManager.ReceiveRPCSyncKBPlayer(reader);
-                break;
-            case CustomRPC.SyncHPPlayer:
-                HotPotatoManager.ReceiveRPCSyncHPPlayer(reader);
                 break;
             case CustomRPC.SyncAllPlayerNames:
                 Main.AllPlayerNames = new();
@@ -904,7 +907,7 @@ internal static class RPC
                 Main.DovesOfNeaceNumOfUsed.Add(targetId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                 break;
             case CustomRoles.Rudepeople:
-                Main.RudepeopleNumOfUsed.Add(targetId, Options.RudepeoplekillMaxOfUseage.GetInt());
+                Rudepeople.Add(targetId);
                 break;
             case CustomRoles.Vulture:
                 Vulture.Add(targetId);
@@ -983,6 +986,9 @@ internal static class RPC
             //    break;
             case CustomRoles.MimicKiller:
                 Mimics.Add(targetId);
+                break;
+            case CustomRoles.ShapeShifters:
+                ShapeShifters.Add(targetId);
                 break;
             case CustomRoles.MimicAss:
                 Mimics.Add(targetId);

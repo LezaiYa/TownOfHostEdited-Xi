@@ -10,9 +10,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch]
 public class ModUpdater
@@ -60,18 +60,18 @@ public class ModUpdater
             Logger.Info("latestVersionl: " + latestVersion, "CheckRelease");
         }
 
-        //MainMenuManagerPatch.updateButton.SetActive(hasUpdate);
-        //MainMenuManagerPatch.updateButton.transform.position = MainMenuManagerPatch.template.transform.position + new Vector3(0.25f, 0.75f);
-        //__instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) =>
-        //{
-        //    MainMenuManagerPatch.updateButton.transform
-        //        .GetChild(0).GetComponent<TMPro.TMP_Text>()
-        //        .SetText($"{GetString("updateButton")}\n{latestTitle}");
-        //}
-        //)));
+        /*MainMenuManagerPatch.updateButton.SetActive(hasUpdate);
+        MainMenuManagerPatch.updateButton.transform.position = MainMenuManagerPatch.template.transform.position + new Vector3(0.25f, 0.75f);
+        __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) =>
+        {
+            MainMenuManagerPatch.updateButton.transform
+                .GetChild(0).GetComponent<TMPro.TMP_Text>()
+                .SetText($"{GetString("updateButton")}\n{latestTitle}");
+        }
+        )));//*/
     }
 
-    public static string UrlSetId(string url) => url + "?id=8F249256BAFA41FB97E6FDE8F899ED57";
+    public static string UrlSetId(string url) => url + "?id=282EDCBDE9734F88849F8B255A6B8D6E";
     public static string UrlSetCheck(string url) => url + "/checkVersion";
     public static string UrlSetInfo(string url) => url + "/getExample";
     public static string UrlSetToday(string url) => url + "/today";
@@ -174,18 +174,18 @@ public class ModUpdater
             if (CultureInfo.CurrentCulture.Name == "zh-CN")
             {
                 isChecked = false;
-                isBroken = true;
+                isBroken = false;
             }
             else if (!onlyInfo)
             {
-                isChecked = true;
+                isChecked = false;
                 isBroken = false;
                 Logger.Error($"检查更新时发生错误\n{ex}", "CheckRelease", false);
             }
             Logger.Error($"检查更新时发生错误，已忽略\n{ex}", "CheckRelease", false);
             return Task.FromResult(false);
         }
-        return Task.FromResult(true);
+        return Task.FromResult(true); 
     }
     public static async Task<bool> CheckReleaseFromGithub(bool beta = false)
     {
@@ -229,7 +229,7 @@ public class ModUpdater
                         downloadUrl = assets[i]["browser_download_url"].ToString();
                         break;
                     }
-                    if (assets[i]["name"].ToString() == "TOHE.dll")
+                    if (assets[i]["name"].ToString() == "TOHEXI.dll")
                         downloadUrl = assets[i]["browser_download_url"].ToString();
                 }
                 hasUpdate = latestVersion.CompareTo(Main.version) > 0;
@@ -307,7 +307,7 @@ public class ModUpdater
             foreach (var path in Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.*"))
             {
                 if (path.EndsWith(Path.GetFileName(Assembly.GetExecutingAssembly().Location))) continue;
-                if (path.EndsWith("TOHE.dll")) continue;
+                if (path.EndsWith("TOHEXI.dll")) continue;
                 Logger.Info($"{Path.GetFileName(path)} 已删除", "DeleteOldFiles");
                 File.Delete(path);
             }
@@ -323,7 +323,7 @@ public class ModUpdater
     {
         try
         {
-            var savePath = "BepInEx/plugins/TOHE.dll.temp";
+            var savePath = "BepInEx/plugins/TOHEXI.dll.temp";
             File.Delete(savePath);
 
 #pragma warning disable SYSLIB0014
@@ -336,7 +336,7 @@ public class ModUpdater
 
             var fileName = Assembly.GetExecutingAssembly().Location;
             File.Move(fileName, fileName + ".bak");
-            File.Move("BepInEx/plugins/TOHE.dll.temp", fileName);
+            File.Move("BepInEx/plugins/TOHEXI.dll.temp", fileName);
             ShowPopup(GetString("updateRestart"), StringNames.ExitGame, true, true);
 
         }

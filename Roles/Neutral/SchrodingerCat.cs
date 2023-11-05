@@ -1,9 +1,9 @@
 ﻿using Hazel;
 using System.Collections.Generic;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public static class SchrodingerCat
 {

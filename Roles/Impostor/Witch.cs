@@ -2,11 +2,11 @@ using Hazel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOHE.Modules;
-using static TOHE.Options;
-using static TOHE.Translator;
+using TOHEXI.Modules;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Witch
 {

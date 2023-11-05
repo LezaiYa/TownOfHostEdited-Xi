@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Hazel;
 using UnityEngine;
-using static TOHE.Options;
-using static TOHE.Translator;
-using TOHE.Roles.Double;
+using static TOHEXI.Options;
+using static TOHEXI.Translator;
+using TOHEXI.Roles.Double;
 using MonoMod.Cil;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 
 public static class Jackal
 {
@@ -127,7 +127,12 @@ public static class Jackal
             {
                 if (!target.CanUseKillButton() && (!target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini))))
                 {
-                    var ghostRoles = new Dictionary<PlayerControl, RoleTypes>();
+                    target.Data.RoleType = RoleTypes.Impostor;
+                    target.Data.Role.Role = RoleTypes.Impostor;
+                    target.SetRole(RoleTypes.Impostor);
+                    target.RpcSetRole(RoleTypes.Impostor);
+                    
+                    /*var ghostRoles = new Dictionary<PlayerControl, RoleTypes>();
                     foreach (var seer in Main.AllPlayerControls)
                     {
                         ghostRoles[seer] = RoleTypes.Impostor;
@@ -144,8 +149,9 @@ public static class Jackal
                         target.RpcSetCustomRole(CustomRoles.Sidekick);
                         Jackal.Add(target.PlayerId);
                         target.RpcGuardAndKill(target);
-                    }
-                    
+                    }*/
+                    //target.RpcSetCustomRole(CustomRoles.Whoops);
+                    target.RpcSetCustomRole(CustomRoles.Sidekick);
                 }
                 if (target.CanUseKillButton() && (!target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini))))
                 {

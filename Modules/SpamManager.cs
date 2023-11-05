@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class SpamManager
 {
@@ -39,7 +39,7 @@ public static class SpamManager
                         };
                     else fileName = "English";
                     Logger.Warn($"创建新的 BanWords 文件：{fileName}", "SpamManager");
-                    File.WriteAllText(BANEDWORDS_FILE_PATH, GetResourcesTxt($"TOHE.Resources.Config.BanWords.{fileName}.txt"));
+                    File.WriteAllText(BANEDWORDS_FILE_PATH, GetResourcesTxt($"TOHEXI.Resources.Config.BanWords.{fileName}.txt"));
                 }
             }
             catch (Exception ex)

@@ -1,11 +1,11 @@
 using HarmonyLib;
 
-namespace TOHE;
+namespace TOHEXI;
 
 //参考
 //https://github.com/Koke1024/Town-Of-Moss/blob/main/TownOfMoss/Patches/MeltDownBoost.cs
 
-[HarmonyPatch(typeof(ReactorSystemType), nameof(ReactorSystemType.Detoriorate))]
+[HarmonyPatch(typeof(ReactorSystemType), nameof(ReactorSystemType.Deteriorate))]
 public static class ReactorSystemTypePatch
 {
     public static void Prefix(ReactorSystemType __instance)
@@ -21,7 +21,7 @@ public static class ReactorSystemTypePatch
         return;
     }
 }
-[HarmonyPatch(typeof(HeliSabotageSystem), nameof(HeliSabotageSystem.Detoriorate))]
+[HarmonyPatch(typeof(HeliSabotageSystem), nameof(HeliSabotageSystem.Deteriorate))]
 public static class HeliSabotageSystemPatch
 {
     public static void Prefix(HeliSabotageSystem __instance)

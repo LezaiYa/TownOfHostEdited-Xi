@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOHE.Roles.Neutral;
-using TOHE;
-using static TOHE.Options;
+using TOHEXI.Roles.Neutral;
+using TOHEXI;
+using static TOHEXI.Options;
 using MS.Internal.Xml.XPath;
 using UnityEngine;
 using static Il2CppSystem.Net.Http.Headers.Parser;
@@ -15,7 +15,7 @@ using static UnityEngine.GraphicsBuffer;
 using Sentry.Internal;
 using static Rewired.Demos.GamepadTemplateUI.GamepadTemplateUI;
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 public static class Yandere
 {
     private static readonly int Id = 156465;
@@ -34,7 +34,7 @@ public static class Yandere
         SetupRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.Yandere);
         KnowTargetRole = BooleanOptionItem.Create(Id + 14, "KnowTargetRole", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere]);
         TargetKnowsYandere = BooleanOptionItem.Create(Id + 15, "TargetKnowsYandere", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere]);
-        SkillCooldown = FloatOptionItem.Create(Id + 15, "KillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere])
+        SkillCooldown = FloatOptionItem.Create(Id + 150, "KillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Yandere])
             .SetValueFormat(OptionFormat.Seconds);
     }
     public static void Init()

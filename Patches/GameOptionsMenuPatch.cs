@@ -4,11 +4,12 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOHEXI.GameMode;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using Object = UnityEngine.Object;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.InitializeOptions))]
 public static class GameSettingMenuPatch
@@ -120,8 +121,8 @@ public static class GameOptionsMenuPatch
             menus.Add(tohSettings.gameObject);
 
             var tohTab = Object.Instantiate(roleTab, roleTab.transform.parent);
-            //tohTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite($"TOHE.Resources.Images.TabIcon_{tab}.png", 100f);
-            tohTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite($"TOHE.Resources.Images.TabIcon_{tab}(150).png", 600f);
+            //tohTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite($"TOHEXI.Resources.Images.TabIcon_{tab}.png", 100f);
+            tohTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite($"TOHEXI.Resources.Images.TabIcon_{tab}(150).png", 600f);
             tabs.Add(tohTab);
             var tohTabHighlight = tohTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             highlights.Add(tohTabHighlight);
@@ -376,8 +377,12 @@ public static class SetRecommendationsPatch
             __instance.NumCommonTasks = 0;
             __instance.NumLongTasks = 0;
             __instance.NumShortTasks = 0;
-            __instance.KillCooldown = 0f;
+            __instance.KillCooldown = 10f;
         }
-        return false;
+        if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)   // TheLivingDaylights
+        {
+
+        }
+            return false;
     }
 }

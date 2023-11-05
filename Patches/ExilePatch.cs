@@ -1,17 +1,17 @@
 using AmongUs.Data;
 using HarmonyLib;
 using System.Linq;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using AmongUs.GameOptions;
 using System;
 using System.Collections.Generic;
 using static UnityEngine.GraphicsBuffer;
-using TOHE.Roles.Double;
-using TOHE.Modules;
+using TOHEXI.Roles.Double;
+using TOHEXI.Modules;
 
-namespace TOHE;
+namespace TOHEXI;
 
 class ExileControllerWrapUpPatch
 {
@@ -356,7 +356,7 @@ class ExileControllerWrapUpPatch
                 CustomRoles.QuickShooter
                 ) pc.RpcResetAbilityCooldown();
         }
-        if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat || Options.CurrentGameMode == CustomGameMode.HotPotato)
+        if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat || Options.CurrentGameMode == CustomGameMode.HotPotato || Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
         {
             RandomSpawn.SpawnMap map;
             switch (Main.NormalOptions.MapId)

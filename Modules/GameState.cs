@@ -3,17 +3,17 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Modules;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using Hazel;
 using InnerNet;
-using static TOHE.Translator;
-using TOHE.Roles.Crewmate;
+using static TOHEXI.Translator;
+using TOHEXI.Roles.Crewmate;
 using static UnityEngine.GraphicsBuffer;
-using TOHE.Roles.Double;
+using TOHEXI.Roles.Double;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public class PlayerState
 {
@@ -281,7 +281,7 @@ public class TaskState
                 {
                     foreach (var sysType in SysList)
                     {
-                        MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, player.GetClientId());
+                        var SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, player.GetClientId());
                         SabotageFixWriter.Write((byte)sysType);
                         MessageExtensions.WriteNetObject(SabotageFixWriter, player);
                         AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
@@ -289,7 +289,7 @@ public class TaskState
                         foreach (var target in Main.AllPlayerControls)
                         {
                             if (target == player || target.Data.Disconnected) continue;
-                            SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, target.GetClientId());
+                            SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, target.GetClientId());
                             SabotageFixWriter.Write((byte)sysType);
                             MessageExtensions.WriteNetObject(SabotageFixWriter, target);
                             AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
@@ -311,7 +311,7 @@ public class TaskState
                 {
                     var SbSys = SysList[IRandom.Instance.Next(0, SysList.Count)];
 
-                    MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, player.GetClientId());
+                    MessageWriter SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, player.GetClientId());
                     SabotageFixWriter.Write((byte)SbSys);
                     MessageExtensions.WriteNetObject(SabotageFixWriter, player);
                     AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);
@@ -319,7 +319,7 @@ public class TaskState
                     foreach (var target in Main.AllPlayerControls)
                     {
                         if (target == player || target.Data.Disconnected) continue;
-                        SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.RepairSystem, SendOption.Reliable, target.GetClientId());
+                        SabotageFixWriter = AmongUsClient.Instance.StartRpcImmediately(ShipStatus.Instance.NetId, (byte)RpcCalls.UpdateSystem, SendOption.Reliable, target.GetClientId());
                         SabotageFixWriter.Write((byte)SbSys);
                         MessageExtensions.WriteNetObject(SabotageFixWriter, target);
                         AmongUsClient.Instance.FinishRpcImmediately(SabotageFixWriter);

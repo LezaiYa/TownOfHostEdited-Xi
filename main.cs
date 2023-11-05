@@ -8,13 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 
-[assembly: AssemblyFileVersion(TOHE.Main.PluginVersion)]
-[assembly: AssemblyInformationalVersion(TOHE.Main.PluginVersion)]
-[assembly: AssemblyVersion(TOHE.Main.PluginVersion)]
-namespace TOHE;
+[assembly: AssemblyFileVersion(TOHEXI.Main.PluginVersion)]
+[assembly: AssemblyInformationalVersion(TOHEXI.Main.PluginVersion)]
+[assembly: AssemblyVersion(TOHEXI.Main.PluginVersion)]
+namespace TOHEXI;
 
 [BepInPlugin(PluginGuid, "TOHEX", PluginVersion)]
 [BepInIncompatibility("jp.ykundesu.supernewroles")]
@@ -31,10 +31,10 @@ public class Main : BasePlugin
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
-    public static readonly string MainMenuText = "</color><color=#FFFF00>国庆节快乐！</color>";
+    public static readonly string MainMenuText = "</color><color=#fffcbe>真菌世界！！</color>";
     public const string PluginGuid = "com.xi.tohexi";
-    public const string PluginVersion = "2.0.3.01";
-    public const string PluginDisplayVersion = "2.0.3";
+    public const string PluginVersion = "2.0.4.2";
+    public const string PluginDisplayVersion = "2.0.4";
     public const string CanaryPluginVersion = "Canary_裤";
     public static readonly string SupportedVersionAU = "2023.7.11";
     public const int PluginCreate = 7;
@@ -107,6 +107,7 @@ public class Main : BasePlugin
     public static bool isLoversDead = true;
     public static bool isCrushLoversDead = true;
     public static bool isCupidLoversDead = true;
+    public static bool CupidComplete = true;
     public static bool isAkujoLoversDead = true;
     public static bool isjackalDead = true;
     public static bool isSheriffDead = true; 
@@ -190,8 +191,6 @@ public class Main : BasePlugin
     public static Dictionary<byte, int> sabcatNumOfUsed = new();
     public static Dictionary<byte, byte> Provoked = new();
     public static Dictionary<byte, int> DovesOfNeaceNumOfUsed = new();
-    public static Dictionary<byte, long> RudepeopleInProtect = new();
-    public static Dictionary<byte, int> RudepeopleNumOfUsed = new();
     public static Dictionary<byte, long> TimeStopsInProtect = new();
     //public static Dictionary<byte, int> HypnotistMax = new();
     public static Dictionary<byte, long> TimeMasterInProtect = new();
@@ -294,7 +293,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, Vector2> Spiritualistsbacktrack = new();
     public static List<byte> HangTheDevilKiller = new();
     public static List<byte> ForHangTheDevil = new();
-    public static List<byte> ForRudepeople = new(); 
+    public static List<byte> ForMagnetMan = new(); 
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static Dictionary<byte, CustomRoles> AllPlayerCustomRoles = new();
@@ -317,7 +316,7 @@ public class Main : BasePlugin
     public static string OverrideWelcomeMsg = "";
     public static int HostClientId;
 
-    public static List<string> TName_Snacks_CN = new() { "CoCo", "喜茶", "奈雪的茶", "蜜雪冰城", "霸王茶姬", "百乐", "斑马", "国誉", "kaco", "晨光", "TOHEX", "TOHE", "TONX", "TOHE-R", "TOH", "TOHEE", "喜", "N", "霸道清风", "BT小叨", "歌姬村民", "Bug世界", "八嘎呀路", "你好", "雪糕", "麦当劳", "肯德基", "汉堡", "蛋挞", "果冻", "果茶", "鲜百香双响奏", "派蒙", "胡桃", "银狼" };
+    public static List<string> TName_Snacks_CN = new() { "CoCo", "喜茶", "奈雪的茶", "蜜雪冰城", "霸王茶姬", "百乐", "斑马", "国誉", "kaco", "晨光", "TOHEX", "TOHE", "TONX", "TOHE-R", "TOH", "TOHEE", "喜", "N", "霸道清风", "BT小叨", "歌姬村民", "Bug世界", "八嘎呀路", "你好", "雪糕", "麦当劳", "肯德基", "汉堡", "蛋挞", "果冻", "果茶", "鲜百香双响奏", "派蒙", "胡桃", "银狼","散兵","流浪者","钟离" };
     public static List<string> TName_Snacks_EN = new() { "Ice cream", "Milk tea", "Chocolate", "Cake", "Donut", "Coke", "Lemonade", "Candied haws", "Jelly", "Candy", "Milk", "Matcha", "Burning Grass Jelly", "Pineapple Bun", "Pudding", "Coconut Jelly", "Cookies", "Red Bean Toast", "Three Color Dumplings", "Wormwood Dumplings", "Puffs", "Can be Crepe", "Peach Crisp", "Mochi", "Egg Waffle", "Macaron", "Snow Plum Niang", "Fried Yogurt", "Egg Tart", "Muffin", "Sago Dew", "panna cotta", "soufflé", "croissant", "toffee" };
     public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese ?
         TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] :
@@ -328,7 +327,7 @@ public class Main : BasePlugin
         Instance = this;
 
         //Client Options
-        HideName = Config.Bind("Client Options", "Hide Game Code Name", "TOHE");
+        HideName = Config.Bind("Client Options", "Hide Game Code Name", "TOHEX");
         HideColor = Config.Bind("Client Options", "Hide Game Code Color", $"{ModColor}");
         DebugKeyInput = Config.Bind("Authentication", "Debug Key", "");
         UnlockFPS = Config.Bind("Client Options", "UnlockFPS", false);
@@ -347,32 +346,32 @@ public class Main : BasePlugin
 
 
         Logger = BepInEx.Logging.Logger.CreateLogSource("TOHEX");
-        TOHE.Logger.Enable();
-        TOHE.Logger.Disable("NotifyRoles");
-        TOHE.Logger.Disable("SwitchSystem");
-        TOHE.Logger.Disable("ModNews");
+        TOHEXI.Logger.Enable();
+        TOHEXI.Logger.Disable("NotifyRoles");
+        TOHEXI.Logger.Disable("SwitchSystem");
+        TOHEXI.Logger.Disable("ModNews");
         if (!DebugModeManager.AmDebugger)
         {
-            TOHE.Logger.Disable("2018k");
-            //TOHE.Logger.Disable("Github");
-            TOHE.Logger.Disable("CustomRpcSender");
-            //TOHE.Logger.Disable("ReceiveRPC");
-            TOHE.Logger.Disable("SendRPC");
-            TOHE.Logger.Disable("SetRole");
-            TOHE.Logger.Disable("Info.Role");
-            TOHE.Logger.Disable("TaskState.Init");
-            //TOHE.Logger.Disable("Vote");
-            TOHE.Logger.Disable("RpcSetNamePrivate");
-            //TOHE.Logger.Disable("SendChat");
-            TOHE.Logger.Disable("SetName");
-            //TOHE.Logger.Disable("AssignRoles");
-            //TOHE.Logger.Disable("RepairSystem");
-            //TOHE.Logger.Disable("MurderPlayer");
-            //TOHE.Logger.Disable("CheckMurder");
-            TOHE.Logger.Disable("PlayerControl.RpcSetRole");
-            TOHE.Logger.Disable("SyncCustomSettings");
+            TOHEXI.Logger.Disable("2018k");
+            //TOHEXI.Logger.Disable("Github");
+            TOHEXI.Logger.Disable("CustomRpcSender");
+            //TOHEXI.Logger.Disable("ReceiveRPC");
+            TOHEXI.Logger.Disable("SendRPC");
+            TOHEXI.Logger.Disable("SetRole");
+            TOHEXI.Logger.Disable("Info.Role");
+            TOHEXI.Logger.Disable("TaskState.Init");
+            //TOHEXI.Logger.Disable("Vote");
+            TOHEXI.Logger.Disable("RpcSetNamePrivate");
+            //TOHEXI.Logger.Disable("SendChat");
+            TOHEXI.Logger.Disable("SetName");
+            //TOHEXI.Logger.Disable("AssignRoles");
+            //TOHEXI.Logger.Disable("UpdateSystem");
+            //TOHEXI.Logger.Disable("MurderPlayer");
+            //TOHEXI.Logger.Disable("CheckMurder");
+            TOHEXI.Logger.Disable("PlayerControl.RpcSetRole");
+            TOHEXI.Logger.Disable("SyncCustomSettings");
         }
-        //TOHE.Logger.isDetail = true;
+        //TOHEXI.Logger.isDetail = true;
 
         // 認証関連-初期化
         DebugKeyAuth = new HashAuth(DebugKeyHash, DebugKeySalt);
@@ -402,6 +401,7 @@ public class Main : BasePlugin
                 {CustomRoles.Engineer, "#8cffff"},
                 {CustomRoles.Scientist, "#8cffff"},
                 {CustomRoles.GuardianAngel, "#ffffff"},
+                {CustomRoles.Guardian, "#ffffff"},
                 //伪装者颜色设置
                 {CustomRoles.Disorder, "#666699" },
                 {CustomRoles.EvilMini, "#FF0000" },
@@ -483,6 +483,7 @@ public class Main : BasePlugin
                  {CustomRoles.Copycat,"#00CC00" },
                 {CustomRoles.Spiritualists,"#87CEFA" },
                 {CustomRoles.Plumber,"#99CCCC" },
+                {CustomRoles.MagnetMan,"#FF3333" },
                 //中立职业颜色设置
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -526,7 +527,7 @@ public class Main : BasePlugin
                 {CustomRoles.Crush,"#ff79ce" },
                 {CustomRoles.Slaveowner,"#996600" },
                 {CustomRoles.Jealousy, "#996666"},
-                {CustomRoles.SourcePlague, "#CCCC33"},
+                {CustomRoles.SourcePlague, "#E9E9A8"},
                   {CustomRoles.PlaguesGod, "#101010"},
                 {CustomRoles.King,"#FFCC00" },
                 {CustomRoles.Exorcist,"#336666" },
@@ -625,8 +626,8 @@ public class Main : BasePlugin
         }
         catch (ArgumentException ex)
         {
-            TOHE.Logger.Error("错误：字典出现重复项", "LoadDictionary");
-            TOHE.Logger.Exception(ex, "LoadDictionary");
+            TOHEXI.Logger.Error("错误：字典出现重复项", "LoadDictionary");
+            TOHEXI.Logger.Exception(ex, "LoadDictionary");
             hasArgumentException = true;
             ExceptionMessage = ex.Message;
             ExceptionMessageIsShown = false;
@@ -643,9 +644,9 @@ public class Main : BasePlugin
 
         IRandom.SetInstance(new NetRandomWrapper());
 
-        TOHE.Logger.Info($"{Application.version}", "AmongUs Version");
+        TOHEXI.Logger.Info($"{Application.version}", "AmongUs Version");
 
-        var handler = TOHE.Logger.Handler("GitVersion");
+        var handler = TOHEXI.Logger.Handler("GitVersion");
         handler.Info($"{nameof(ThisAssembly.Git.BaseTag)}: {ThisAssembly.Git.BaseTag}");
         handler.Info($"{nameof(ThisAssembly.Git.Commit)}: {ThisAssembly.Git.Commit}");
         handler.Info($"{nameof(ThisAssembly.Git.Commits)}: {ThisAssembly.Git.Commits}");
@@ -660,7 +661,7 @@ public class Main : BasePlugin
         if (!DebugModeManager.AmDebugger) ConsoleManager.DetachConsole();
         else ConsoleManager.CreateConsole();
 
-        TOHE.Logger.Msg("========= TOHE loaded! =========", "Plugin Load");
+        TOHEXI.Logger.Msg("========= TOHE loaded! =========", "Plugin Load");
     }
 
     
@@ -751,6 +752,7 @@ public enum CustomRoles
     BloodSeekers,
     SoulSucker,
     HangTheDevil,
+    ShapeShifters,
     //双阵营
     Mini,
     //船员（原版）
@@ -833,6 +835,8 @@ public enum CustomRoles
     Tom,
     Copycat,
     Spiritualists,
+    MagnetMan,
+    Guardian,
     //中立
     Arsonist,
     Jester,
@@ -905,6 +909,10 @@ public enum CustomRoles
     //烫手的山芋
     Hotpotato,
     Coldpotato,
+
+    //黎明杀机
+    Fugitives,
+    Butcher,
 
     //抓捕
     captor,

@@ -1,7 +1,7 @@
 using Hazel;
 using System.Collections.Generic;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class CustomWinnerHolder
 {

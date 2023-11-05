@@ -1,11 +1,11 @@
 ﻿using Il2CppSystem.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using TOHE.Modules;
-using TOHE.Roles.Neutral;
-using static TOHE.Options;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.Options;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class SpeedUp
 {
@@ -18,7 +18,7 @@ public static class SpeedUp
         SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.SpeedUp);
         SkillCooldown = FloatOptionItem.Create(Id + 10, "SpeedUpSkillCooldown", new(2.5f, 900f, 2.5f), 20f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SpeedUp])
             .SetValueFormat(OptionFormat.Seconds);
-        ForSpeed = FloatOptionItem.Create(Id + 10, "ForSpeed", new(0.5f, 3.0f, 0.5f), 0.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SpeedUp])
+        ForSpeed = FloatOptionItem.Create(Id + 11, "ForSpeed", new(0.5f, 3.0f, 0.5f), 0.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SpeedUp])
             .SetValueFormat(OptionFormat.Seconds);
     }
     public static void Init()

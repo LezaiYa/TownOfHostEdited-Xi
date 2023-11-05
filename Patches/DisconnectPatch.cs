@@ -1,7 +1,7 @@
 using HarmonyLib;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnDisconnected))]
 internal class OnDisconnectedPatch

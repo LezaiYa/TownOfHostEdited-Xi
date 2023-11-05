@@ -1,12 +1,13 @@
 using HarmonyLib;
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Neutral;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.FixedUpdate))]
 class ShipFixedUpdatePatch
@@ -28,8 +29,8 @@ class ShipFixedUpdatePatch
         }
     }
 }
-[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.RepairSystem))]
-class RepairSystemPatch
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.UpdateSystem))]
+class UpdateSystemPatch
 {
     public static bool IsComms;
     public static bool Prefix(ShipStatus __instance,
@@ -37,7 +38,7 @@ class RepairSystemPatch
         [HarmonyArgument(1)] PlayerControl player,
         [HarmonyArgument(2)] byte amount)
     {
-        Logger.Msg("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole() + ", amount: " + amount, "RepairSystem");
+        Logger.Msg("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole() + ", amount: " + amount, "UpdateSystem");
         if (RepairSender.enabled && AmongUsClient.Instance.NetworkMode != NetworkModes.OnlineGame)
             Logger.SendInGame("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole() + ", amount: " + amount);
 
@@ -54,7 +55,7 @@ class RepairSystemPatch
 
         //SabotageMaster
         if (player.Is(CustomRoles.SabotageMaster))
-            SabotageMaster.RepairSystem(__instance, systemType, amount);
+            SabotageMaster.RepairSystem(__instance, systemType, amount, player.PlayerId);
 
         if (systemType == SystemTypes.Electrical && 0 <= amount && amount <= 4)
         {
@@ -90,7 +91,7 @@ class RepairSystemPatch
                 if (!GameStates.IsMeeting)
                 { Utils.NotifyRoles(ForceLoop: true); }
 
-            }, 0.1f, "ShipStatus.RepairSystem");
+            }, 0.1f, "ShipStatus.UpdateSystem");
         }
         else
         {
@@ -108,12 +109,36 @@ class RepairSystemPatch
         }
         CheckAndOpenDoors(__instance, amount, Ids.ToArray());
     }
+    public static void OpenDoors(ShipStatus __instance, int amount, int min, int max)
+    {
+       for (var i = 0; i <= 100; i++)
+        {
+            __instance.RpcUpdateSystem(SystemTypes.Doors, (byte)i);
+        }
+    }
+    public static void CloseDoors(ShipStatus __instance)
+    {
+   
+            __instance.RpcCloseDoorsOfType(SystemTypes.Doors);
+        
+    }
     private static void CheckAndOpenDoors(ShipStatus __instance, int amount, params int[] DoorIds)
     {
         if (DoorIds.Contains(amount)) foreach (var id in DoorIds)
             {
-                __instance.RpcRepairSystem(SystemTypes.Doors, id);
+                __instance.RpcUpdateSystem(SystemTypes.Doors, (byte)id);
+                __instance.RpcCloseDoorsOfType(SystemTypes.Doors);
             }
+    }
+}
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.UpdateSystem), typeof(SystemTypes), typeof(PlayerControl), typeof(MessageReader))]
+public static class MessageReaderUpdateSystemPatch
+{
+    public static void Prefix(ShipStatus __instance, [HarmonyArgument(0)] SystemTypes systemType, [HarmonyArgument(1)] PlayerControl player, [HarmonyArgument(2)] MessageReader reader)
+    {
+        if (systemType is SystemTypes.Ventilation) return;
+
+        RepairSystemPatch.Prefix(__instance, systemType, player, MessageReader.Get(reader).ReadByte());
     }
 }
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CloseDoorsOfType))]
@@ -124,13 +149,63 @@ class CloseDoorsPatch
         return !(Options.DisableSabotage.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat);
     }
 }
-[HarmonyPatch(typeof(SwitchSystem), nameof(SwitchSystem.RepairDamage))]
-class SwitchSystemRepairPatch
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.UpdateSystem), typeof(SystemTypes), typeof(PlayerControl), typeof(byte))]
+class RepairSystemPatch
 {
-    public static void Postfix(SwitchSystem __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] byte amount)
+    public static bool Prefix(ShipStatus __instance,
+        [HarmonyArgument(0)] SystemTypes systemType,
+        [HarmonyArgument(1)] PlayerControl player,
+        [HarmonyArgument(2)] byte amount)
     {
-        if (player.Is(CustomRoles.SabotageMaster))
-            SabotageMaster.SwitchSystemRepair(__instance, amount);
+        Logger.Msg("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole().RemoveHtmlTags() + ", amount: " + amount, "RepairSystem");
+
+        if (RepairSender.enabled && AmongUsClient.Instance.NetworkMode != NetworkModes.OnlineGame)
+        {
+            Logger.SendInGame("SystemType: " + systemType.ToString() + ", PlayerName: " + player.GetNameWithRole().RemoveHtmlTags() + ", amount: " + amount);
+        }
+
+        if (!AmongUsClient.Instance.AmHost) return true;
+
+        if (Options.DisableSabotage.GetBool() && systemType == SystemTypes.Sabotage)
+        {
+            return false;
+        }
+
+        if (player.Is(CustomRoles.Fool) && !GameStates.IsMeeting &&
+            systemType != SystemTypes.Sabotage &&
+            (systemType is
+                SystemTypes.Reactor or
+                SystemTypes.Laboratory or
+                SystemTypes.HeliSabotage or
+                SystemTypes.LifeSupp or
+                SystemTypes.Comms or
+                SystemTypes.Electrical))
+        {
+            return false;
+        }
+
+
+
+
+        return true;
+    }
+
+    public static void CheckAndOpenDoorsRange(ShipStatus __instance, int amount, int min, int max)
+    {
+        var Ids = new List<int>();
+        for (var i = min; i <= max; i++)
+        {
+            Ids.Add(i);
+        }
+        CheckAndOpenDoors(__instance, amount, Ids.ToArray());
+    }
+    private static void CheckAndOpenDoors(ShipStatus __instance, int amount, params int[] DoorIds)
+    {
+        if (!DoorIds.Contains(amount)) return;
+        foreach (var id in DoorIds)
+        {
+            __instance.RpcUpdateSystem(SystemTypes.Doors, (byte)id);
+        }
     }
 }
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]

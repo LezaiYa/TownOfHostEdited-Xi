@@ -2,7 +2,7 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 using UnityEngine;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
 class CanUsePatch
@@ -19,7 +19,7 @@ class EmergencyMinigamePatch
 {
     public static void Postfix(EmergencyMinigame __instance)
     {
-        if (Options.DisableMeeting.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat || Options.CurrentGameMode == CustomGameMode.HotPotato)
+        if (Options.DisableMeeting.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat || Options.CurrentGameMode == CustomGameMode.HotPotato || Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
             __instance.Close();
         return;
     }

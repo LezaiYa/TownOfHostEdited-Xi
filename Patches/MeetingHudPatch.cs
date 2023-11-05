@@ -7,19 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOHE.Modules;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Double;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstructionNoT;
-using static TOHE.ChatCommands;
-using static TOHE.Translator;
+using static TOHEXI.ChatCommands;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.ParticleSystem.PlaybackState;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
 class CheckForEndVotingPatch
@@ -557,7 +557,7 @@ class CheckForEndVotingPatch
                         name += Utils.ColorString(new Color32(255, 25, 25, byte.MaxValue), GetString("TeamImpostor"));
                     else if (player.GetCustomRole().IsNeutral() || player.Is(CustomRoles.Charmed) || player.Is(CustomRoles.Attendant))
                         name += Utils.ColorString(new Color32(255, 171, 27, byte.MaxValue), GetString("TeamNeutral"));
-                    else if (player.GetCustomRole().IsCrewmate())
+                    else if (player.GetCustomRole().IsCrewmate() || player.Is(CustomRoles.Undercover))
                         name += Utils.ColorString(new Color32(140, 255, 255, byte.MaxValue), GetString("TeamCrewmate"));
                     name += ")";
                 }
@@ -986,11 +986,6 @@ class MeetingHudStartPatch
             {
                 Main.NnurseHelep.Remove(player.PlayerId);
                 player.RpcMurderPlayerV3(player);
-            }
-            //化形
-            if (player.Is(CustomRoles.MimicKiller))
-            {
-               player.RpcRevertShapeshift(true);
             }
 
             //操控者
@@ -1706,7 +1701,7 @@ class MeetingHudOnDestroyPatch
                                         Main.DovesOfNeaceNumOfUsed.Add(ps.PlayerId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                                         break;
                                     case CustomRoles.Rudepeople:
-                                        Main.RudepeopleNumOfUsed.Add(ps.PlayerId, Options.RudepeoplekillMaxOfUseage.GetInt());
+                                        Rudepeople.Add(ps.PlayerId);
                                         break;
                                     case CustomRoles.TimeMaster:
                                         Main.TimeMasterNum[ps.PlayerId] = 0;
@@ -1870,6 +1865,9 @@ class MeetingHudOnDestroyPatch
                                         break;
                                     case CustomRoles.MimicAss:
                                         Mimics.Add(ps.PlayerId);
+                                        break;
+                                    case CustomRoles.ShapeShifters:
+                                        ShapeShifters.Add(ps.PlayerId);
                                         break;
                                     case CustomRoles.Fake:
                                         Main.FakeMax[ps.PlayerId] = 0;

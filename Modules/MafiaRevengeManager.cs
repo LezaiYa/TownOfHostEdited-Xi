@@ -1,11 +1,11 @@
 ﻿using HarmonyLib;
 using Hazel;
 using System;
-using TOHE.Modules;
+using TOHEXI.Modules;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class MafiaRevengeManager
 {

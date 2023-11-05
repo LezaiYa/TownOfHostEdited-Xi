@@ -8,9 +8,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 public static class TemplateManager
 {
@@ -63,7 +63,7 @@ public static class TemplateManager
                         };
                     else fileName = "English";
                     Logger.Warn($"创建新的 Template 文件：{fileName}", "TemplateManager");
-                    File.WriteAllText(TEMPLATE_FILE_PATH, GetResourcesTxt($"TOHE.Resources.Config.template.{fileName}.txt"));
+                    File.WriteAllText(TEMPLATE_FILE_PATH, GetResourcesTxt($"TOHEXI.Resources.Config.template.{fileName}.txt"));
                 }
             }
             catch (Exception ex)

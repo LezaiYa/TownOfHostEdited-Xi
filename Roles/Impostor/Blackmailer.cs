@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using static TOHE.Options;
+using static TOHEXI.Options;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 using static UnityEngine.GraphicsBuffer;
-using TOHE.Modules;
-using TOHE.Roles.Neutral;
+using TOHEXI.Modules;
+using TOHEXI.Roles.Neutral;
 using MS.Internal.Xml.XPath;
 using Rewired.Utils.Platforms.Windows;
 using System.Runtime.Intrinsics.Arm;
 using AmongUs.GameOptions;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class Blackmailer
 {

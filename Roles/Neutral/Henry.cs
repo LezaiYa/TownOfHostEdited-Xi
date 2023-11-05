@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOHE.Roles.Neutral;
-using TOHE;
-using static TOHE.Options;
+using TOHEXI.Roles.Neutral;
+using TOHEXI;
+using static TOHEXI.Options;
 using MS.Internal.Xml.XPath;
 using UnityEngine;
 using static Il2CppSystem.Net.Http.Headers.Parser;
 using static UnityEngine.GraphicsBuffer;
 using Sentry.Internal;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
 
-namespace TOHE.Roles.Neutral;
+namespace TOHEXI.Roles.Neutral;
 public static class Henry
 {
     private static readonly int Id = 167832056;

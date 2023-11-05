@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE.Roles.Impostor;
+namespace TOHEXI.Roles.Impostor;
 
 public static class SerialKiller
 {

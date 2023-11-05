@@ -2,13 +2,14 @@ using HarmonyLib;
 using Il2CppSystem.Text;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Roles.Crewmate;
-using TOHE.Roles.Impostor;
-using TOHE.Roles.Neutral;
+using TOHEXI.GameMode;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
 using UnityEngine;
-using static TOHE.Translator;
+using static TOHEXI.Translator;
 
-namespace TOHE;
+namespace TOHEXI;
 
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
 class HudManagerPatch
@@ -369,6 +370,10 @@ class HudManagerPatch
                 {
                     LowerInfoText.text = HotPotatoManager.GetHudText();
                 }
+                if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)
+                {
+                    LowerInfoText.text = TheLivingDaylights.GetHudText();
+                }
                 else if (player.Is(CustomRoles.BountyHunter))
                 {
                     LowerInfoText.text = BountyHunter.GetTargetText(player, true);
@@ -719,7 +724,7 @@ class RepairSender
     }
     public static void Send()
     {
-        ShipStatus.Instance.RpcRepairSystem((SystemTypes)SystemType, amount);
+        ShipStatus.Instance.RpcUpdateSystem((SystemTypes)SystemType, (byte)amount);
         Reset();
     }
     public static void Reset()

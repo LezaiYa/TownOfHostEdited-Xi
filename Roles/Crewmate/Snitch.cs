@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-using static TOHE.Options;
+using static TOHEXI.Options;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHEXI.Roles.Crewmate;
 
 public static class Snitch
 {

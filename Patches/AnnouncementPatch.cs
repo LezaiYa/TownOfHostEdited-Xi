@@ -8,7 +8,7 @@ using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System.Reflection;
 
-namespace TOHE;
+namespace TOHEXI;
 
 // ##https://github.com/Yumenopai/TownOfHost_Y
 //来源：TOHY（谢谢！）
@@ -21,8 +21,8 @@ public class ModNewsSCn
     public string ShortTitle;
     public string Text;
     public string Date;
-
-    public Announcement ToAnnouncement()
+    public uint Language;
+   public Announcement ToAnnouncement()
     {
         var result = new Announcement
         {
@@ -70,6 +70,70 @@ public class ModNewsHistorySCn
         {
             var news = new ModNewsSCn
             {
+                Number = 100006,
+                Title = "TownOfHostEdited-Xi v2.0.4",
+                SubTitle = "★★★★真菌世界！★★★★",
+                ShortTitle = "★TOHEX v2.0.4★\n<size=75%>简体中文</size>",
+                Text =
+                "简体中文"
+                + "\n-----------------------------"
+                + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
+                + "\n-----------------------------"
+                + "\n喜是歌姬真菌!"
+                + "\n\n\n## 对应官方版本"
+                + "\n- 基于TOH版本 v4.1.2"
+                + "\n- 基于TOHE版本 v2.3.55"
+                + "\n- 适配Among Us版本 v2023.10.24及以上版本"
+                + "\n\n## 修复"
+                + "\n- 修复了猎人可以击杀的问题"
+                + "\n- 修复了魅魔无法选择备胎的问题"
+                 + "\n- 修复了丘比特开局死亡的问题"
+                           + "\n- 修复了热土豆的问题"
+                + "\n\n## 新增职业"
+                +"\n- 内鬼阵营：模仿者团队"
+                + "\n- 内鬼阵营：化形者"
+                         + "\n- 船员阵营：磁铁人"
+                + "\n\n## 更改"
+                 + "\n- 梦魇在未关灯的情况下可以给人施加停电buff"
+                  + "\n- 诱饵可以看到视野范围里的管道里有没有人"
+                 + "\n- 暂时删除音效",
+                Date = "2023-10-29T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100005,
+                Title = "TownOfHostEdited-Xi v2.0.4",
+                SubTitle = "★★★★Fungle World!★★★★",
+                ShortTitle = "★TOHEX v2.0.4★\n<size=75%>English</size>",
+                Text =
+                "English"
+                + "\n-----------------------------"
+                 + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
+                + "\n-----------------------------"
+                + "\nNew Map!"
+               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24 And Above"                + "\n\n## Bugs Fix"
+                + "\n- Hunter Can Kill Bug Fix"
+                + "\n- Akujo Can't Keep Bug Fix"
+                 + "\n- Cupid Die When Game Start Bug Fix"
+                 + "\n\n## New Roles"
+                 + "\n- Impostor:Mimics"
+                 + "\n- Impostor:Insteader"
+                 + "\n- Crewmate:Magneter"
+                 + "\n\n## Changes" 
+                 + "\n- Mare has the ability to temporarily blind others"
+                 + "\n- Temporarily Remove Sounds"
+                 + "\n- Bait can see player in vent"
+                 + "\n-Support English",
+                Date = "2023-10-29T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
                 Number = 100004,
                 Title = "TownOfHostEdited-Xi v2.0.3",
                 SubTitle = "★★★★公开回归！★★★★",
@@ -86,7 +150,7 @@ public class ModNewsHistorySCn
                 + "\n- 适配Among Us版本 v2023.7.11及以上版本"
                 + "\n\n## 修复"
                 + "\n- 修复大量bug"
-                         + "\n- 可以公开"
+                + "\n- 可以公开"
                 + "\n\n## 新增职业"
                 + "\n- 船员阵营：管道工"
                 + "\n\n## 写在最后"

@@ -341,6 +341,10 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.GuardianAngelCooldown = Options.GuardianCooldown.GetFloat();
                 AURoleOptions.ImpostorsCanSeeProtect = false;
                 break;
+          //  case CustomRoles.Locksmith:
+         //       AURoleOptions.EngineerCooldown = Options.LocksmithCooldown.GetFloat();
+            //    AURoleOptions.EngineerInVentMaxTime = 1f;
+            //    break; 
         }
 
         // 为迷幻者的凶手

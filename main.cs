@@ -484,6 +484,7 @@ public class Main : BasePlugin
                 {CustomRoles.Spiritualists,"#87CEFA" },
                 {CustomRoles.Plumber,"#99CCCC" },
                 {CustomRoles.MagnetMan,"#FF3333" },
+                // {CustomRoles.Locksmith ,"#669966" },
                 //中立职业颜色设置
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -837,6 +838,7 @@ public enum CustomRoles
     Spiritualists,
     MagnetMan,
     Guardian,
+    //Locksmith,
     //中立
     Arsonist,
     Jester,

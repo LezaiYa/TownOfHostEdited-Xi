@@ -344,6 +344,10 @@ class EnterVentPatch
                 player?.MyPhysics?.RpcBootFromVent(__instance.Id);
             }
         }
+       // if (pc.Is(CustomRoles.Locksmith))
+      //  {
+       //         RepairSystemPatch.OpenDoors((ShipStatus)pc.PlayerId);
+      //  }
     }
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.CoEnterVent))]
     class CoEnterVentPatch

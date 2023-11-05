@@ -517,6 +517,7 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SyncKBNameNotify:
                 SoloKombatManager.ReceiveRPCSyncNameNotify(reader);
+                HotPotatoManager.ReceiveRPCSyncNameNotify(reader);
                 break;
             case CustomRPC.SetMorticianArrow:
                 Mortician.ReceiveRPC(reader);

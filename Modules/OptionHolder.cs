@@ -375,6 +375,7 @@ public static class Options
     public static OptionItem GuardianCooldown;
         public static OptionItem ResetDoorsEveryTurns;
     public static OptionItem DoorsResetMode;
+    public static OptionItem LocksmithCooldown;
 
 
     // タスク無効化
@@ -1088,6 +1089,9 @@ public static class Options
         TextOptionItem.Create(909200, "CF", TabGroup.CrewmateRoles)//辅助型
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(247, 70, 49, byte.MaxValue));
+      //  SetupRoleOptions(1184654, TabGroup.CrewmateRoles, CustomRoles.Locksmith);
+       // LocksmithCooldown = FloatOptionItem.Create(1156985, "LocksmithCooldown", new(0f, 990f, 1f), 25f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances////[CustomRoles.Locksmith])
+//.SetValueFormat(OptionFormat.Seconds);
         SetupRoleOptions(15458694, TabGroup.CrewmateRoles, CustomRoles.MagnetMan);
         MagnetManRadius = FloatOptionItem.Create(18994887, "MagnetManRadius", new(0.5f, 5f, 0.5f), 1.5f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.MagnetMan])
     .SetValueFormat(OptionFormat.Multiplier);

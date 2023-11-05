@@ -259,7 +259,7 @@ class BeginCrewmatePatch
             __instance.ImpostorText.gameObject.SetActive(true);
             __instance.ImpostorText.text = GetString("ModeTheLivingDaylights");
             __instance.BackgroundBar.material.color = color;
-            PlayerControl.LocalPlayer.Data.Role.IntroSound = PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.Impostor);
+            PlayerControl.LocalPlayer.Data.Role.IntroSound = PlayerControl.LocalPlayer.Data.Role.IntroSound = GetIntroSound(RoleTypes.GuardianAngel);
         }
         if (Options.CurrentGameMode == CustomGameMode.HotPotato)
         {

@@ -381,7 +381,14 @@ public static class SetRecommendationsPatch
         }
         if (Options.CurrentGameMode == CustomGameMode.TheLivingDaylights)   // TheLivingDaylights
         {
-
+            __instance.PlayerSpeedMod = 1.75f;
+            __instance.CrewLightMod = 1f;
+            __instance.ImpostorLightMod = 1f;
+            __instance.NumImpostors = 3;
+            __instance.NumCommonTasks = 1;
+            __instance.NumLongTasks = 1;
+            __instance.NumShortTasks = 2;
+            __instance.KillCooldown = 10f;
         }
             return false;
     }

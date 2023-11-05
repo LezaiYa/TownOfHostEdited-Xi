@@ -172,6 +172,9 @@ internal static class CustomRolesHelper
                 CustomRoles.ShapeShifters => CustomRoles.Impostor,
                 CustomRoles.MagnetMan => CustomRoles.Crewmate,
                 CustomRoles.Coldpotato => CustomRoles.Impostor,
+               // CustomRoles.Locksmith => CustomRoles.Engineer,
+               CustomRoles.Butcher => CustomRoles.Impostor,
+               CustomRoles.Fugitives => CustomRoles.Engineer,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };;
     }

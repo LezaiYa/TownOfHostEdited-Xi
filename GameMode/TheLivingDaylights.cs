@@ -29,8 +29,7 @@ public static class TheLivingDaylights
     {
         if (Options.CurrentGameMode != CustomGameMode.TheLivingDaylights) return;
         RoundTime = TD.GetInt() + 8;
-       
-
+      
     }
     public static string GetHudText()
     {

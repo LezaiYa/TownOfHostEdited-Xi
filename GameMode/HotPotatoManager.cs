@@ -3,13 +3,8 @@ using HarmonyLib;
 using Hazel;
 using System.Linq;
 using UnityEngine;
-using HarmonyLib;
-using Hazel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using TOHEXI.Roles.Neutral;
-using UnityEngine;
 using static TOHEXI.RandomSpawn;
 using static TOHEXI.Translator;
 

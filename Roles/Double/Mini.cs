@@ -23,10 +23,11 @@ public class Mini
     public static int GrowUpTime = new();
     public static int GrowUp = new();
     public static int EvilKillCDmin = new();
+    private static long LastFixedUpdate = new();
     public static int Age = new();
     public static OptionItem GrowUpDuration;
     public static OptionItem EveryoneCanKnowMini;
-    public static OptionItem OnMeetingStopCountdown;
+    public static OptionItem CountMeetingTime;
     public static OptionItem EvilMiniSpawnChances;
     public static OptionItem CanBeEvil;
     public static OptionItem UpDateAge;
@@ -46,6 +47,7 @@ public class Mini
         MajorCD = FloatOptionItem.Create(Id + 112, "MajorCooldown", new(0f, 180f, 2.5f), 15f, TabGroup.CrewmateRoles, false).SetParent(CanBeEvil)
            .SetValueFormat(OptionFormat.Seconds);
         UpDateAge = BooleanOptionItem.Create(Id + 114, "UpDateAge", true, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Mini]);
+        CountMeetingTime = BooleanOptionItem.Create(Id + 116, "CountMeetingTime", true, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Mini]);
     }
     public static void Init()
     {
@@ -53,6 +55,89 @@ public class Mini
         playerIdList = new();
         GrowUp = GrowUpDuration.GetInt() / 18;
         Age = 0;
+    }
+    private static void SendRPC(byte playerId)
+    {
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SyncMiniCrewAge, SendOption.Reliable, -1);
+        writer.Write(Age);
+        AmongUsClient.Instance.FinishRpcImmediately(writer);
+    }
+
+    public static void ReceiveRPC(MessageReader reader)
+    {
+        Age = reader.ReadInt32();
+    }
+    public static void OnFixedUpdate(PlayerControl player)
+    {
+
+        if (!GameStates.IsInGame || !AmongUsClient.Instance.AmHost) return;
+        if (!player.Is(CustomRoles.NiceMini) && !player.Is(CustomRoles.EvilMini) || !IsEnable) return;
+        if (Age >= 18 || (!CountMeetingTime.GetBool() && GameStates.IsMeeting)) return;
+        if (LastFixedUpdate == Utils.GetTimeStamp()) return;
+        LastFixedUpdate = Utils.GetTimeStamp();
+        Mini.GrowUpTime++;
+        if ( player.Is(CustomRoles.NiceMini))
+        {
+            
+                
+                
+                if (Mini.GrowUpTime >= Mini.GrowUpDuration.GetInt() / 18)
+                {
+                    Mini.Age += 1;
+                    Mini.GrowUpTime = 0;
+                    player.RpcGuardAndKill();
+                    Logger.Info($"年龄增加1", "Child");
+                    Mini.SendRPC(player.PlayerId);
+                    if (Mini.UpDateAge.GetBool())
+                    {
+                        foreach (var pc in Main.AllPlayerControls)
+                        {
+                            if (pc.PlayerId != player.PlayerId) continue;
+                            player.Notify(Translator.GetString("MiniUp"));
+                        }
+                    }
+                }
+            
+            if (!player.IsAlive())
+            {
+                CustomWinnerHolder.ResetAndSetWinner(CustomWinner.NiceMini);
+                CustomWinnerHolder.WinnerIds.Add(player.PlayerId);
+                return;
+            }
+        }
+        else if (player.Is(CustomRoles.EvilMini))
+        {
+            
+                if (Main.EvilMiniKillcooldown[player.PlayerId] >= 1f)
+                {
+                    Main.EvilMiniKillcooldown[player.PlayerId]--;
+
+                }
+                if (Mini.GrowUpTime >= Mini.GrowUpDuration.GetInt() / 18)
+                {
+                    Main.EvilMiniKillcooldownf = Main.EvilMiniKillcooldown[player.PlayerId];
+                    Logger.Info($"记录击杀冷却{Main.EvilMiniKillcooldownf}", "Child");
+                    Main.AllPlayerKillCooldown[player.PlayerId] = Main.EvilMiniKillcooldownf;
+                    Main.EvilMiniKillcooldown[player.PlayerId] = Main.EvilMiniKillcooldownf;
+                    player.MarkDirtySettings();
+                    Mini.Age += 1;
+                    Mini.GrowUpTime = 0;
+                    Logger.Info($"年龄增加1", "Child");
+                    Mini.SendRPC(player.PlayerId);
+                    if (Mini.UpDateAge.GetBool())
+                    {
+                        foreach (var pc in Main.AllPlayerControls)
+                        {
+                            if (pc.PlayerId != player.PlayerId) continue;
+                            player.Notify(Translator.GetString("MiniUp"));
+                        }
+                    }
+                    Logger.Info($"重置击杀冷却{Main.EvilMiniKillcooldownf - 1f}", "Child");
+
+
+                }
+            
+        }
     }
     public static void Add(byte playerId)
     {

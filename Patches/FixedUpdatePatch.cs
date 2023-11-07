@@ -378,75 +378,7 @@ class FixedUpdatePatch
                         PlagueDoctor.ImmunityGone = true;
                     }
                 }
-                #region 检查小孩是否要增加年龄
-                if (GameStates.IsInTask && player.Is(CustomRoles.NiceMini))
-                {
-                    if (Mini.Age < 18 && player.IsAlive())
-                    {
-                        if (LastFixedUpdate == Utils.GetTimeStamp()) return;
-                        LastFixedUpdate = Utils.GetTimeStamp();
-                        Mini.GrowUpTime++;
-                        if (Mini.GrowUpTime >= Mini.GrowUpDuration.GetInt() / 18)
-                        {
-                            Mini.Age += 1;
-                            Mini.GrowUpTime = 0;
-                            player.RpcGuardAndKill();
-                            Logger.Info($"年龄增加1", "Child");
-                            if (Mini.UpDateAge.GetBool())
-                            {
-                                foreach (var pc in Main.AllPlayerControls)
-                                {
-                                    if (pc.PlayerId != player.PlayerId) continue;
-                                    player.Notify(GetString("MiniUp"));
-                                }
-                            }
-                        }
-                    }
-                    if (!player.IsAlive())
-                    {
-                        CustomWinnerHolder.ResetAndSetWinner(CustomWinner.NiceMini);
-                        CustomWinnerHolder.WinnerIds.Add(player.PlayerId);
-                        return;
-                    }
-                }
-                if (GameStates.IsInTask && player.Is(CustomRoles.EvilMini))
-                {
-                    if (Mini.Age < 18)
-                    {
-                        if (LastFixedUpdate == Utils.GetTimeStamp()) return;
-                        LastFixedUpdate = Utils.GetTimeStamp();
-                        Mini.GrowUpTime++;
-                        if (Main.EvilMiniKillcooldown[player.PlayerId] >= 1f)
-                        {
-                            Main.EvilMiniKillcooldown[player.PlayerId]--;
 
-                        }
-                        if (Mini.GrowUpTime >= Mini.GrowUpDuration.GetInt() / 18)
-                        {
-                            Main.EvilMiniKillcooldownf = Main.EvilMiniKillcooldown[player.PlayerId];
-                            Logger.Info($"记录击杀冷却{Main.EvilMiniKillcooldownf}", "Child");
-                            Main.AllPlayerKillCooldown[player.PlayerId] = Main.EvilMiniKillcooldownf;
-                            Main.EvilMiniKillcooldown[player.PlayerId] = Main.EvilMiniKillcooldownf;
-                            player.MarkDirtySettings();
-                            Mini.Age += 1;
-                            Mini.GrowUpTime = 0;
-                            Logger.Info($"年龄增加1", "Child");
-
-                            if (Mini.UpDateAge.GetBool())
-                            {
-                                foreach (var pc in Main.AllPlayerControls)
-                                {
-                                    if (pc.PlayerId != player.PlayerId) continue;
-                                    player.Notify(GetString("MiniUp"));
-                                }
-                            }
-                            Logger.Info($"重置击杀冷却{Main.EvilMiniKillcooldownf - 1f}", "Child");
-
-
-                        }
-                    }
-                }
-                #endregion
 
                 //检查双刀手的第二把叨是否已经到时间
                 if (GameStates.IsInTask && player.Is(CustomRoles.DoubleKiller))
@@ -652,6 +584,7 @@ class FixedUpdatePatch
                 BloodKnight.OnFixedUpdate(player);
                 Yandere.OnFixedUpdate(player);
                 PlagueDoctor.OnFixedUpdate(player);
+                Mini.OnFixedUpdate(player);
                 Chameleon.OnFixedUpdate(player);
 
                 //Kidnapper.OnFixedUpdate(player);

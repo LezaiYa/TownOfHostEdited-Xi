@@ -72,6 +72,7 @@ enum CustomRPC
         SetCurrentInfectTarget,
     SetGamerHealth,
     SetInfect,
+    SyncMiniCrewAge,
     SetPelicanEtenNum,
     SwordsManKill,
     SetCounterfeiterSellLimit,
@@ -436,6 +437,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetInfect:
                 PlagueDoctor.ReceiveRPC(reader);
                 break;
+            case CustomRPC.SyncMiniCrewAge:
+                Mini.ReceiveRPC(reader);
+                    break;
             case CustomRPC.PlayCustomSound:
                 CustomSoundsManager.ReceiveRPC(reader);
                 break;

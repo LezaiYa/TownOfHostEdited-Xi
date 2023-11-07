@@ -32,7 +32,7 @@ Regardin WebSite
 ### The Latest Version：
 support AmongUs v2023.7.11 and above
 
-The Latest Version: v2.0.3
+The Latest Version: v2.0.4
 
 <a href="https://gitee.com/xigua_ya/tohex/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Gitee Releases%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 
@@ -50,6 +50,7 @@ The Latest Version: v2.0.3
 [Town Of Host : The Other Roles](https://github.com/music-discussion/TownOfHost-TheOtherRoles)<br>
 [Super New Roles](https://github.com/ykundesu/SuperNewRoles)<br>
 [Town Of Host-ReEdited](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
+[Town Of Host:Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced)<br>
 [Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko)<br>
 [Town Of Us](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town-Of-Us-R](https://github.com/eDonnes124/Town-Of-Us-R)<br>
@@ -114,6 +115,12 @@ The Latest Version: v2.0.3
 > - Many role ideas
 > - Provided roles: Medic, Disperser, Researcher
 >  
+>### :star: [Town Of Host:Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced) :
+> 
+> - Developer：[Moe](https://github.com/0xDrMoe)
+> - Many role ideas
+> - v2023.10.24 Version support
+>  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :
 > 
 > - Developer：[Night_瓜](https://gitee.com/xigua_ya)
@@ -124,6 +131,7 @@ The Latest Version: v2.0.3
 > - Developer: [Niko](https://github.com/NikoCat233)
 > - Reference: Public ideas before v2.0.3
 > - Reference: Improve roles in TOHEX
+> - **Technical support**
 >
 # ***Credits***
 

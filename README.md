@@ -31,7 +31,7 @@
 ### 最新版本：
 支持AmongUs v2023.7.11及以上版本
 
-最新版本：v2.0.3
+最新版本：v2.0.4
 
 <a href="https://gitee.com/xigua_ya/tohex/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Gitee获取新版本%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 
@@ -49,6 +49,7 @@
 [Town Of Host : The Other Roles](https://github.com/music-discussion/TownOfHost-TheOtherRoles)<br>
 [Super New Roles](https://github.com/ykundesu/SuperNewRoles)<br>
 [Town Of Host-ReEdited](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
+[Town Of Host:Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced)<br>
 [Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko)<br>
 [Town Of Us](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town-Of-Us-R](https://github.com/eDonnes124/Town-Of-Us-R)<br>
@@ -88,7 +89,6 @@
 > - 许多职业想法
 > - 驱逐确认
 > - 分割RPC包
-> - 部分职业来源：模仿者(杀手)
 >
 >### :star: [Super New Roles](https://github.com/ykundesu/SuperNewRoles) :
 > 
@@ -114,6 +114,12 @@
 > - 许多职业想法
 > - 部分职业来源：医生，分散者，研究员
 >  
+>### :star: [Town Of Host:Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced) :
+> 
+> - 作者：[Moe](https://github.com/0xDrMoe)
+> - 许多职业想法
+> - v2023.10.24版本适配
+>  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :
 > 
 > - 作者：[Night_瓜](https://gitee.com/xigua_ya)
@@ -124,6 +130,7 @@
 > - 作者：[Niko](https://github.com/NikoCat233)
 > - v2.0.3以前的公开想法
 > - 改进TOHEX的职业
+> - **技术支持**
 >
 # 制作团队
 
@@ -137,5 +144,5 @@
 >[小黄117]()- **职业栏图标绘制&背景绘制** -<br>
 >
 >> ***网站开发：***<BR>
->[清风]()- **网站制作** -<br>
+>[清风]()- **TOHEX.CC网站制作** -<br>
 >[嘉轩]()- **技术指导** -<br>

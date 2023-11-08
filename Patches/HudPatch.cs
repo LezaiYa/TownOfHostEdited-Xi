@@ -424,6 +424,10 @@ class HudManagerPatch
                 bool CanUseVent = player.CanUseImpostorVentButton();
                 __instance.ImpostorVentButton.ToggleVisible(CanUseVent);
                 player.Data.Role.CanVent = CanUseVent;
+                if (player.Data.Role.Role == AmongUs.GameOptions.RoleTypes.Engineer && !player.Data.Role.CanVent)
+                {
+                    player.Data.Role.CanVent = true;
+                }
             }
             else
             {

@@ -172,7 +172,7 @@ static class ExtendedPlayerControl
         if (killer.AmOwner)
         {
             killer.ProtectPlayer(target, colorId);
-            killer.MurderPlayer(target, MurderResultFlags.DecisionByHost);
+            killer.MurderPlayer(target,ResultFlags);
         }
         // Other Clients
         if (killer.PlayerId != 0)
@@ -185,6 +185,7 @@ static class ExtendedPlayerControl
                 .EndRpc();
             sender.StartRpc(killer.NetId, (byte)RpcCalls.MurderPlayer)
                 .WriteNetObject(target)
+                .Write((int)ResultFlags)
                 .EndRpc();
             sender.EndMessage();
             sender.SendMessage();
@@ -227,15 +228,22 @@ static class ExtendedPlayerControl
         }
         player.ResetKillCooldown();
     }
-    public static void RpcSpecificMurderPlayer(this PlayerControl killer, PlayerControl target = null)
+    public static void RpcSpecificMurderPlayer(this PlayerControl killer, PlayerControl target = null, PlayerControl seer = null)
     {
         if (target == null) target = killer;
-        if (killer.AmOwner)
+        if (seer == null) seer = killer;
+        if (killer.AmOwner && seer.AmOwner)
         {
-            killer.MurderPlayer(target, MurderResultFlags.DecisionByHost);
+            killer.MurderPlayer(target, ResultFlags);
+        }
+        else
+        {
+            MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)RpcCalls.MurderPlayer, SendOption.Reliable, seer.GetClientId());
+            messageWriter.WriteNetObject(target);
+            messageWriter.Write((int)ResultFlags);
+            AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
         }
     }
-    [Obsolete]
     public static void RpcSpecificProtectPlayer(this PlayerControl killer, PlayerControl target = null, int colorId = 0)
     {
         if (AmongUsClient.Instance.AmClient)
@@ -556,7 +564,7 @@ static class ExtendedPlayerControl
             CustomRoles.KB_Normal => true,
 
             //烫手的山芋
-            CustomRoles.Coldpotato => false,
+            CustomRoles.Coldpotato or
             CustomRoles.Hotpotato => false,
 
             _ => pc.Is(CustomRoleTypes.Impostor),
@@ -967,10 +975,11 @@ static class ExtendedPlayerControl
         if (target == null) target = killer;
         if (AmongUsClient.Instance.AmClient)
         {
-            killer.MurderPlayer(target, MurderResultFlags.DecisionByHost);
+            killer.MurderPlayer(target, ResultFlags);
         }
         MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)RpcCalls.MurderPlayer, SendOption.None, -1);
         messageWriter.WriteNetObject(target);
+        messageWriter.Write((int)ResultFlags);
         AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
         Utils.NotifyRoles();
     }
@@ -1078,5 +1087,5 @@ static class ExtendedPlayerControl
         if (target == null || target.Is(CustomRoles.GM) || target.Is(CustomRoles.Glitch)) return false;
         return GameStates.IsLobby || (target != null && (!Main.PlayerStates.TryGetValue(target.PlayerId, out var ps) || !ps.IsDead));
     }
-
+    public const MurderResultFlags ResultFlags = MurderResultFlags.Succeeded | MurderResultFlags.DecisionByHost;
 }

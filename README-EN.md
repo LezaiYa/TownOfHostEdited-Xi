@@ -30,9 +30,9 @@ Regardin WebSite
 <br>
   
 ### The Latest Version：
-support AmongUs v2023.7.11 and above
+support AmongUs v2023.10.24 and above
 
-The Latest Version: v2.0.4
+The Latest Version: v2.0.5
 
 <a href="https://gitee.com/xigua_ya/tohex/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Gitee Releases%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 
@@ -51,6 +51,7 @@ The Latest Version: v2.0.4
 [Super New Roles](https://github.com/ykundesu/SuperNewRoles)<br>
 [Town Of Host-ReEdited](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town Of Host:Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced)<br>
+[Town Of Host Edited_PLUS](https://github.com/Gurge44/TOHE_PLUS)<br>
 [Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko)<br>
 [Town Of Us](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town-Of-Us-R](https://github.com/eDonnes124/Town-Of-Us-R)<br>
@@ -120,6 +121,11 @@ The Latest Version: v2.0.4
 > - Developer：[Moe](https://github.com/0xDrMoe)
 > - Many role ideas
 > - v2023.10.24 Version support
+>  
+>### :star: [Town Of Host Edited_PLUS](https://github.com/Gurge44/TOHE_PLUS) :
+> 
+> - Developer：[Moe](https://github.com/Gurge44)
+> - Pet Event
 >  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :
 > 

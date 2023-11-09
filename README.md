@@ -29,9 +29,9 @@
 <br>
   
 ### 最新版本：
-支持AmongUs v2023.7.11及以上版本
+支持AmongUs v2023.10.24及以上版本
 
-最新版本：v2.0.4
+最新版本：v2.0.5
 
 <a href="https://gitee.com/xigua_ya/tohex/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Gitee获取新版本%20-%231DA1F2.svg?&style=for-the-badge&logo=gitee&logoColor=white&color=FFA500"/></a>
 
@@ -50,6 +50,7 @@
 [Super New Roles](https://github.com/ykundesu/SuperNewRoles)<br>
 [Town Of Host-ReEdited](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town Of Host:Enhanced](https://github.com/0xDrMoe/TownofHost-Enhanced)<br>
+[Town Of Host Edited_PLUS](https://github.com/Gurge44/TOHE_PLUS)<br>
 [Town Of Host Edited-Niko](https://github.com/NikoCat233/TOHE-Niko)<br>
 [Town Of Us](https://github.com/Loonie-Toons/TownOfHost-ReEdited)<br>
 [Town-Of-Us-R](https://github.com/eDonnes124/Town-Of-Us-R)<br>
@@ -119,6 +120,11 @@
 > - 作者：[Moe](https://github.com/0xDrMoe)
 > - 许多职业想法
 > - v2023.10.24版本适配
+>  
+>### :star: [Town Of Host Edited_PLUS](https://github.com/Gurge44/TOHE_PLUS) :
+> 
+> - 作者：[Moe](https://github.com/Gurge44)
+> - 摸宠物事件
 >  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :
 > 

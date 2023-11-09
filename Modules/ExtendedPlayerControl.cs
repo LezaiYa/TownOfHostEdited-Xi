@@ -978,6 +978,9 @@ static class ExtendedPlayerControl
         sender.StartRpc(target.NetId, RpcCalls.SetRole)
                         .Write((ushort)roleTypes)
                         .EndRpc();
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(target.NetId, (byte)RpcCalls.SetRole, SendOption.None, -1);
+        writer.Write((ushort)roleTypes);
+        AmongUsClient.Instance.FinishRpcImmediately(writer);
         target.Data.Role.Role = roleTypes;
         target.Data.RoleType = roleTypes;
         target.SetRole(roleTypes);

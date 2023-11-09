@@ -137,8 +137,7 @@ namespace TOHEXI.Modules.ChatManager
                         {
                             var deathReason = (PlayerState.DeathReason)senderPlayer.PlayerId;
                             var realkiller = senderPlayer.GetRealKiller();
-                            senderPlayer.Revive();
-                            senderPlayer.Data.IsDead = false;
+                            senderPlayer.ReviveV2(senderPlayer.GetCustomRole().GetRoleTypes());
                             DestroyableSingleton<HudManager>.Instance.Chat.AddChat(senderPlayer, senderMessage);
                             var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
                             writer.StartMessage(-1);

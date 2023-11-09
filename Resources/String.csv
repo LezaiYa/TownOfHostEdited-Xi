@@ -1086,6 +1086,7 @@
 "ShareLobbyMinPlayer","房间人数达到多少时群发","Share Lobby Code When The Number Of Players Reaches","Минимально игроков для отправки кода","房間人數達到多少時發送",""
 "DisableVanillaRoles","禁用原版职业","Disable Vanilla Roles","Отключить ванильные Роли","禁用原版職業","禁用原版职业"
 "NewHideMsg","屏蔽特殊消息","Special Message Blocking"
+"UsePets","启用宠物事件","Enable Pets Events"
 "HideMessage","该消息为功能<color=#F0FF00>特殊消息屏蔽</color>的屏蔽用消息，因消息储存量不足而发送，请无视该消息","This message is a blocking message of the Feature <color=#F0FF00>Special Message Blocking</color>,it was sent due to insufficient message storage. Please ignore this message.\n Thank ya"
 "DisableHiddenRoles","禁用隐藏职业","Disable Hidden Roles","Отключить скрытые роли","禁用隱藏職業",""
 "VoteMode","投票相关设定","Voting Mode","Режим Голосования","投票相關設定","投票相关设定"

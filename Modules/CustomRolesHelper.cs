@@ -430,10 +430,15 @@ internal static class CustomRolesHelper
                 CustomRoles.Cluster or
                 CustomRoles.Forger;
     }
-    public static bool IsMini(this CustomRoles role) // 是否内鬼
+    public static bool IsMini(this CustomRoles role) // 是否小孩
     {
         return role is
             CustomRoles.Mini;
+    }
+    public static bool PetActivatedAbility(this CustomRoles role)//宠物事件
+    {
+        return role is
+            CustomRoles.Mayor;
     }
     public static bool IsImpostor(this CustomRoles role) // 是否内鬼
     {

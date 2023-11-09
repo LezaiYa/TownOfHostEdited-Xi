@@ -370,6 +370,45 @@ class IntroCutsceneDestroyPatch
                     }, 2f, "FixKillCooldownTask");
             }
             new LateTask(() => Main.AllPlayerControls.Do(pc => pc.RpcSetRoleDesync(RoleTypes.Shapeshifter, -3)), 2f, "SetImpostorForServer");
+            if (Options.UsePets.GetBool())
+            {
+                
+                _ = new LateTask(() => PlayerControl.AllPlayerControls.ToArray().Do(pc => PetsPatch.SetPet(pc, "pet_Pusheen", true)), 0.3f, "Grant Pet For Everyone");
+                try
+                {
+                    _ = new LateTask(() =>
+                    {
+                        try
+                        {
+                            foreach (PlayerControl pc in Main.AllPlayerControls)
+                            {
+                                if (pc.PlayerId == 0) continue;
+                                if (pc != null)
+                                {
+                                    try
+                                    {
+                                        pc.RpcShapeshift(pc, false);
+                                        pc.Notify("", 0.1f);
+                                    }
+                                    catch (Exception ex) { Logger.Fatal(ex.ToString(), "IntroPatch.RpcShapeshift"); }
+                                }
+                            }
+                        }
+                        catch (Exception ex) { Logger.Fatal(ex.ToString(), "IntroPatch.RpcShapeshift.forCycle"); }
+                    }, 0.4f, "Show Pet For Everyone");
+                }
+                catch { }
+                //_ = new LateTask(() =>
+                //{
+                //    for (int i = 0; i < Main.AllPlayerControls.Count; i++)
+                //    {
+                //        PlayerControl pc = Main.AllPlayerControls[i];
+                //        try { pc.CmdCheckRevertShapeshift(false); }
+                //        catch { pc.RpcShapeshift(pc, false); }
+                //    }
+                //}, 1f, "Revert Shapeshifts");
+
+            }
             if (PlayerControl.LocalPlayer.Is(CustomRoles.GM))
             {
                 PlayerControl.LocalPlayer.RpcExile();

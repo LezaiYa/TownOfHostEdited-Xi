@@ -135,6 +135,7 @@ public static class Options
     public static OptionItem CheatResponses;
     public static OptionItem LowLoadMode;
     public static OptionItem ShowLobbyCode;
+    public static OptionItem UsePets;
 
     public static OptionItem NeutralRolesMinPlayer;
     public static OptionItem NeutralRolesMaxPlayer;
@@ -1798,9 +1799,16 @@ public static class Options
         AddedPolus = BooleanOptionItem.Create(100403, "AddedPolus", false, TabGroup.GameSettings, false).SetParent(RandomMapsMode);
         AddedTheAirShip = BooleanOptionItem.Create(100404, "AddedTheAirShip", false, TabGroup.GameSettings, false).SetParent(RandomMapsMode);
         // MapDleks = CustomOption.Create(100405, Color.white, "AddedDleks", false, RandomMapMode);
+        //混淆
         NewHideMsg = BooleanOptionItem.Create(00017565, "NewHideMsg", true, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)
              .SetColor(new Color32(193, 255, 209, byte.MaxValue));
+        //宠物
+        UsePets = BooleanOptionItem.Create(23850, "UsePets", false, TabGroup.GameSettings, false)
+            .SetGameMode(CustomGameMode.Standard)
+            .SetHeader(true)
+            .SetHidden(true)
+            .SetColor(new Color32(60, 0, 255, byte.MaxValue));
         // 随机出生点
         RandomSpawn = BooleanOptionItem.Create(101300, "RandomSpawn", false, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)

@@ -67,6 +67,53 @@ public class ModNewsHistorySCn
         }
         *别忘了标点！！！！！
         */
+        /*{
+            var news = new ModNewsSCn
+            {
+                Number = 100010,
+                Title = "TownOfHostEdited-Xi v2.1.0",
+                SubTitle = "★★★★Bug修复★★★★",
+                ShortTitle = "★TOHEX v2.1.0★\n<size=75%>简体中文</size>",
+                Text =
+                "简体中文"
+                + "\n-----------------------------"
+                + "\n<size=125%>欢迎来到TOHEX,感谢您的游玩</size>"
+                + "\n-----------------------------"
+                + "\n终于解决了!"
+                + "\n\n\n### 对应官方版本"
+                + "\n- 基于TOH版本 v4.1.2"
+                + "\n- 基于TOHE版本 v2.3.55"
+                + "\n- 适配Among Us版本 v2023.10.24"
+                + "\n\n### 修复"
+                + "\n- 修复了击杀检查失效的问题"
+                + "\n- 修复了原版职业工程师为模型的职业不可使用通风口的问题"
+                + "\n- 修复了迷你船员长大不显示的问题",
+                Date = "2023-11-09T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }
+        {
+            var news = new ModNewsSCn
+            {
+                Number = 100009,
+                Title = "TownOfHostEdited-Xi v2.1.0",
+                SubTitle = "★★★★Bugs Fix★★★★",
+                ShortTitle = "★TOHEX v2.1.0★\n<size=75%>English</size>",
+                Text =
+                "English"
+                + "\n-----------------------------"
+                 + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
+                + "\n-----------------------------"
+                + "\nOOOOOOOKKKKKAAAAYYYYY!"
+               + "\n\n\n### Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24"                + "\n\n### Bugs Fix"
+                + "\n- Check Murder Lose Efficacy Bug Fix"
+                + "\n- Engineer Model's Role Can't Vent Bug Fix"
+                + "\n- When Mini Grows Up Didn't Displayed In Mod Client Bug Fix",
+
+                Date = "2023-11-09T00:00:00Z",
+            };
+            AllModNews.Add(news);
+        }*/
         {
 
             var news = new ModNewsSCn
@@ -84,7 +131,7 @@ public class ModNewsHistorySCn
                 + "\n\n\n### 对应官方版本"
                 + "\n- 基于TOH版本 v4.1.2"
                 + "\n- 基于TOHE版本 v2.3.55"
-                + "\n- 适配Among Us版本 v2023.10.24及以上版本"
+                + "\n- 适配Among Us版本 v2023.10.24"
                 + "\n\n### 修复"
                 + "\n- 修复了击杀检查失效的问题"
                 + "\n- 修复了原版职业工程师为模型的职业不可使用通风口的问题"
@@ -106,7 +153,7 @@ public class ModNewsHistorySCn
                  + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
                 + "\n-----------------------------"
                 + "\nOOOOOOOKKKKKAAAAYYYYY!"
-               + "\n\n\n### Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24 And Above"                + "\n\n### Bugs Fix"
+               + "\n\n\n### Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24"                + "\n\n### Bugs Fix"
                 + "\n- Check Murder Lose Efficacy Bug Fix"
                 + "\n- Engineer Model's Role Can't Vent Bug Fix"
                 + "\n- When Mini Grows Up Didn't Displayed In Mod Client Bug Fix",
@@ -131,7 +178,7 @@ public class ModNewsHistorySCn
                 + "\n\n\n## 对应官方版本"
                 + "\n- 基于TOH版本 v4.1.2"
                 + "\n- 基于TOHE版本 v2.3.55"
-                + "\n- 适配Among Us版本 v2023.10.24及以上版本"
+                + "\n- 适配Among Us版本 v2023.10.24"
                 + "\n\n## 修复"
                 + "\n- 修复了猎人可以击杀的问题"
                 + "\n- 修复了魅魔无法选择备胎的问题"
@@ -162,7 +209,7 @@ public class ModNewsHistorySCn
                  + "\n<size=125%>Welcome To TOHEX,Thank ya For Playing!</size>"
                 + "\n-----------------------------"
                 + "\nNew Map!"
-               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24 And Above"                + "\n\n## Bugs Fix"
+               + "\n\n\n## Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24"                + "\n\n## Bugs Fix"
                 + "\n- Hunter Can Kill Bug Fix"
                 + "\n- Akujo Can't Keep Bug Fix"
                  + "\n- Cupid Die When Game Start Bug Fix"

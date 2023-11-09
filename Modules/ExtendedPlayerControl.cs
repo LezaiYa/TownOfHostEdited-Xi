@@ -13,6 +13,7 @@ using TOHEXI.Roles.Double;
 using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
 using UnityEngine;
+using UnityEngine.UIElements.UIR;
 using static TOHEXI.Translator;
 
 namespace TOHEXI;
@@ -969,6 +970,28 @@ static class ExtendedPlayerControl
         }
 
         killer.RpcMurderPlayer(target, true);
+    }
+    public static void SetRoleV2(this PlayerControl target, RoleTypes roleTypes)
+    {
+        var sender = new CustomRpcSender("SetRoleSender", SendOption.Reliable, true);
+        sender.StartMessage(-1); // 5: GameData
+        sender.StartRpc(target.NetId, RpcCalls.SetRole)
+                        .Write((ushort)roleTypes)
+                        .EndRpc();
+        target.Data.Role.Role = roleTypes;
+        target.Data.RoleType = roleTypes;
+        target.SetRole(roleTypes);
+        target.RpcSetRole(roleTypes);
+    }
+    public static void ReviveV2(this PlayerControl target, RoleTypes original)
+    {
+        //MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ReviveV2, SendOption.Reliable, -1);
+        
+      //  writer.Write(target.Data.IsDead = false);
+        //AmongUsClient.Instance.FinishRpcImmediately(writer);
+        target.Revive();
+        target.Data.IsDead = false;
+        target.SetRoleV2(original);
     }
     public static void RpcMurderPlayerV2(this PlayerControl killer, PlayerControl target)
     {

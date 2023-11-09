@@ -110,7 +110,7 @@ namespace TOHEXI.Modules.ChatManager
         {
             var rd = IRandom.Instance;
             string msg;
-            for (int i = chatHistory.Count; i < 30; i++)
+            for (int i = chatHistory.Count; i < 40; i++)
             {
                 msg = $"{GetString("HideMessage")}";
                 var player = Main.AllAlivePlayerControls.ToArray()[rd.Next(0, Main.AllAlivePlayerControls.Count())];

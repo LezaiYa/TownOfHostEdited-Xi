@@ -1,17 +1,20 @@
-/*using HarmonyLib;
+using HarmonyLib;
 using TOHEXI;
 using System;
+using Hazel;
 using UnityEngine;
-
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))] // Modded
+using AmongUs.GameOptions;
+using Epic.OnlineServices.UserInfo;
+using HarmonyLib;
+using Hazel;
+using MS.Internal.Xml.XPath;
+using System.Collections.Generic;
+using System.Linq;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Neutral;
+using static TOHEXI.Translator;
+using static UnityEngine.GraphicsBuffer;
 class RevivePatch
 {
-	public static bool Prefix(PlayerControl target)
-	{
-		if (!AmongUsClient.Instance.AmHost) return false;
-		TOHEXI.Logger.Info($"Revive{target.GetNameWithRole()}", "Revive");
-
-		if (!AmongUsClient.Instance.AmHost) return true;
-		return RevivePatch.Prefix(target);
-	}
-}*/
+	
+}

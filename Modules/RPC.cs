@@ -19,6 +19,7 @@ namespace TOHEXI;
 
 enum CustomRPC
 {
+    ReviveV2,
     VersionCheck = 60,
     RequestRetryVersionCheck = 61,
     SyncCustomSettings = 80,
@@ -73,6 +74,7 @@ enum CustomRPC
     SetGamerHealth,
     SetInfect,
     SyncMiniCrewAge,
+   
     SetPelicanEtenNum,
     SwordsManKill,
     SetCounterfeiterSellLimit,
@@ -440,6 +442,7 @@ internal class RPCHandlerPatch
             case CustomRPC.SyncMiniCrewAge:
                 Mini.ReceiveRPC(reader);
                     break;
+              
             case CustomRPC.PlayCustomSound:
                 CustomSoundsManager.ReceiveRPC(reader);
                 break;

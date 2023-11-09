@@ -108,7 +108,7 @@ public class ModNewsHistorySCn
                 + "\nOOOOOOOKKKKKAAAAYYYYY!"
                + "\n\n\n### Support Among Us Version"                + "\n- Based On TOH v4.1.2"                + "\n- Based On TOHE v2.3.55"                + "\n- Support Among Us v2023.10.24 And Above"                + "\n\n### Bugs Fix"
                 + "\n- Check Murder Lose Efficacy Bug Fix"
-                + "\n- Engineer Modle's Role Can't Vent Bug Fix"
+                + "\n- Engineer Model's Role Can't Vent Bug Fix"
                 + "\n- When Mini Grows Up Didn't Displayed In Mod Client Bug Fix",
                  
                 Date = "2023-11-09T00:00:00Z",

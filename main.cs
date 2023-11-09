@@ -33,10 +33,10 @@ public class Main : BasePlugin
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = "</color><color=#fffcbe>真菌世界！！</color>";
     public const string PluginGuid = "com.xi.tohexi";
-    public const string PluginVersion = "2.0.5";
-    public const string PluginDisplayVersion = "2.0.5";
+    public const string PluginVersion = "2.0.6";
+    public const string PluginDisplayVersion = "2.1.0 canary_1";
     public const string CanaryPluginVersion = "Canary_裤";
-    public static readonly string SupportedVersionAU = "2023.7.11";
+    public static readonly string SupportedVersionAU = "2023.10.24";
     public const int PluginCreate = 7;
 
     //没错，那个没树枝的N删了
@@ -316,7 +316,7 @@ public class Main : BasePlugin
     public static string OverrideWelcomeMsg = "";
     public static int HostClientId;
 
-    public static List<string> TName_Snacks_CN = new() { "CoCo", "喜茶", "奈雪的茶", "蜜雪冰城", "霸王茶姬", "百乐", "斑马", "国誉", "kaco", "晨光", "TOHEX", "TOHE", "TONX", "TOHE-R", "TOH", "TOHEE", "喜", "N", "霸道清风", "BT小叨", "歌姬村民", "Bug世界", "八嘎呀路", "你好", "雪糕", "麦当劳", "肯德基", "汉堡", "蛋挞", "果冻", "果茶", "鲜百香双响奏", "派蒙", "胡桃", "银狼","散兵","流浪者","钟离" };
+    public static List<string> TName_Snacks_CN = new() { "CoCo", "喜茶", "奈雪的茶", "蜜雪冰城", "霸王茶姬", "百乐", "斑马", "国誉", "kaco", "晨光", "TOHEX", "TOHE", "TONX", "TOHE-R", "TOH", "TOHE","TOHE+", "喜", "N", "霸道清风", "BT小叨", "歌姬村民", "Bug世界", "八嘎呀路", "你好", "雪糕", "麦当劳", "肯德基", "汉堡", "蛋挞", "果冻", "果茶", "鲜百香双响奏", "派蒙", "胡桃", "银狼","散兵","流浪者","钟离","岩王帝君" };
     public static List<string> TName_Snacks_EN = new() { "Ice cream", "Milk tea", "Chocolate", "Cake", "Donut", "Coke", "Lemonade", "Candied haws", "Jelly", "Candy", "Milk", "Matcha", "Burning Grass Jelly", "Pineapple Bun", "Pudding", "Coconut Jelly", "Cookies", "Red Bean Toast", "Three Color Dumplings", "Wormwood Dumplings", "Puffs", "Can be Crepe", "Peach Crisp", "Mochi", "Egg Waffle", "Macaron", "Snow Plum Niang", "Fried Yogurt", "Egg Tart", "Muffin", "Sago Dew", "panna cotta", "soufflé", "croissant", "toffee" };
     public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese ?
         TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] :

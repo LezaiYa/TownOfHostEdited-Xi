@@ -29,7 +29,7 @@
 
 "# 阵营 / Teams"
 "TeamImpostor","内鬼阵营","Impostor","Предатель","偽裝者陣營","EquipoImpostor"
-"TeamImpostora","杀光<color=#ff0000>所有人</color>"
+"TeamImpostora","杀光<color=#ff0000>所有人</color>","Kill every one！"
 "TeamNeutral","中立阵营","Neutral","Нейтрал","中立陣營","EquipoNeutro"
 "TeamNeutrala","藏在人群中的<color=#edd38b>中立</color>者","Neutrals"
 "TeamNK","独立阵营","Neutrals"
@@ -330,7 +330,7 @@
 "UnanimalRefuser","动物保护者","UnanimalRefuser"
 "CrazyRefuser","世界抗拒者","CrazyRefuser"
 "AttendRefuser","招募抗拒者","AttendRefuser"
-"ZeyanRefuser","投票偷袭者","ZeyanRefuser"
+"ZeyanRefuser","投票偷袭者","VoteRefuser"
 
 "# 附加职业 / Add-ons"
 "LastImpostor","绝境者","Last Impostor","Последний Предатель","絕境者","绝境者"

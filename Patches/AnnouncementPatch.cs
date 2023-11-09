@@ -67,7 +67,7 @@ public class ModNewsHistorySCn
         }
         *别忘了标点！！！！！
         */
-        /*{
+        {
             var news = new ModNewsSCn
             {
                 Number = 100010,
@@ -113,7 +113,7 @@ public class ModNewsHistorySCn
                 Date = "2023-11-09T00:00:00Z",
             };
             AllModNews.Add(news);
-        }*/
+        }
         {
 
             var news = new ModNewsSCn

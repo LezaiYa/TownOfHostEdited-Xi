@@ -95,12 +95,69 @@ class ExternalRpcPetPatch
 
         switch (pc.GetCustomRole())
         {
-            //case CustomRoles.Mayor:
-              //  if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt())
-              //  {
-              //      pc?.ReportDeadBody(null);
-              //  }
-              //  break;
+            case CustomRoles.Mayor:
+                if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt())
+                {
+                    pc?.ReportDeadBody(null);
+                }
+                break;
+            case CustomRoles.Veteran:
+                if (!Main.VeteranNumOfUsed.TryGetValue(pc.PlayerId, out var count3) && count3 < 1)
+                {
+                    Main.VeteranInProtect.Remove(pc.PlayerId);
+                    Main.VeteranInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
+                    Main.VeteranNumOfUsed[pc.PlayerId]--;
+                    if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
+                    pc.RPCPlayCustomSound("Gunload");
+                    pc.Notify(GetString("VeteranOnGuard"), Options.VeteranSkillDuration.GetFloat());
+                }
+                break;
+            case CustomRoles.TimeMaster:
+                Main.TimeMasterInProtect.Remove(pc.PlayerId);
+                Main.TimeMasterInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
+                if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
+                pc.Notify(GetString("TimeMasterOnGuard"), Options.TimeMasterSkillDuration.GetFloat());
+                foreach (var player in Main.AllPlayerControls)
+                {
+                    if (Main.TimeMasterbacktrack.ContainsKey(player.PlayerId))
+                    {
+                        var position = Main.TimeMasterbacktrack[player.PlayerId];
+                        Utils.TP(player.NetTransform, position);
+                        Main.TimeMasterbacktrack.Remove(player.PlayerId);
+                    }
+                    else
+                    {
+                        Main.TimeMasterbacktrack.Add(player.PlayerId, player.GetTruePosition());
+                    }
+                }
+                break;
+            case CustomRoles.TimeStops:
+                CustomSoundsManager.RPCPlayCustomSoundAll("THEWORLD");
+                Main.TimeStopsInProtect.Remove(pc.PlayerId);
+                Main.TimeStopsInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
+                if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
+                pc.RPCPlayCustomSound("THEWORLD");
+                pc.Notify(GetString("TimeStopsOnGuard"), Options.TimeStopsSkillDuration.GetFloat());
+                foreach (var player in Main.AllAlivePlayerControls)
+                {
+                    if (pc == player) continue;
+                    if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId)) continue;
+                    NameNotifyManager.Notify(player, Utils.ColorString(Utils.GetRoleColor(CustomRoles.TimeStops), GetString("ForTimeStops")));
+                    var tmpSpeed1 = Main.AllPlayerSpeed[player.PlayerId];
+                    Main.TimeStopsstop.Add(player.PlayerId);
+                    Main.AllPlayerSpeed[player.PlayerId] = Main.MinSpeed;
+                    ReportDeadBodyPatch.CanReport[player.PlayerId] = false;
+                    player.MarkDirtySettings();
+                    new LateTask(() =>
+                    {
+                        Main.AllPlayerSpeed[player.PlayerId] = Main.AllPlayerSpeed[player.PlayerId] - Main.MinSpeed + tmpSpeed1;
+                        ReportDeadBodyPatch.CanReport[player.PlayerId] = true;
+                        player.MarkDirtySettings();
+                        Main.TimeStopsstop.Remove(player.PlayerId);
+                        RPC.PlaySoundRPC(player.PlayerId, Sounds.TaskComplete);
+                    }, Options.TimeStopsSkillDuration.GetFloat(), "Time Stop");
+                }
+                break;
         }
     }
 }

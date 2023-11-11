@@ -2422,7 +2422,7 @@ class CheckMurderPatch
             case CustomRoles.PlaguesGod:
                 killer.SetRealKiller(target);
                 target.RpcMurderPlayerV3(killer);
-                Logger.Info($"{target.GetRealName()} 万疫之神反杀：{killer.GetRealName()}", "Veteran Kill");
+                Logger.Info($"{target.GetRealName()} 万疫之神反杀：{killer.GetRealName()}", "PlagueGod Kill");
                 return false;
 
             //击杀逃犯

@@ -17,7 +17,7 @@ internal static class CustomRolesHelper
             {
                 CustomRoles.Sniper => CustomRoles.Shapeshifter,
                 CustomRoles.Jester => CustomRoles.Crewmate,
-                CustomRoles.Mayor => Options.MayorHasPortableButton.GetBool() ? CustomRoles.Engineer : CustomRoles.Crewmate,
+                CustomRoles.Mayor => Options.MayorHasPortableButton.GetBool() && !Options.UsePets.GetBool() ? CustomRoles.Engineer : CustomRoles.Crewmate,
                 CustomRoles.Opportunist => CustomRoles.Crewmate,
                 CustomRoles.Snitch => CustomRoles.Crewmate,
                 CustomRoles.SabotageMaster => CustomRoles.Engineer,
@@ -60,7 +60,7 @@ internal static class CustomRolesHelper
                 CustomRoles.BoobyTrap => CustomRoles.Impostor,
                 CustomRoles.Scavenger => CustomRoles.Impostor,
                 CustomRoles.Transporter => CustomRoles.Crewmate,
-                CustomRoles.Veteran => CustomRoles.Engineer,
+                CustomRoles.Veteran => Options.UsePets.GetBool() ? CustomRoles.Engineer : CustomRoles.Crewmate,
                 CustomRoles.Capitalism => CustomRoles.Impostor,
                 CustomRoles.Bodyguard => CustomRoles.Crewmate,
                 CustomRoles.Grenadier => CustomRoles.Engineer,
@@ -118,7 +118,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Followers => CustomRoles.Impostor,
                 CustomRoles.Whoops => CustomRoles.Engineer,
                 CustomRoles.Sidekick => CustomRoles.Impostor,
-                CustomRoles.TimeMaster => CustomRoles.Engineer,
+                CustomRoles.TimeMaster => Options.UsePets.GetBool() ? CustomRoles.Engineer : CustomRoles.Crewmate,
                 CustomRoles.DemolitionManiac => CustomRoles.Impostor,
                 CustomRoles.SuperPowers => CustomRoles.Crewmate,
                 CustomRoles.sabcat => CustomRoles.Impostor,
@@ -438,7 +438,8 @@ internal static class CustomRolesHelper
     public static bool PetActivatedAbility(this CustomRoles role)//宠物事件
     {
         return role is
-            CustomRoles.Mayor;
+            CustomRoles.Mayor or
+            CustomRoles.Veteran;
     }
     public static bool IsImpostor(this CustomRoles role) // 是否内鬼
     {

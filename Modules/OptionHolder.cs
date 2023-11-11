@@ -1806,9 +1806,7 @@ public static class Options
         //宠物
         UsePets = BooleanOptionItem.Create(23850, "UsePets", false, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)
-            .SetHeader(true)
-            .SetHidden(true)
-            .SetColor(new Color32(60, 0, 255, byte.MaxValue));
+            .SetColor(new Color32(193, 255, 209, byte.MaxValue));
         // 随机出生点
         RandomSpawn = BooleanOptionItem.Create(101300, "RandomSpawn", false, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)

@@ -37,7 +37,7 @@ public class ModUpdater
     public static void Start_Prefix(MainMenuManager __instance)
     {
         NewVersionCheck();
-        DeleteOldFiles();
+        //DeleteOldFiles();
         InfoPopup = UnityEngine.Object.Instantiate(Twitch.TwitchManager.Instance.TwitchPopup);
         InfoPopup.name = "InfoPopup";
         InfoPopup.TextAreaTMP.GetComponent<RectTransform>().sizeDelta = new(2.5f, 2f);
@@ -268,7 +268,7 @@ public class ModUpdater
         try
         {
             var fileName = Assembly.GetExecutingAssembly().Location;
-            if (Directory.Exists("TOH_DATA") && File.Exists(@"./TOHE_DATA/BanWords.txt"))
+            if (Directory.Exists("TOH_DATA") && File.Exists(@"./TOHEX_DATA/BanWords.txt"))
             {
                 DirectoryInfo di = new("TOH_DATA");
                 di.Delete(true);

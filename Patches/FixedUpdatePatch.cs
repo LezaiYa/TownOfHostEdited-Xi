@@ -261,6 +261,11 @@ class FixedUpdatePatch
                         player.RpcGuardAndKill();
                         player.Notify(string.Format(GetString("VeteranOffGuard"), Main.VeteranNumOfUsed[player.PlayerId]));
                     }
+                    if (Main.VeteranProtectCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.VeteranSkillCooldown.GetInt() < Utils.GetTimeStamp())
+                    {
+                        Main.VeteranProtectCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
                 }
                 //检查恐血者技能是否失效
                 if (GameStates.IsInTask && player.Is(CustomRoles.Hemophobia))
@@ -492,6 +497,19 @@ class FixedUpdatePatch
                         player.RpcGuardAndKill();
                         player.Notify(GetString("GrenadierSkillStop"));
                         Utils.MarkEveryoneDirtySettings();
+                    }
+                    if (Main.MadGrenadierCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.GrenadierSkillCooldown.GetInt() < Utils.GetTimeStamp() || Main.GrenadierCooldown.TryGetValue(player.PlayerId, out var Gr) && Gr + Options.GrenadierSkillCooldown.GetInt() < Utils.GetTimeStamp())
+                    {
+                        if (player.Is(CustomRoles.Madmate))
+                        {
+                            Main.MadGrenadierCooldown.Remove(player.PlayerId);
+                            player.Notify(GetString("SkillReady"));
+                        }
+                        else
+                        { 
+                            Main.GrenadierCooldown.Remove(player.PlayerId);
+                            player.Notify(GetString("SkillReady"));
+                        }
                     }
                 }
                 //检查掷弹兵技能是否生效

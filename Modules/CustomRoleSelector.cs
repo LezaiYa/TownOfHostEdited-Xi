@@ -127,7 +127,7 @@ internal class CustomRoleSelector
                 else if (!role.IsNKS() && role.IsNeutral()) NeutralOnList.Add(role);
                 else if (role.IsNKS()) NKOnList.Add(role);
                 else roleOnList.Add(role);
-                Logger.Warn("职业设置为：优先", "2");
+                Logger.Warn("职业设置为：优先", "CustomRoleSelector");
 
             }
         // 职业设置为：启用
@@ -139,20 +139,12 @@ internal class CustomRoleSelector
                 else if (!role.IsNKS() && role.IsNeutral()) NeutralRateList.Add(role);
                 else if (role.IsNKS()) NKRateList.Add(role);
                 else roleRateList.Add(role);
-                Logger.Warn("职业设置为：启用", "1");
+                Logger.Warn("职业设置为：启用", "CustomRoleSelector");
             }
 
 
 
-        //RPCによる同期
-        foreach (var pair in Main.PlayerStates)
-        {
-            ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
-
-            foreach (var subRole in pair.Value.SubRoles)
-                ExtendedPlayerControl.RpcSetCustomRole(pair.Key, subRole);
-            Logger.Warn("职业设置为：附加", "1");
-        }
+        
         while (MiniOnList.Count == 1)
         {
             var select = MiniOnList[rd.Next(0, MiniOnList.Count)];

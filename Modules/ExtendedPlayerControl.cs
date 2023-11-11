@@ -994,6 +994,7 @@ static class ExtendedPlayerControl
         //AmongUsClient.Instance.FinishRpcImmediately(writer);
         target.Revive();
         target.Data.IsDead = false;
+        //target.Data.Role.IsDead = false;
         target.SetRoleV2(original);
     }
     public static void RpcMurderPlayerV2(this PlayerControl killer, PlayerControl target)

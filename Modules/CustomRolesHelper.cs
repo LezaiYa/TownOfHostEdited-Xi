@@ -63,7 +63,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Veteran => Options.UsePets.GetBool() ? CustomRoles.Engineer : CustomRoles.Crewmate,
                 CustomRoles.Capitalism => CustomRoles.Impostor,
                 CustomRoles.Bodyguard => CustomRoles.Crewmate,
-                CustomRoles.Grenadier => CustomRoles.Engineer,
+                CustomRoles.Grenadier => Options.UsePets.GetBool() ? CustomRoles.Engineer : CustomRoles.Crewmate,
                 CustomRoles.Gangster => CustomRoles.Impostor,
                 CustomRoles.Cleaner => CustomRoles.Impostor,
                 CustomRoles.Konan => CustomRoles.Crewmate,

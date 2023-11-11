@@ -126,8 +126,11 @@ internal class ChangeRoleSettings
             Main.MarioVentCount = new();
             Main.VeteranInProtect = new();
             Main.VeteranNumOfUsed = new();
+            Main.VeteranProtectCooldown = new();
             Main.GrenadierBlinding = new();
             Main.MadGrenadierBlinding = new();
+            Main.GrenadierCooldown = new();
+            Main.MadGrenadierCooldown = new();
             Main.CursedWolfSpellCount = new();
             Main.OverDeadPlayerList = new();
             Main.Provoked = new();
@@ -527,7 +530,15 @@ internal class SelectRolesPatch
                     if (role.IsEnable()) AssignSubRoles(role);
             }
 
+            //RPCによる同期
+            foreach (var pair in Main.PlayerStates)
+            {
+                ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
 
+                foreach (var subRole in pair.Value.SubRoles)
+                    ExtendedPlayerControl.RpcSetCustomRole(pair.Key, subRole);
+
+            }
 
             foreach (var pc in Main.AllPlayerControls)
             {
@@ -677,6 +688,25 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Veteran:
                         Main.VeteranNumOfUsed.Add(pc.PlayerId, Options.VeteranSkillMaxOfUseage.GetInt());
+                        new LateTask(() =>
+                        {
+                            Main.VeteranProtectCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                            Utils.NotifyRoles();
+                        }, 8f, ("AddTime"));
+                        break;
+                    case CustomRoles.Grenadier:
+                        if (pc.Is(CustomRoles.Madmate))
+                            new LateTask(() =>
+                            {
+                                Main.MadGrenadierCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime"));
+                        else
+                            new LateTask(() =>
+                            {
+                                Main.GrenadierCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime"));
                         break;
                     case CustomRoles.Swooper:
                         Swooper.Add(pc.PlayerId);

@@ -1,4 +1,5 @@
 using HarmonyLib;
+using MS.Internal.Xml.XPath;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,7 +103,7 @@ class ExternalRpcPetPatch
                 }
                 break;
             case CustomRoles.Veteran:
-                if (!Main.VeteranNumOfUsed.TryGetValue(pc.PlayerId, out var count3) && count3 < 1)
+                if(!Main.VeteranProtectCooldown.ContainsKey(pc.PlayerId) && !Main.VeteranNumOfUsed.TryGetValue(pc.PlayerId, out var count3) && count3 < 1)
                 {
                     Main.VeteranInProtect.Remove(pc.PlayerId);
                     Main.VeteranInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
@@ -110,7 +111,11 @@ class ExternalRpcPetPatch
                     if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
                     pc.RPCPlayCustomSound("Gunload");
                     pc.Notify(GetString("VeteranOnGuard"), Options.VeteranSkillDuration.GetFloat());
+                    Main.VeteranProtectCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
                 }
+                break;
+            case CustomRoles.Rudepeople:
+                if (!Rudepeople.OnPetUse(pc.PlayerId)) return;
                 break;
             case CustomRoles.TimeMaster:
                 Main.TimeMasterInProtect.Remove(pc.PlayerId);
@@ -130,6 +135,30 @@ class ExternalRpcPetPatch
                         Main.TimeMasterbacktrack.Add(player.PlayerId, player.GetTruePosition());
                     }
                 }
+                break;
+            case CustomRoles. Grenadier:
+                if(!Main.GrenadierCooldown.ContainsKey(pc.PlayerId) || !Main.MadGrenadierCooldown.ContainsKey(pc.PlayerId))
+                {
+         if (pc.Is(CustomRoles.Madmate))
+                {
+                        Main.MadGrenadierCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                        Main.MadGrenadierBlinding.Remove(pc.PlayerId);
+                    Main.MadGrenadierBlinding.Add(pc.PlayerId, Utils.GetTimeStamp());
+                    Main.AllPlayerControls.Where(x => x.IsModClient()).Where(x => !x.GetCustomRole().IsImpostorTeam() && !x.Is(CustomRoles.Madmate)).Do(x => x.RPCPlayCustomSound("FlashBang"));
+                }
+                else
+                {
+                        Main.GrenadierCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                        Main.GrenadierBlinding.Remove(pc.PlayerId);
+                    Main.GrenadierBlinding.Add(pc.PlayerId, Utils.GetTimeStamp());
+                    Main.AllPlayerControls.Where(x => x.IsModClient()).Where(x => x.GetCustomRole().IsImpostor() || (x.GetCustomRole().IsNeutral() && Options.GrenadierCanAffectNeutral.GetBool())).Do(x => x.RPCPlayCustomSound("FlashBang"));
+                }
+                if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
+                pc.RPCPlayCustomSound("FlashBang");
+                pc.Notify(GetString("GrenadierSkillInUse"), Options.GrenadierSkillDuration.GetFloat());
+                Utils.MarkEveryoneDirtySettings();
+                }
+           
                 break;
             case CustomRoles.TimeStops:
                 CustomSoundsManager.RPCPlayCustomSoundAll("THEWORLD");

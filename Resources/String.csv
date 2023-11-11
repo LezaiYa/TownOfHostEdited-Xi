@@ -1994,6 +1994,7 @@
 "HangTheDevilMsg","吊死鬼被杀死了！\n请驱逐他的凶手\n否则所有人将会死亡！","HangTheDevil was dead,find out the murder and ejected him!!Or the Im[ps will win!"
 "MiniUp","你长大了一岁！","Your age +1"
 "BaitSeeVentPlayer","在你视野里的管道里有玩家！","Trere are somebody in the vents which in your vision"
+"SkillReady","技能冷却完毕"
 
 "## 信息 / Message"
 "Message.SetToSeconds","信息发送冷却时间为【{0}】秒","Set to 【{0}】 seconds.","Установлен на 【{0}】 секунды","訊息傳送冷卻時間設為【{0}】秒","信息发送冷却时间为【{0}】秒"

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TOHEXI.Modules;
 using static TOHEXI.Options;
 using System;
-
 namespace TOHEXI;
 
 
@@ -14,6 +13,7 @@ public static class Rudepeople
 
     private static OptionItem DefaultKillCooldown;
     public static Dictionary<byte, long> RudepeopleInProtect = new();
+    public static Dictionary<byte, long> RudepeopleProtectCooldown = new();
     private static Dictionary<byte, float> NowCooldown;
     public static List<byte> ForRudepeople = new();
     public static OptionItem RudepeopleSkillDuration;
@@ -38,11 +38,17 @@ public static class Rudepeople
         NowCooldown = new();
         RudepeopleInProtect = new();
         ForRudepeople = new();
+        RudepeopleProtectCooldown = new();
     }
     public static void Add(byte playerId)
     {
         playerIdList.Add(playerId);
         NowCooldown.TryAdd(playerId, DefaultKillCooldown.GetFloat());
+        new LateTask(() =>
+        {
+            RudepeopleProtectCooldown.Add(playerId, Utils.GetTimeStamp());
+            Utils.NotifyRoles();
+        }, 8f, ("AddTime"));
     }
     public static bool IsEnable() => playerIdList.Count > 0;
     public static void SetCooldown(byte id) => AURoleOptions.EngineerCooldown = NowCooldown[id];
@@ -72,6 +78,24 @@ public static class Rudepeople
             }
         return false;
     }
+    public static bool OnPetUse(byte player)
+    {
+        var pc = Utils.GetPlayerById(player);
+        if (pc == null || !pc.Is(CustomRoles.Rudepeople)) return true;
+        if (!RudepeopleProtectCooldown.ContainsKey(pc.PlayerId))
+        {
+            RudepeopleProtectCooldown.Add(pc.PlayerId,Utils.GetTimeStamp());
+                    NowCooldown[pc.PlayerId] = Math.Clamp(NowCooldown[pc.PlayerId] + ReduceKillCooldown.GetFloat(), MinKillCooldown.GetFloat(), DefaultKillCooldown.GetFloat());
+        pc.SyncSettings();
+        RudepeopleInProtect.Remove(pc.PlayerId);
+        RudepeopleInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
+        if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
+        pc.RPCPlayCustomSound("RNM");
+        pc.Notify(GetString("RudepeopleOnGuard"), RudepeopleSkillDuration.GetFloat());
+        }
+
+        return false;
+    }
     public static void FixedUpdate(PlayerControl player)
     {
         if (!GameStates.IsInTask || !Rudepeople.IsEnable()) return;
@@ -82,6 +106,11 @@ public static class Rudepeople
                 RudepeopleInProtect.Remove(player.PlayerId);
                 player.RpcGuardAndKill();
                 player.Notify(string.Format(GetString("RudepeopleOffGuard")));
+            }
+            if (RudepeopleProtectCooldown.TryGetValue(player.PlayerId, out var stime) && stime + RudepeopleSkillCooldown.GetInt() < Utils.GetTimeStamp())
+            {
+                RudepeopleProtectCooldown.Remove(player.PlayerId);
+                player.Notify(GetString("SkillReady"));
             }
         }
     }

@@ -127,30 +127,7 @@ public static class Jackal
             {
                 if (!target.CanUseKillButton() && (!target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini))))
                 {
-                    target.Data.RoleType = RoleTypes.Impostor;
-                    target.Data.Role.Role = RoleTypes.Impostor;
-                    target.SetRole(RoleTypes.Impostor);
-                    target.RpcSetRole(RoleTypes.Impostor);
-                    
-                    /*var ghostRoles = new Dictionary<PlayerControl, RoleTypes>();
-                    foreach (var seer in Main.AllPlayerControls)
-                    {
-                        ghostRoles[seer] = RoleTypes.Impostor;
-
-                       
-                            foreach ((var seers, var role) in ghostRoles)
-                            {
-                                target.RpcSetRoleDesync(role, seers.GetClientId());
-                            }
-
-                        target.Data.RoleType = RoleTypes.Impostor;
-                        target.SetRole(RoleTypes.Impostor);
-                        target.RpcSetRole(RoleTypes.Impostor);
-                        target.RpcSetCustomRole(CustomRoles.Sidekick);
-                        Jackal.Add(target.PlayerId);
-                        target.RpcGuardAndKill(target);
-                    }*/
-                    //target.RpcSetCustomRole(CustomRoles.Whoops);
+                    target.SetRoleV2(RoleTypes.Impostor);
                     target.RpcSetCustomRole(CustomRoles.Sidekick);
                 }
                 if (target.CanUseKillButton() && (!target.Is(CustomRoles.Captain) || !target.Is(CustomRoles.Solicited) || !target.Is(CustomRoles.Believer) || Mini.Age != 18 && !(target.Is(CustomRoles.NiceMini) || target.Is(CustomRoles.EvilMini))))

@@ -20,6 +20,7 @@ namespace TOHEXI;
 enum CustomRPC
 {
     ReviveV2,
+    CanBeKilled,
     VersionCheck = 60,
     RequestRetryVersionCheck = 61,
     SyncCustomSettings = 80,
@@ -295,6 +296,12 @@ internal class RPCHandlerPatch
             case CustomRPC.ShowPopUp:
                 string msg = reader.ReadString();
                 HudManager.Instance.ShowPopUp(msg);
+                break;
+            case CustomRPC.ReviveV2:
+                RPC.ReviveV2(reader);
+                break;
+            case CustomRPC.CanBeKilled:
+                RPC.CanBeKilled(reader);
                 break;
             case CustomRPC.SetCustomRole:
                 byte CustomRoleTargetId = reader.ReadByte();
@@ -723,6 +730,23 @@ internal static class RPC
         Main.PlayerStates[playerId].deathReason = deathReason;
         Main.PlayerStates[playerId].IsDead = true;
     }
+    public static void ReviveV2(MessageReader reader)
+    {
+        byte playerId = reader.ReadByte();
+        PlayerControl revive = new();
+        revive.PlayerId = playerId;
+        bool Isdead = reader.ReadBoolean();
+        revive.Data.IsDead = Isdead;
+        Main.PlayerStates[playerId].IsDead = Isdead;
+    }
+    public static void CanBeKilled(MessageReader reader)
+    {
+        byte playerId = reader.ReadByte();
+        PlayerControl target = new();
+        target.PlayerId = playerId;
+        bool CanBeKilled = reader.ReadBoolean();
+        target.Data.Role.CanBeKilled = CanBeKilled;
+    }
     public static void ForceEndGame(CustomWinner win)
     {
         if (ShipStatus.Instance == null) return;
@@ -748,6 +772,7 @@ internal static class RPC
             Logger.Error($"正常にEndGameを行えませんでした。\n{ex}", "EndGame", false);
         }
     }
+
     public static void PlaySound(byte playerID, Sounds sound)
     {
         if (PlayerControl.LocalPlayer.PlayerId == playerID)

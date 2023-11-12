@@ -264,6 +264,7 @@ internal class ChangeRoleSettings
             TimeThief.Init();
             Mare.Init();
             Witch.Init();
+           
             SabotageMaster.Init();
             Executioner.Init();
             Jackal.Init();
@@ -324,6 +325,7 @@ internal class ChangeRoleSettings
             EvilGambler.Init();
             Merchant.Init();
             NiceTracker.Init();
+            Rudepeople.Init();
             Yandere.Init();
             Buried.Init();
             PlagueDoctor.Init();

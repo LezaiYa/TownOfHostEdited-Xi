@@ -2,6 +2,7 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
 using InnerNet;
+using LibCpp2IL.Elf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -974,10 +975,6 @@ static class ExtendedPlayerControl
     public static void SetRoleV2(this PlayerControl target, RoleTypes roleTypes)
     {
         var sender = new CustomRpcSender("SetRoleSender", SendOption.Reliable, true);
-        sender.StartMessage(-1); // 5: GameData
-        sender.StartRpc(target.NetId, RpcCalls.SetRole)
-                        .Write((ushort)roleTypes)
-                        .EndRpc();
         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(target.NetId, (byte)RpcCalls.SetRole, SendOption.None, -1);
         writer.Write((ushort)roleTypes);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -986,13 +983,21 @@ static class ExtendedPlayerControl
         target.SetRole(roleTypes);
         target.RpcSetRole(roleTypes);
     }
-    public static void ReviveV2(this PlayerControl target, RoleTypes original)
+    public static void ReviveV2(this PlayerControl target, RoleTypes original = RoleTypes.GuardianAngel)
     {
-        //MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ReviveV2, SendOption.Reliable, -1);
-        
-      //  writer.Write(target.Data.IsDead = false);
-        //AmongUsClient.Instance.FinishRpcImmediately(writer);
+        if (target.Data.IsDead == false) return;
+        if (original == RoleTypes.GuardianAngel)
+            original = target.GetCustomRole().GetRoleTypes();
+        else if (original == RoleTypes.CrewmateGhost)
+            original = target.GetCustomRole().GetRoleTypes();
+        else if (original == RoleTypes.ImpostorGhost)
+            original = target.GetCustomRole().GetRoleTypes();
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ReviveV2, SendOption.Reliable, -1);
+        writer.Write(target.Data.IsDead = false);
+        writer.Write(Main.PlayerStates[target.PlayerId].IsDead = false);
+        AmongUsClient.Instance.FinishRpcImmediately(writer);
         target.Revive();
+        Main.PlayerStates[target.PlayerId].IsDead = false;
         target.Data.IsDead = false;
         //target.Data.Role.IsDead = false;
         target.SetRoleV2(original);

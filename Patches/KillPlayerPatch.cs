@@ -1511,8 +1511,6 @@ class CheckMurderPatch
 
 
         }
-        //复活代码：目前在试验中
-        // target.Revive();
         //==キル処理==
         __instance.RpcMurderPlayerV3(target);
         //============

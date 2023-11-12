@@ -34,7 +34,7 @@ public class Main : BasePlugin
     public static readonly string MainMenuText = "</color><color=#fffcbe>真菌世界！！</color>";
     public const string PluginGuid = "com.xi.tohexi";
     public const string PluginVersion = "2.0.6";
-    public const string PluginDisplayVersion = "2.1.0 canary_1";
+    public const string PluginDisplayVersion = "2.1.0 Canary-2";
     public const string CanaryPluginVersion = "Canary_裤";
     public static readonly string SupportedVersionAU = "2023.10.24";
     public const int PluginCreate = 7;

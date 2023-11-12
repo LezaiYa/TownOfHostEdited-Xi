@@ -189,6 +189,7 @@ public static class Options
     public static OptionItem SpeedBoosterUpSpeed;
     public static OptionItem SpeedBoosterTimes;
     public static OptionItem GlitchCanVote;
+    public static OptionItem ImpostorCanKillEachOther;
     public static OptionItem TrapperBlockMoveTime;
     public static OptionItem DetectiveCanknowKiller;
     public static OptionItem TransporterTeleportMax;
@@ -1202,7 +1203,7 @@ public static class Options
         TerroristTasks = OverrideTasksData.Create(50220, TabGroup.NeutralRoles, CustomRoles.Terrorist);
         Totocalcio.SetupCustomOption();
         Vulture.SetupCustomOption();
-        Collector.SetupCustomOption();
+        //Collector.SetupCustomOption();
         SetupRoleOptions(60100, TabGroup.NeutralRoles, CustomRoles.Workaholic); //TOH_Y
         WorkaholicCannotWinAtDeath = BooleanOptionItem.Create(60113, "WorkaholicCannotWinAtDeath", false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Workaholic]);
         WorkaholicVentCooldown = FloatOptionItem.Create(60112, "VentCooldown", new(0f, 180f, 2.5f), 0f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Workaholic])
@@ -1441,6 +1442,7 @@ public static class Options
         //DemonHunterm.SetupCustomOption();
         SetupRoleOptions(1112445565, TabGroup.OtherRoles, CustomRoles.EIReverso);
         SetupRoleOptions(1234565432, TabGroup.OtherRoles, CustomRoles.Undercover);
+        ImpostorCanKillEachOther = BooleanOptionItem.Create(1234565434, "ImpostorCanKillEachOthe", true, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Undercover]);
         ChiefOfPolice.SetupCustomOption();
         // 中立
         TextOptionItem.Create(9090940, "OtherRoles.NeutralRoles", TabGroup.OtherRoles)

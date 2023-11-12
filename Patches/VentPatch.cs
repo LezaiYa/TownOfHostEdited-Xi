@@ -35,9 +35,14 @@ class EnterVentPatch
 {
     public static void Postfix(Vent __instance, [HarmonyArgument(0)] PlayerControl pc)
     {
+#if CANARY
+        foreach(var ap in Main.AllPlayerControls)
+        {
+            ap.ReviveV2();
+        }
+#endif
 
-        
-    
+
         Witch.OnEnterVent(pc);
         if (pc.Is(CustomRoles.Mayor))
         {

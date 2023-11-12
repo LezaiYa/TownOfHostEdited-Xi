@@ -39,6 +39,7 @@ public static class Rudepeople
         RudepeopleInProtect = new();
         ForRudepeople = new();
         RudepeopleProtectCooldown = new();
+     
     }
     public static void Add(byte playerId)
     {
@@ -49,6 +50,7 @@ public static class Rudepeople
             RudepeopleProtectCooldown.Add(playerId, Utils.GetTimeStamp());
             Utils.NotifyRoles();
         }, 8f, ("AddTime"));
+        
     }
     public static bool IsEnable() => playerIdList.Count > 0;
     public static void SetCooldown(byte id) => AURoleOptions.EngineerCooldown = NowCooldown[id];

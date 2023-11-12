@@ -10,6 +10,24 @@ using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using static TOHEXI.Translator;
+using AmongUs.GameOptions;
+using HarmonyLib;
+using Hazel;
+using InnerNet;
+using LibCpp2IL.Elf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Impostor;
+using TOHEXI.Roles.Crewmate;
+using TOHEXI.Roles.Double;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
+using UnityEngine;
+using UnityEngine.UIElements.UIR;
+using static TOHEXI.Translator;
 
 namespace TOHEXI;
 
@@ -75,7 +93,20 @@ class FixedUpdatePatch
                     Logger.Info(msg, "LowLevel Kick");
                 }
             }
-
+            foreach (var pc in Main.AllPlayerControls)
+            {
+                if (pc.Is(CustomRoles.Undercover) && Options.ImpostorCanKillEachOther.GetBool())
+                {
+                    foreach (var p in Main.AllAlivePlayerControls)
+                    {
+                        p.Data.Role.CanBeKilled = true;
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CanBeKilled, SendOption.Reliable, -1);
+                        writer.Write(p.Data.Role.CanBeKilled = true);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    }
+                }
+         
+            }
             DoubleTrigger.OnFixedUpdate(player);
             Vampire.OnFixedUpdate(player);
             BountyHunter.FixedUpdate(player);

@@ -72,7 +72,7 @@ public class ModNewsHistorySCn
             {
                 Number = 100010,
                 Title = "TownOfHostEdited-Xi v2.1.0",
-                SubTitle = "★★★★Bug修复★★★★",
+                SubTitle = "★★★★技术爆炸★★★★",
                 ShortTitle = "★TOHEX v2.1.0★\n<size=75%>简体中文</size>",
                 Text =
                 "简体中文"

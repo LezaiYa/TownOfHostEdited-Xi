@@ -124,7 +124,7 @@ The Latest Version: v2.0.5
 >  
 >### :star: [Town Of Host Edited_PLUS](https://github.com/Gurge44/TOHE_PLUS) :
 > 
-> - Developer：[Moe](https://github.com/Gurge44)
+> - Developer：[Gurge44](https://github.com/Gurge44)
 > - Pet Event
 >  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :

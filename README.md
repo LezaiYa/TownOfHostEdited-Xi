@@ -123,7 +123,7 @@
 >  
 >### :star: [Town Of Host Edited_PLUS](https://github.com/Gurge44/TOHE_PLUS) :
 > 
-> - 作者：[Moe](https://github.com/Gurge44)
+> - 作者：[Gurge44](https://github.com/Gurge44)
 > - 摸宠物事件
 >  
 >### :star: [To-Hope](https://gitee.com/xigua_ya/to-hope) :

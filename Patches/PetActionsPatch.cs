@@ -20,7 +20,12 @@ namespace TOHEXI;
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.TryPet))]
 class LocalPetPatch
 {
+    public static Dictionary<byte, float> Cooldown = new();
     private static readonly Dictionary<byte, long> LastProcess = new();
+    public static void Init()
+    {
+        Cooldown = new();
+    }
     public static bool Prefix(PlayerControl __instance)
     {
         if (!Options.UsePets.GetBool()) return true;

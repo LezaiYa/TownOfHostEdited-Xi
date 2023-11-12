@@ -1506,7 +1506,7 @@ class CheckMurderPatch
 
             new LateTask(() =>
             {
-                target.ReviveV2(target.GetCustomRole().GetRoleTypes());
+                target.ReviveV2();
             }, 1f, ("Killer"));
 
 

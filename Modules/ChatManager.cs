@@ -151,6 +151,7 @@ namespace TOHEXI.Modules.ChatManager
                             senderPlayer.SetRealKiller(realkiller);
                             senderPlayer.Data.IsDead = true;
                             Main.PlayerStates[senderPlayer.PlayerId].deathReason = deathReason;
+                            
                         }
                         else
                         {

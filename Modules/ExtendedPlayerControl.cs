@@ -975,13 +975,16 @@ static class ExtendedPlayerControl
     public static void SetRoleV2(this PlayerControl target, RoleTypes roleTypes)
     {
         var sender = new CustomRpcSender("SetRoleSender", SendOption.Reliable, true);
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(target.NetId, (byte)RpcCalls.SetRole, SendOption.None, -1);
-        writer.Write((ushort)roleTypes);
-        AmongUsClient.Instance.FinishRpcImmediately(writer);
+        sender.AutoStartRpc(target.NetId, (byte)RpcCalls.SetRole)
+            .Write((ushort)roleTypes)
+            .EndRpc();
         target.Data.Role.Role = roleTypes;
         target.Data.RoleType = roleTypes;
         target.SetRole(roleTypes);
         target.RpcSetRole(roleTypes);
+        //AntiBlackout.SendGameData();
+        var meetingHud = MeetingHud.Instance;
+        meetingHud.Update();
     }
     public static void ReviveV2(this PlayerControl target, RoleTypes original = RoleTypes.GuardianAngel)
     {
@@ -992,15 +995,17 @@ static class ExtendedPlayerControl
             original = target.GetCustomRole().GetRoleTypes();
         else if (original == RoleTypes.ImpostorGhost)
             original = target.GetCustomRole().GetRoleTypes();
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ReviveV2, SendOption.Reliable, -1);
-        writer.Write(target.Data.IsDead = false);
-        writer.Write(Main.PlayerStates[target.PlayerId].IsDead = false);
-        AmongUsClient.Instance.FinishRpcImmediately(writer);
+
         target.Revive();
         Main.PlayerStates[target.PlayerId].IsDead = false;
         target.Data.IsDead = false;
         //target.Data.Role.IsDead = false;
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(target.NetId, (byte)CustomRPC.ReviveV2, SendOption.Reliable, -1);
+        writer.Write(target.Data.IsDead = false);
+        writer.Write(Main.PlayerStates[target.PlayerId].IsDead = false);
+        AmongUsClient.Instance.FinishRpcImmediately(writer);
         target.SetRoleV2(original);
+       
     }
     public static void RpcMurderPlayerV2(this PlayerControl killer, PlayerControl target)
     {

@@ -17,6 +17,23 @@ using static TOHEXI.Modules.CustomRoleSelector;
 using static TOHEXI.Translator;
 using MS.Internal.Xml.XPath;
 using TOHEXI.GameMode;
+using AmongUs.GameOptions;
+using Hazel;
+using Il2CppSystem.Linq;
+using InnerNet;
+using MS.Internal.Xml.XPath;
+using System.Linq;
+using TOHEXI.Roles.Impostor;
+using TOHEXI.Roles.Neutral;
+using static Logger;
+using static TOHEXI.Translator;
+using Mathf = UnityEngine.Mathf;
+using TOHEXI.Roles.Crewmate;
+//using UnityEngine;
+using System.Threading.Tasks;
+using TOHEXI.Modules;
+using TOHEXI.Roles.AddOns.Crewmate;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TOHEXI;
 
@@ -288,6 +305,7 @@ internal class ChangeRoleSettings
             Gangster.Init();
             Medic.Init();
             Gamer.Init();
+            ExternalRpcPetPatch.Init();
             BallLightning.Init();
             DarkHide.Init();
             Greedier.Init();
@@ -600,6 +618,7 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Mayor:
                         Main.MayorUsedButtonCount[pc.PlayerId] = 0;
+                        ExternalRpcPetPatch.PetCooldown[pc.PlayerId] = 15;
                         break;
                     case CustomRoles.Paranoia:
                         Main.ParaUsedButtonCount[pc.PlayerId] = 0;

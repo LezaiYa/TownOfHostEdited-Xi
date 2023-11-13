@@ -1,3 +1,4 @@
+using AmongUs.GameOptions;
 using HarmonyLib;
 using MS.Internal.Xml.XPath;
 using System;
@@ -20,12 +21,8 @@ namespace TOHEXI;
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.TryPet))]
 class LocalPetPatch
 {
-    public static Dictionary<byte, float> Cooldown = new();
     private static readonly Dictionary<byte, long> LastProcess = new();
-    public static void Init()
-    {
-        Cooldown = new();
-    }
+
     public static bool Prefix(PlayerControl __instance)
     {
         if (!Options.UsePets.GetBool()) return true;
@@ -55,6 +52,33 @@ class LocalPetPatch
 [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleRpc))]
 class ExternalRpcPetPatch
 {
+    private static long LastFixedUpdate = new();
+    public static Dictionary<byte, float> PetCooldown = new();
+    public static Dictionary<byte, bool> SkillReady = new();
+    public static void Init()
+    {
+        PetCooldown = new();
+        SkillReady = new();
+    }
+    public static void OnFixedUpdate()
+    {
+        if (!GameStates.IsInGame || !AmongUsClient.Instance.AmHost) return;
+        if (!Options.UsePets.GetBool()) return;
+        if (LastFixedUpdate == Utils.GetTimeStamp()) return;
+        LastFixedUpdate = Utils.GetTimeStamp();
+        foreach (var pc in Main.AllPlayerControls)
+        {
+            if (PetCooldown.ContainsKey(pc.PlayerId) && !SkillReady[pc.PlayerId])
+            {
+                PetCooldown[pc.PlayerId]--;
+                if (PetCooldown[pc.PlayerId] <= 0)
+                { 
+                    pc.Notify(GetString("SkillReady"), 2f);
+                    SkillReady[pc.PlayerId] = true;
+                }
+            }
+        }
+    }
     private static readonly Dictionary<byte, long> LastProcess = new();
     public static void Prefix(PlayerPhysics __instance, [HarmonyArgument(0)] byte callID)
     {
@@ -88,6 +112,7 @@ class ExternalRpcPetPatch
     }
     public static void OnPetUse(PlayerControl pc)
     {
+        
         if (pc == null ||
             pc.inVent ||
             pc.inMovingPlat ||
@@ -102,9 +127,11 @@ class ExternalRpcPetPatch
         switch (pc.GetCustomRole())
         {
             case CustomRoles.Mayor:
-                if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt())
+                if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt() && PetCooldown.TryGetValue(pc.PlayerId, out var cd) && cd <= 0)
                 {
                     pc?.ReportDeadBody(null);
+                    PetCooldown[pc.PlayerId] = 15;
+                    SkillReady[pc.PlayerId] = false;
                 }
                 break;
             case CustomRoles.Veteran:

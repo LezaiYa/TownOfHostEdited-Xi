@@ -635,7 +635,7 @@ class FixedUpdatePatch
                 PlagueDoctor.OnFixedUpdate(player);
                 Mini.OnFixedUpdate(player);
                 Chameleon.OnFixedUpdate(player);
-
+                ExternalRpcPetPatch.OnFixedUpdate();
                 //Kidnapper.OnFixedUpdate(player);
 
                 if (GameStates.IsInTask && player.IsAlive() && Options.LadderDeath.GetBool()) FallFromLadder.FixedUpdate(player);

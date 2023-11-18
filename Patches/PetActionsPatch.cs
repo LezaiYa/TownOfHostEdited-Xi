@@ -5,10 +5,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TOHEXI.Modules;
+using System.Text;
 using TOHEXI.Roles.Crewmate;
 using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
+using UnityEngine;
 using static TOHEXI.Translator;
+using Hazel;
+using InnerNet;
+using System.Threading.Tasks;
+using TOHEXI.Roles.AddOns.Crewmate;
+using UnityEngine.Profiling;
+using System.Runtime.Intrinsics.X86;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
+using UnityEngine.Networking.Types;
+using TOHEXI.Roles.Double;
+using Microsoft.Extensions.Logging;
+using Sentry;
+using UnityEngine.SocialPlatforms;
+using static UnityEngine.ParticleSystem.PlaybackState;
+using Cpp2IL.Core.Extensions;
 
 namespace TOHEXI;
 
@@ -17,6 +34,7 @@ namespace TOHEXI;
  * ImaMapleTree / 단풍잎 / Tealeaf
  * FOR THE CODE
  */
+
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.TryPet))]
 class LocalPetPatch
@@ -36,7 +54,6 @@ class LocalPetPatch
         if (LastProcess[__instance.PlayerId] + 1 >= Utils.GetTimeStamp()) return true;
 
         ExternalRpcPetPatch.Prefix(__instance.MyPhysics, (byte)RpcCalls.Pet);
-
         LastProcess[__instance.PlayerId] = Utils.GetTimeStamp();
         return !__instance.GetCustomRole().PetActivatedAbility();
     }
@@ -60,25 +77,7 @@ class ExternalRpcPetPatch
         PetCooldown = new();
         SkillReady = new();
     }
-    public static void OnFixedUpdate()
-    {
-        if (!GameStates.IsInGame || !AmongUsClient.Instance.AmHost) return;
-        if (!Options.UsePets.GetBool()) return;
-        if (LastFixedUpdate == Utils.GetTimeStamp()) return;
-        LastFixedUpdate = Utils.GetTimeStamp();
-        foreach (var pc in Main.AllPlayerControls)
-        {
-            if (PetCooldown.ContainsKey(pc.PlayerId) && !SkillReady[pc.PlayerId])
-            {
-                PetCooldown[pc.PlayerId]--;
-                if (PetCooldown[pc.PlayerId] <= 0)
-                { 
-                    pc.Notify(GetString("SkillReady"), 2f);
-                    SkillReady[pc.PlayerId] = true;
-                }
-            }
-        }
-    }
+    
     private static readonly Dictionary<byte, long> LastProcess = new();
     public static void Prefix(PlayerPhysics __instance, [HarmonyArgument(0)] byte callID)
     {
@@ -105,7 +104,11 @@ class ExternalRpcPetPatch
         if (!LastProcess.ContainsKey(pc.PlayerId)) LastProcess.TryAdd(pc.PlayerId, Utils.GetTimeStamp() - 2);
         if (LastProcess[pc.PlayerId] + 1 >= Utils.GetTimeStamp()) return;
         LastProcess[pc.PlayerId] = Utils.GetTimeStamp();
-
+        __instance.CancelPet();
+        physics.RpcCancelPet();
+        physics.RpcCancelPet();
+        physics.RpcCancelPet();
+        physics.RpcCancelPet();
         Logger.Info($"Player {pc.GetNameWithRole().RemoveHtmlTags()} petted their pet", "PetActionTrigger");
 
         _ = new LateTask(() => { OnPetUse(pc); }, 0.2f, $"OnPetUse: {pc.GetNameWithRole().RemoveHtmlTags()}");
@@ -123,20 +126,20 @@ class ExternalRpcPetPatch
             pc.MyPhysics.Animations.IsPlayingAnyLadderAnimation() ||
             Pelican.IsEaten(pc.PlayerId))
             return;
-
+        Rudepeople.OnUsePet(pc);
         switch (pc.GetCustomRole())
         {
             case CustomRoles.Mayor:
-                if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt() && PetCooldown.TryGetValue(pc.PlayerId, out var cd) && cd <= 0)
+                if (Main.MayorUsedButtonCount[pc.PlayerId] < Options.MayorNumOfUseButton.GetInt() && !Main.MayorStartMeetCooldown.ContainsKey(pc.PlayerId))
                 {
+                    Main.MayorStartMeetCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
                     pc?.ReportDeadBody(null);
-                    PetCooldown[pc.PlayerId] = 15;
-                    SkillReady[pc.PlayerId] = false;
                 }
                 break;
             case CustomRoles.Veteran:
-                if(!Main.VeteranProtectCooldown.ContainsKey(pc.PlayerId) && !Main.VeteranNumOfUsed.TryGetValue(pc.PlayerId, out var count3) && count3 < 1)
+                if(!Main.VeteranProtectCooldown.ContainsKey(pc.PlayerId) && Main.VeteranNumOfUsed[pc.PlayerId] >= 1)
                 {
+                    Logger.Info($"Playerawa", "PetActionTrigger");
                     Main.VeteranInProtect.Remove(pc.PlayerId);
                     Main.VeteranInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
                     Main.VeteranNumOfUsed[pc.PlayerId]--;
@@ -146,12 +149,12 @@ class ExternalRpcPetPatch
                     Main.VeteranProtectCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
                 }
                 break;
-            case CustomRoles.Rudepeople:
-                if (!Rudepeople.OnPetUse(pc.PlayerId)) return;
-                break;
             case CustomRoles.TimeMaster:
-                Main.TimeMasterInProtect.Remove(pc.PlayerId);
-                Main.TimeMasterInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
+                if (!Main.TimeMasterCooldown.ContainsKey(pc.PlayerId))
+                {
+                    Main.TimeMasterCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                    Main.TimeMasterInProtect.Remove(pc.PlayerId);
+                  Main.TimeMasterInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
                 if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
                 pc.Notify(GetString("TimeMasterOnGuard"), Options.TimeMasterSkillDuration.GetFloat());
                 foreach (var player in Main.AllPlayerControls)
@@ -166,6 +169,7 @@ class ExternalRpcPetPatch
                     {
                         Main.TimeMasterbacktrack.Add(player.PlayerId, player.GetTruePosition());
                     }
+                }
                 }
                 break;
             case CustomRoles. Grenadier:
@@ -193,7 +197,10 @@ class ExternalRpcPetPatch
            
                 break;
             case CustomRoles.TimeStops:
-                CustomSoundsManager.RPCPlayCustomSoundAll("THEWORLD");
+                if(!Main.TimeStopsCooldown.ContainsKey(pc.PlayerId))
+                {
+                    Main.TimeStopsCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                    CustomSoundsManager.RPCPlayCustomSoundAll("THEWORLD");
                 Main.TimeStopsInProtect.Remove(pc.PlayerId);
                 Main.TimeStopsInProtect.Add(pc.PlayerId, Utils.GetTimeStamp());
                 if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
@@ -217,6 +224,94 @@ class ExternalRpcPetPatch
                         Main.TimeStopsstop.Remove(player.PlayerId);
                         RPC.PlaySoundRPC(player.PlayerId, Sounds.TaskComplete);
                     }, Options.TimeStopsSkillDuration.GetFloat(), "Time Stop");
+                }
+                }
+                break;
+            case CustomRoles.GlennQuagmire:
+                if(!Main.GlennQuagmireCooldown.ContainsKey(pc.PlayerId))
+                {
+        List<PlayerControl> list = Main.AllAlivePlayerControls.Where(x => x.PlayerId != pc.PlayerId).ToList();
+                if (list.Count < 1)
+                {
+                    Logger.Info($"Q哥没有目标", "GlennQuagmire");
+                }
+                else
+                {
+                    list = list.OrderBy(x => Vector2.Distance(pc.GetTruePosition(), x.GetTruePosition())).ToList();
+                    var target = list[0];
+                    if (target.GetCustomRole().IsImpostor())
+                    {
+                        pc.RPCPlayCustomSound("giggity");
+                        target.SetRealKiller(pc);
+                        target.RpcCheckAndMurder(target);
+                        pc.RpcGuardAndKill();
+                        Main.PlayerStates[target.PlayerId].deathReason = PlayerState.DeathReason.Creation;
+                    }
+                    else
+                    {
+                        if (Main.ForSourcePlague.Contains(pc.PlayerId))
+                        {
+                                Utils.TP(pc.NetTransform, target.GetTruePosition());
+                                Main.ForSourcePlague.Add(target.PlayerId);
+                                Utils.NotifyRoles();
+                        }
+                            Utils.TP(pc.NetTransform, target.GetTruePosition());
+                    }
+                }
+                }
+
+                break;
+            case CustomRoles.SoulSeeker:
+                if(!Main.SoulSeekerCooldown.ContainsKey(pc.PlayerId))
+                {
+                if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
+                foreach (var player in Main.AllPlayerControls)
+                {
+                    if (Pelican.IsEaten(player.PlayerId) && Options.SoulSeekerCanSeeEat.GetBool())
+                    {
+                        Main.SoulSeekerCanEat[pc.PlayerId]++;
+                    }
+                    if (!player.IsAlive())
+                    {
+                        Main.SoulSeekerDead[pc.PlayerId]++;
+                        if (player.CanUseKillButton())
+                        {
+                            Main.SoulSeekerCanKill[pc.PlayerId]++;
+                        }
+                        else
+                        {
+                            Main.SoulSeekerNotCanKill[pc.PlayerId]++;
+                        }
+                    }
+                }
+                pc.Notify(string.Format(GetString("SoulSeekerOffGuard"), Main.SoulSeekerDead[pc.PlayerId], Main.SoulSeekerNotCanKill[pc.PlayerId], Main.SoulSeekerCanKill[pc.PlayerId], Main.SoulSeekerCanEat[pc.PlayerId]));
+                if (Main.SoulSeekerCanEat[pc.PlayerId] > 0)
+                {
+                    Main.SoulSeekerCanEat[pc.PlayerId] = 0;
+                }
+                if (Main.SoulSeekerCanKill[pc.PlayerId] > 0)
+                {
+                    Main.SoulSeekerCanKill[pc.PlayerId] = 0;
+                }
+                if (Main.SoulSeekerNotCanKill[pc.PlayerId] > 0)
+                {
+                    Main.SoulSeekerNotCanKill[pc.PlayerId] = 0;
+                }
+                if (Main.SoulSeekerDead[pc.PlayerId] > 0)
+                {
+                    Main.SoulSeekerDead[pc.PlayerId] = 0;
+                }
+                }
+
+                break;
+            case CustomRoles.Plumber:
+                if(!Main.PlumberCooldown.ContainsKey(pc.PlayerId))
+                {
+                    foreach (var player in Main.AllAlivePlayerControls)
+                    {
+                        if (player.PlayerId == pc.PlayerId || !player.inVent) continue;
+                        player?.MyPhysics?.RpcBootFromVent(pc.PlayerId);
+                    }
                 }
                 break;
         }

@@ -158,11 +158,20 @@ public class Main : BasePlugin
     public static Dictionary<byte, int> MarioVentCount = new();
     public static Dictionary<byte, long> VeteranInProtect = new();
     public static Dictionary<byte, int> VeteranNumOfUsed = new();
+
     public static Dictionary<byte, long> VeteranProtectCooldown = new();
     public static Dictionary<byte, long> GrenadierBlinding = new();
     public static Dictionary<byte, long> MadGrenadierBlinding = new();
     public static Dictionary<byte, long> GrenadierCooldown = new();
     public static Dictionary<byte, long> MadGrenadierCooldown = new();
+    public static Dictionary<byte, long> MayorStartMeetCooldown = new();
+    public static Dictionary<byte, long> TimeMasterCooldown = new();
+    public static Dictionary<byte, long> TimeStopsCooldown = new();
+    public static Dictionary<byte, long> GlennQuagmireCooldown = new();
+    public static Dictionary<byte,long> SoulSeekerCooldown = new();
+    public static Dictionary<byte, long> PlumberCooldown = new();
+
+
     public static Dictionary<byte, int> CursedWolfSpellCount = new();
     public static int AliveImpostorCount;
     public static bool isCursed;

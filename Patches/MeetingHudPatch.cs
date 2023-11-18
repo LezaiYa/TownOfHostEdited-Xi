@@ -1,6 +1,5 @@
 using AmongUs.GameOptions;
 using HarmonyLib;
-using Lotus.Roles.Internals;
 using MS.Internal.Xml.XPath;
 using Sentry.Internal.Extensions;
 using System;

@@ -45,12 +45,6 @@ public static class Rudepeople
     {
         playerIdList.Add(playerId);
         NowCooldown.TryAdd(playerId, DefaultKillCooldown.GetFloat());
-        new LateTask(() =>
-        {
-            RudepeopleProtectCooldown.Add(playerId, Utils.GetTimeStamp());
-            Utils.NotifyRoles();
-        }, 8f, ("AddTime"));
-        
     }
     public static bool IsEnable() => playerIdList.Count > 0;
     public static void SetCooldown(byte id) => AURoleOptions.EngineerCooldown = NowCooldown[id];
@@ -80,12 +74,9 @@ public static class Rudepeople
             }
         return false;
     }
-    public static bool OnPetUse(byte player)
+    public static bool OnUsePet(PlayerControl pc)
     {
-        var pc = Utils.GetPlayerById(player);
         if (pc == null || !pc.Is(CustomRoles.Rudepeople)) return true;
-        if (!RudepeopleProtectCooldown.ContainsKey(pc.PlayerId))
-        {
             RudepeopleProtectCooldown.Add(pc.PlayerId,Utils.GetTimeStamp());
                     NowCooldown[pc.PlayerId] = Math.Clamp(NowCooldown[pc.PlayerId] + ReduceKillCooldown.GetFloat(), MinKillCooldown.GetFloat(), DefaultKillCooldown.GetFloat());
         pc.SyncSettings();
@@ -94,9 +85,8 @@ public static class Rudepeople
         if (!pc.IsModClient()) pc.RpcGuardAndKill(pc);
         pc.RPCPlayCustomSound("RNM");
         pc.Notify(GetString("RudepeopleOnGuard"), RudepeopleSkillDuration.GetFloat());
-        }
-
         return false;
+
     }
     public static void FixedUpdate(PlayerControl player)
     {
@@ -109,7 +99,7 @@ public static class Rudepeople
                 player.RpcGuardAndKill();
                 player.Notify(string.Format(GetString("RudepeopleOffGuard")));
             }
-            if (RudepeopleProtectCooldown.TryGetValue(player.PlayerId, out var stime) && stime + RudepeopleSkillCooldown.GetInt() < Utils.GetTimeStamp())
+            if (RudepeopleProtectCooldown.TryGetValue(player.PlayerId, out var stime) && stime + NowCooldown[player.PlayerId] < Utils.GetTimeStamp() && Options.UsePets.GetBool())
             {
                 RudepeopleProtectCooldown.Remove(player.PlayerId);
                 player.Notify(GetString("SkillReady"));

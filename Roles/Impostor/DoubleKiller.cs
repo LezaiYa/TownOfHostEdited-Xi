@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using static TOHEXI.Options;
 using Il2CppMono.Security;
-using Lotus.Roles.Internals;
 
 namespace TOHEXI;
 

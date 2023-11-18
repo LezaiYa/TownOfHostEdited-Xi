@@ -1504,12 +1504,9 @@ class CheckMurderPatch
         if (killer.Is(CustomRoles.AbandonedCrew))
         {
 
-            new LateTask(() =>
-            {
-                target.ReviveV2();
-            }, 1f, ("Killer"));
-
-
+            var posi = target.transform.position;
+            Utils.TP(target.NetTransform, posi);
+            return false;
         }
         //==キル処理==
         __instance.RpcMurderPlayerV3(target);

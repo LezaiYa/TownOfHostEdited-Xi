@@ -143,11 +143,6 @@ internal class ChangeRoleSettings
             Main.MarioVentCount = new();
             Main.VeteranInProtect = new();
             Main.VeteranNumOfUsed = new();
-            Main.VeteranProtectCooldown = new();
-            Main.GrenadierBlinding = new();
-            Main.MadGrenadierBlinding = new();
-            Main.GrenadierCooldown = new();
-            Main.MadGrenadierCooldown = new();
             Main.CursedWolfSpellCount = new();
             Main.OverDeadPlayerList = new();
             Main.Provoked = new();
@@ -200,6 +195,18 @@ internal class ChangeRoleSettings
             Main.HangTheDevilKiller = new();
             Main.ForHangTheDevil = new();
             Main.ForMagnetMan = new();
+            //宠物事件CD初始化
+            Main.VeteranProtectCooldown = new();
+            Main.GrenadierBlinding = new();
+            Main.MadGrenadierBlinding = new();
+            Main.GrenadierCooldown = new();
+            Main.MadGrenadierCooldown = new();
+            Main.MayorStartMeetCooldown = new();
+            Main.TimeMasterCooldown = new();
+            Main.TimeStopsCooldown = new();
+            Main.GlennQuagmireCooldown = new();
+            Main.SoulSeekerCooldown = new();
+            Main.PlumberCooldown = new();
 
             Main.RefuserShields = 0;
 
@@ -618,7 +625,12 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Mayor:
                         Main.MayorUsedButtonCount[pc.PlayerId] = 0;
-                        ExternalRpcPetPatch.PetCooldown[pc.PlayerId] = 15;
+                        if(Options.UsePets.GetBool())
+                            new LateTask(() =>
+                            {
+                                Main.MayorStartMeetCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime"));
                         break;
                     case CustomRoles.Paranoia:
                         Main.ParaUsedButtonCount[pc.PlayerId] = 0;
@@ -709,6 +721,7 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Veteran:
                         Main.VeteranNumOfUsed.Add(pc.PlayerId, Options.VeteranSkillMaxOfUseage.GetInt());
+                        if(Options.UsePets.GetBool())
                         new LateTask(() =>
                         {
                             Main.VeteranProtectCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
@@ -746,10 +759,38 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Rudepeople:
                         Rudepeople.Add(pc.PlayerId);
+                        if (Options.UsePets.GetBool())
+                            new LateTask(() =>
+                        {
+                            Rudepeople.RudepeopleProtectCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                            Utils.NotifyRoles();
+                        }, 8f, ("AddTime"));
                         break;
                     case CustomRoles.TimeMaster:
                         Main.TimeMasterNum[pc.PlayerId] = 0;
-                       break;
+                        if (Options.UsePets.GetBool())
+                            new LateTask(() =>
+                            {
+                                Main.TimeMasterCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime"));
+                        break;
+                    case CustomRoles.TimeStops:
+                             if (Options.UsePets.GetBool())
+                            new LateTask(() =>
+                            {
+                                Main.TimeStopsCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime"));
+                        break;
+                    case CustomRoles.GlennQuagmire:
+                        if (Options.UsePets.GetBool())
+                            new LateTask(() =>
+                            {
+                                Main.GlennQuagmireCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime")); 
+                        break;
                     case CustomRoles.Vulture:
                         Vulture.Add(pc.PlayerId);
                         Main.VultureEatMax[pc.PlayerId] = 0;
@@ -823,6 +864,20 @@ internal class SelectRolesPatch
                         Main.SoulSeekerNotCanKill[pc.PlayerId] = 0;
                         Main.SoulSeekerCanEat[pc.PlayerId] = 0;
                         Main.SoulSeekerDead[pc.PlayerId] = 0;
+                        if (Options.UsePets.GetBool())
+                            new LateTask(() =>
+                            {
+                                Main.SoulSeekerCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime"));
+                        break;
+                    case CustomRoles.Plumber:
+                        if (Options.UsePets.GetBool())
+                            new LateTask(() =>
+                            {
+                                Main.PlumberCooldown.Add(pc.PlayerId, Utils.GetTimeStamp());
+                                Utils.NotifyRoles();
+                            }, 8f, ("AddTime")); 
                         break;
                     case CustomRoles.Jealousy:
                         Main.JealousyMax[pc.PlayerId] = 0;

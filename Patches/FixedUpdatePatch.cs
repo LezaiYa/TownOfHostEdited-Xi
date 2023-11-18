@@ -10,24 +10,8 @@ using TOHEXI.Roles.Impostor;
 using TOHEXI.Roles.Neutral;
 using UnityEngine;
 using static TOHEXI.Translator;
-using AmongUs.GameOptions;
-using HarmonyLib;
 using Hazel;
 using InnerNet;
-using LibCpp2IL.Elf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TOHEXI.Modules;
-using TOHEXI.Roles.AddOns.Impostor;
-using TOHEXI.Roles.Crewmate;
-using TOHEXI.Roles.Double;
-using TOHEXI.Roles.Impostor;
-using TOHEXI.Roles.Neutral;
-using UnityEngine;
-using UnityEngine.UIElements.UIR;
-using static TOHEXI.Translator;
 
 namespace TOHEXI;
 
@@ -292,9 +276,18 @@ class FixedUpdatePatch
                         player.RpcGuardAndKill();
                         player.Notify(string.Format(GetString("VeteranOffGuard"), Main.VeteranNumOfUsed[player.PlayerId]));
                     }
-                    if (Main.VeteranProtectCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.VeteranSkillCooldown.GetInt() < Utils.GetTimeStamp())
+                    if (Main.VeteranProtectCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.VeteranSkillCooldown.GetInt() < Utils.GetTimeStamp() && Options.UsePets.GetBool())
                     {
                         Main.VeteranProtectCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
+                }
+                //检查市长的摸宠物冷却是否达到
+                if (GameStates.IsInTask && player.Is(CustomRoles.Mayor))
+                {
+                    if (Main.MayorStartMeetCooldown.TryGetValue(player.PlayerId, out var stime) && stime + 15f < Utils.GetTimeStamp() && Options.UsePets.GetBool())
+                    {
+                        Main.MayorStartMeetCooldown.Remove(player.PlayerId);
                         player.Notify(GetString("SkillReady"));
                     }
                 }
@@ -577,6 +570,12 @@ class FixedUpdatePatch
                         player.RpcGuardAndKill();
                         player.Notify(GetString("TimeMasterSkillStop"));
                     }
+                    if (Main.TimeMasterCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.TimeMasterSkillCooldown.GetInt() < Utils.GetTimeStamp() && Options.UsePets.GetBool())
+                    {
+                        Main.TimeMasterCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
+                  
                 }
                 //检查正义的护盾师的技能是否失效
                 if (GameStates.IsInTask && player.Is(CustomRoles.NiceShields))
@@ -601,7 +600,40 @@ class FixedUpdatePatch
                             Main.TimeStopsstop.Remove(pc.PlayerId);
                         }
                     }
+                    if (Main.TimeStopsCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.TimeStopsSkillCooldown.GetInt() < Utils.GetTimeStamp() && Options.UsePets.GetBool())
+                    {
+                        Main.TimeStopsCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
                 }
+                //检查飞行员的技能是否冷却完毕
+                if (GameStates.IsInTask && player.Is(CustomRoles.GlennQuagmire))
+                {
+                    if (Main.GlennQuagmireCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.GlennQuagmireSkillCooldown.GetInt() < Utils.GetTimeStamp() && Options.UsePets.GetBool())
+                    {
+                        Main.GlennQuagmireCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
+                }
+                //检查时停者的技能是否生效
+                if (GameStates.IsInTask && player.Is(CustomRoles.SoulSeeker))
+                {
+                    if (Main.SoulSeekerCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.SoulSeekerCooldown.GetInt() < Utils.GetTimeStamp() && Options.UsePets.GetBool())
+                    {
+                        Main.SoulSeekerCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
+                }
+                //检查管道工的技能冷却是否完毕
+                if (GameStates.IsInTask && player.Is(CustomRoles.Plumber))
+                {
+                    if (Main.PlumberCooldown.TryGetValue(player.PlayerId, out var stime) && stime + Options.PlumberCooldown.GetInt() < Utils.GetTimeStamp() && Options.UsePets.GetBool())
+                    {
+                        Main.PlumberCooldown.Remove(player.PlayerId);
+                        player.Notify(GetString("SkillReady"));
+                    }
+                }
+             
 
                 //检查马里奥是否完成
                 if (GameStates.IsInTask && player.Is(CustomRoles.Mario) && Main.MarioVentCount[player.PlayerId] > Options.MarioVentNumWin.GetInt())
@@ -635,7 +667,6 @@ class FixedUpdatePatch
                 PlagueDoctor.OnFixedUpdate(player);
                 Mini.OnFixedUpdate(player);
                 Chameleon.OnFixedUpdate(player);
-                ExternalRpcPetPatch.OnFixedUpdate();
                 //Kidnapper.OnFixedUpdate(player);
 
                 if (GameStates.IsInTask && player.IsAlive() && Options.LadderDeath.GetBool()) FallFromLadder.FixedUpdate(player);
